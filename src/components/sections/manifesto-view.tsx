@@ -19,21 +19,11 @@ export default function ManifestoView() {
         <div className="absolute inset-0 bg-black/50"></div>
       </div>
 
-      {/* Image Container */}
-      <div className="absolute inset-0 z-10">
-        <Image
-          src="/Landpage/Horacio Jose 02 - Editado.png"
-          alt="Horacio Serpa"
-          fill
-          className="object-contain object-right-bottom"
-          priority
-        />
-      </div>
-
-      {/* Content container */}
-      <div className="relative z-20 h-full flex items-center">
-        <div className="container mx-auto px-6">
-          <div className="w-full sm:w-1/2 md:w-3/5 lg:w-1/2 text-left text-white">
+      {/* Main container for both layouts */}
+      <div className="relative z-10 h-full">
+        {/* Desktop Layout (>640px) */}
+        <div className="hidden sm:flex container mx-auto px-6 h-full items-center">
+          <div className="w-1/2 text-left text-white">
             <h1 className="font-headline text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
               Por una Colombia <br />
               <span className="text-primary">justa y unida</span>
@@ -50,6 +40,52 @@ export default function ManifestoView() {
                 size="lg"
                 variant="outline"
                 className="h-12 px-8 text-base bg-transparent text-white border-white hover:bg-white hover:text-primary"
+              >
+                Únete a la campaña <PlayCircle className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+          <div className="w-1/2 h-full relative">
+            <Image
+              src="/Landpage/Horacio Jose 02 - Editado.png"
+              alt="Horacio Serpa"
+              fill
+              className="object-contain object-right"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Mobile Layout (<640px) */}
+        <div className="sm:hidden flex flex-col h-full">
+          <div className="relative w-full h-[70svh]">
+             <Image
+              src="/Landpage/Horacio Jose 02 - Editado.png"
+              alt="Horacio Serpa"
+              fill
+              className="object-contain object-center"
+              priority
+            />
+            <div className="absolute inset-0 flex items-start justify-center p-6 bg-gradient-to-b from-black/60 to-transparent">
+               <h1 className="font-headline text-5xl font-bold tracking-tight text-white text-center mt-8">
+                Por una Colombia <br />
+                <span className="text-primary">justa y unida</span>
+              </h1>
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-white">
+             <p className="max-w-xl text-base text-white/80">
+              Unidos por la experiencia, la integridad y un compromiso
+              inquebrantable con el futuro de nuestra nación.
+            </p>
+            <div className="mt-6 flex flex-col items-center justify-center gap-4 w-full">
+              <Button size="lg" className="w-full">
+                Conóceme <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full bg-transparent text-white border-white hover:bg-white hover:text-primary"
               >
                 Únete a la campaña <PlayCircle className="ml-2 h-5 w-5" />
               </Button>
