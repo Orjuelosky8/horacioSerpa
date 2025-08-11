@@ -30,7 +30,7 @@ export default function ManifestoView() {
           </div>
           <div className="w-1/2 h-full relative">
             <Image
-              src="https://firebasestorage.googleapis.com/v0/b/test-d0f5a.appspot.com/o/public%2Fperson.png?alt=media&token=d1252646-ac28-449e-b873-678440579e08"
+              src="/Landpage/Horacio Jose 02 - Editado.png"
               alt="Horacio Serpa"
               layout="fill"
               objectFit="contain"
