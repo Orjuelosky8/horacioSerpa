@@ -4,11 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import AiAssistant from "@/components/ai-assistant";
 import SmoothScroller from "@/components/smooth-scroller";
-import dynamic from "next/dynamic";
-
-const Scene = dynamic(() => import("@/components/webgl/scene-root"), {
-  ssr: false,
-});
+import SceneLoader from "@/components/scene-loader";
 
 export const metadata: Metadata = {
   title: "Serpa Inmersivo",
@@ -33,7 +29,7 @@ export default function RootLayout({
       <body className={cn("font-body antialiased", "bg-background text-foreground")}>
         <SmoothScroller>
           <div className="fixed inset-0 -z-10 h-full w-full">
-            <Scene />
+            <SceneLoader />
           </div>
           <div className="relative z-10 flex min-h-screen flex-col">
             {children}
