@@ -19,9 +19,9 @@ export default function ManifestoView() {
         <div className="absolute inset-0 bg-black/50"></div>
       </div>
 
-      {/* Main container for both layouts */}
+      {/* Main Container */}
       <div className="relative z-10 h-full">
-        {/* Desktop Layout (>640px) */}
+        {/* Desktop Layout (> 640px) */}
         <div className="hidden sm:flex container mx-auto px-6 h-full items-center">
           <div className="w-1/2 text-left text-white">
             <h1 className="font-headline text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
@@ -56,10 +56,11 @@ export default function ManifestoView() {
           </div>
         </div>
 
-        {/* Mobile Layout (<640px) */}
-        <div className="sm:hidden flex flex-col h-full">
-          <div className="relative w-full h-[70svh]">
-             <Image
+        {/* Mobile Layout (< 640px) */}
+        <div className="sm:hidden flex flex-col h-full text-white">
+          {/* Image and Title Section */}
+          <div className="relative w-full h-[65svh]">
+            <Image
               src="/Landpage/Horacio Jose 02 - Editado.png"
               alt="Horacio Serpa"
               fill
@@ -67,18 +68,19 @@ export default function ManifestoView() {
               priority
             />
             <div className="absolute inset-0 flex items-start justify-center p-6 bg-gradient-to-b from-black/60 to-transparent">
-               <h1 className="font-headline text-5xl font-bold tracking-tight text-white text-center mt-8">
+              <h1 className="font-headline text-5xl font-bold tracking-tight text-center mt-8">
                 Por una Colombia <br />
                 <span className="text-primary">justa y unida</span>
               </h1>
             </div>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-white">
-             <p className="max-w-xl text-base text-white/80">
+          {/* Description and Buttons Section */}
+          <div className="flex-1 flex flex-col items-center justify-center text-center p-6">
+            <p className="max-w-xl text-base text-white/80">
               Unidos por la experiencia, la integridad y un compromiso
               inquebrantable con el futuro de nuestra nación.
             </p>
-            <div className="mt-6 flex flex-col items-center justify-center gap-4 w-full">
+            <div className="mt-6 flex flex-col items-center justify-center gap-4 w-full max-w-sm">
               <Button size="lg" className="w-full">
                 Conóceme <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
