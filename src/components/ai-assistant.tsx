@@ -76,7 +76,7 @@ export default function AiAssistant() {
           <CardHeader className="flex flex-row items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative h-12 w-12">
-                 <AiCharacter />
+                 {/* <AiCharacter /> */}
               </div>
               <CardTitle className="font-headline text-lg">
                 Asistente Virtual

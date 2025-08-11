@@ -21,7 +21,10 @@ export default function Header() {
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="font-headline text-xl font-bold">Serpa Inmersivo</span>
+          <span className="font-headline text-xl font-bold">
+            <span className="text-primary">Serpa</span>
+            <span className="font-light text-foreground/80">Inmersivo</span>
+          </span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => (

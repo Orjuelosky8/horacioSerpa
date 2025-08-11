@@ -1,5 +1,5 @@
 "use client";
-import { Canvas } from "@react-three/fiber";
+// import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
 function Character() {
@@ -12,12 +12,12 @@ function Character() {
 }
 
 export default function AiCharacter() {
-  return (
-    <Canvas>
-      <ambientLight intensity={1.5} />
-      <directionalLight position={[1, 1, 1]} intensity={2} />
-      <Character />
-      <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={2}/>
-    </Canvas>
-  );
+  // return (
+  //   <Canvas>
+  //     <ambientLight intensity={1.5} />
+  //     <directionalLight position={[1, 1, 1]} intensity={2} />
+  //     <Character />
+  //     <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={2}/>
+  //   </Canvas>
+  // );
 }

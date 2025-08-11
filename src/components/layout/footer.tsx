@@ -6,8 +6,9 @@ export default function Footer() {
     <footer className="bg-secondary/50 backdrop-blur-sm">
       <div className="container mx-auto px-6 py-8">
         <div className="flex flex-col items-center text-center">
-          <h2 className="font-headline text-2xl font-bold text-foreground">
-            Serpa Inmersivo
+          <h2 className="font-headline text-2xl font-bold">
+            <span className="text-primary">Serpa</span>
+            <span className="font-light text-foreground/80">Inmersivo</span>
           </h2>
 
           <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2">
