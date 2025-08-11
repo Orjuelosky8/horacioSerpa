@@ -58,7 +58,7 @@ export default function ManifestoView() {
 
         {/* Mobile Layout (< 640px) */}
         <div className="sm:hidden flex flex-col h-full text-white">
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-full pt-24">
             <Image
               src="/Landpage/Horacio Jose 02 - Editado.png"
               alt="Horacio Serpa"
@@ -66,7 +66,7 @@ export default function ManifestoView() {
               className="object-contain object-center"
               priority
             />
-            <div className="absolute inset-0 flex items-start justify-center p-6 bg-gradient-to-b from-black/60 to-transparent">
+            <div className="absolute inset-x-0 top-0 flex items-start justify-center p-6 bg-gradient-to-b from-black/60 to-transparent">
               <h1 className="font-headline text-5xl font-bold tracking-tight text-center mt-8 leading-tight">
                 Por una Colombia <br />
                 <span className="text-primary">justa y unida</span>
