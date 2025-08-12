@@ -22,7 +22,11 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
 
-      const sections = navLinks.map(link => document.querySelector(link.href));
+      const sections = navLinks.map(link => {
+        const elem = document.querySelector(link.href);
+        return elem ? elem : null;
+      }).filter(Boolean);
+      
       let currentSection = "";
 
       sections.forEach(section => {
@@ -45,13 +49,13 @@ export default function Header() {
   return (
     <header className={cn(
       "sticky top-0 z-40 w-full transition-all duration-300",
-      isScrolled ? "border-b border-border/50 bg-background/80 backdrop-blur-xl" : "bg-transparent"
+      isScrolled ? "border-b border-border/50 bg-background/80 backdrop-blur-xl" : "bg-transparent border-b border-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
           <span className="font-headline text-2xl font-bold">
             <span className="text-primary">Serpa</span>
-            <span className="font-light text-foreground/80">Inmersivo</span>
+            <span className={cn("font-light", isScrolled ? "text-foreground/80" : "text-white/80")}>Inmersivo</span>
           </span>
         </Link>
         <nav className="hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex">
@@ -74,7 +78,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button variant="ghost" size="icon" className={cn("md:hidden", !isScrolled && "text-white hover:text-white hover:bg-white/10")}>
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Abrir menú</span>
               </Button>
@@ -93,7 +97,7 @@ export default function Header() {
               </nav>
             </SheetContent>
           </Sheet>
-          <Button asChild className="hidden md:inline-flex rounded-full">
+          <Button asChild className={cn("hidden md:inline-flex rounded-full", !isScrolled && "bg-white/10 border border-white/20 text-white hover:bg-white/20")}>
             <Link href="#contacto">Contacto</Link>
           </Button>
         </div>
