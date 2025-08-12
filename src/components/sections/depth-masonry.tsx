@@ -1,38 +1,231 @@
+"use client";
+
+import { useState, useCallback } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CalendarDays, Clock, MapPin } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const newsItems = [
+type NewsItem = {
+  title: string;
+  category: string;
+  excerpt: string;
+  imageUrl: string;
+  aiHint?: string;
+  // opcionales para la cara trasera
+  details?: string;
+  date?: string;
+  location?: string;
+  readTime?: string;
+};
+
+const newsItems: NewsItem[] = [
   {
     title: "Análisis de la Reforma a la Justicia",
     category: "Justicia",
-    excerpt: "Un profundo vistazo a los puntos clave de la propuesta de reforma judicial y su impacto en el país.",
+    excerpt:
+      "Un profundo vistazo a los puntos clave de la propuesta de reforma judicial y su impacto en el país.",
     imageUrl: "https://placehold.co/600x400.png",
     aiHint: "justice law",
+    details:
+      "Puntos clave: acceso a la justicia, descongestión, digitalización de procesos y fortalecimiento de la defensoría.",
+    date: "12 Ago 2025",
+    location: "Bogotá, Colombia",
+    readTime: "4 min",
   },
   {
     title: "Inversión Histórica en Educación Pública",
     category: "Educación",
-    excerpt: "Detalles del plan para fortalecer la educación pública desde la primera infancia hasta la universidad.",
+    excerpt:
+      "Detalles del plan para fortalecer la educación pública desde la primera infancia hasta la universidad.",
     imageUrl: "https://placehold.co/600x700.png",
     aiHint: "education classroom",
+    details:
+      "Núcleos del plan: infraestructura, formación docente, conectividad y becas de acceso.",
+    date: "10 Ago 2025",
+    location: "Medellín, Colombia",
+    readTime: "3 min",
   },
   {
     title: "Nuevo Modelo de Salud Preventiva",
     category: "Salud",
-    excerpt: "Se presenta un enfoque en la prevención de enfermedades y el fortalecimiento de la atención primaria.",
+    excerpt:
+      "Se presenta un enfoque en la prevención de enfermedades y el fortalecimiento de la atención primaria.",
     imageUrl: "https://placehold.co/600x500.png",
     aiHint: "health doctor",
+    details:
+      "Líneas: tamizaje temprano, rutas de atención, telemedicina y equipos territoriales.",
+    date: "09 Ago 2025",
+    location: "Cali, Colombia",
+    readTime: "5 min",
   },
   {
     title: "Estrategias para la Generación de Empleo",
     category: "Empleo",
-    excerpt: "Iniciativas para fomentar el emprendimiento y atraer inversión que genere empleos de calidad.",
+    excerpt:
+      "Iniciativas para fomentar el emprendimiento y atraer inversión que genere empleos de calidad.",
     imageUrl: "https://placehold.co/600x600.png",
     aiHint: "jobs industry",
+    details:
+      "Ejes: simplificación regulatoria, clústeres regionales, compras públicas y economía creativa.",
+    date: "08 Ago 2025",
+    location: "Barranquilla, Colombia",
+    readTime: "4 min",
   },
 ];
+
+function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
+  const [flipped, setFlipped] = useState(false);
+
+  const toggle = useCallback(() => setFlipped((v) => !v), []);
+  const onKey = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggle();
+    }
+  }, [toggle]);
+
+  return (
+    <Card
+      className={cn(
+        "group relative h-full overflow-hidden border-0 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl",
+        // profundidad 3D
+        "[perspective:1200px]",
+        className
+      )}
+    >
+      {/* Contenedor que rota */}
+      <div
+        className={cn(
+          "relative h-full w-full transition-transform duration-700 ease-out",
+          "[transform-style:preserve-3d]",
+          // hover en desktop
+          "group-hover:[transform:rotateY(180deg)]",
+          // estado en móvil/teclado
+          flipped && "[transform:rotateY(180deg)]"
+        )}
+      >
+        {/* Cara frontal */}
+        <div
+          className={cn(
+            //"absolute inset-0",
+            "bg-gold",
+            "[backface-visibility:hidden]",
+            "rounded-2xl overflow-hidden"
+          )}
+        >
+          <CardHeader className="p-0 relative">
+            <div className="relative aspect-[4/3]">
+              <Image
+                src={item.imageUrl}
+                alt={item.title}
+                width={1200}
+                height={900}
+                className="h-full w-full object-cover"
+                data-ai-hint={item.aiHint}
+                priority={false}
+              />
+              {/* overlay gradiente */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              {/* categoría + fecha */}
+              <div className="absolute left-4 top-4 flex items-center gap-2">
+                <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow">
+                  {item.category}
+                </span>
+                {item.date ? (
+                  <span className="rounded-full bg-black/50 px-2 py-1 text-[10px] text-white backdrop-blur">
+                    {item.date}
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-6">
+            <CardTitle className="font-headline text-xl">{item.title}</CardTitle>
+            <p className="mt-3 text-sm text-muted-foreground">{item.excerpt}</p>
+          </CardContent>
+          <CardFooter className="flex items-center justify-between p-6 pt-0">
+            <Button variant="link" className="p-0">
+              Leer más <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+            {/* Indicador de flip */}
+            <button
+              type="button"
+              onClick={toggle}
+              onKeyDown={onKey}
+              aria-pressed={flipped}
+              aria-label="Ver más información de esta tarjeta"
+              className="rounded-full border px-3 py-1 text-xs text-muted-foreground hover:bg-muted"
+            >
+              Voltear
+            </button>
+          </CardFooter>
+        </div>
+
+        {/* Cara trasera */}
+        <div
+          className={cn(
+            "absolute inset-0",
+            "bg-background",
+            "[transform:rotateY(180deg)] [backface-visibility:hidden]",
+            "rounded-2xl overflow-hidden"
+          )}
+        >
+          <CardHeader className="p-6 pb-0">
+            <p className="text-xs font-semibold text-primary">Detalles</p>
+            <CardTitle className="mt-1 font-headline text-lg">{item.title}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 space-y-4">
+            {item.details ? (
+              <p className="text-sm text-muted-foreground">{item.details}</p>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Conoce los objetivos, el contexto y cómo te impacta esta iniciativa.
+              </p>
+            )}
+            <div className="grid grid-cols-1 gap-3 text-sm">
+              {item.date && (
+                <div className="flex items-center gap-2">
+                  <CalendarDays className="h-4 w-4 text-primary" />
+                  <span>{item.date}</span>
+                </div>
+              )}
+              {item.location && (
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <span>{item.location}</span>
+                </div>
+              )}
+              {item.readTime && (
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-primary" />
+                  <span>{item.readTime} de lectura</span>
+                </div>
+              )}
+            </div>
+            <ul className="list-disc pl-5 text-sm text-muted-foreground">
+              <li>Contexto y objetivos</li>
+              <li>Beneficios para la ciudadanía</li>
+              <li>Cómo participar o informarte más</li>
+            </ul>
+          </CardContent>
+          <CardFooter className="flex items-center justify-between p-6 pt-0">
+            <Button size="sm" onClick={toggle}>
+              Volver
+            </Button>
+            <Button variant="link" className="p-0">
+              Leer artículo completo <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardFooter>
+        </div>
+      </div>
+
+      {/* Capa de brillo sutil al hover */}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 [background:radial-gradient(600px_200px_at_0%_-10%,rgba(255,255,255,0.18),transparent_60%)]" />
+    </Card>
+  );
+}
 
 export default function DepthMasonry() {
   return (
@@ -42,65 +235,37 @@ export default function DepthMasonry() {
           <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
             Noticias y Actividades
           </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+          <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
             Mantente al día con las últimas noticias, eventos y comunicados de la campaña.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {newsItems.map((item, index) => (
-            <Card key={index} className="flex flex-col overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
-              <CardHeader className="p-0">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.title}
-                    width={600}
-                    height={400}
-                    data-ai-hint={item.aiHint}
-                    className="object-cover"
-                  />
-                </div>
-              </CardHeader>
-              <CardContent className="flex-1 p-6">
-                <p className="text-sm font-medium text-primary">{item.category}</p>
-                <CardTitle className="mt-2 font-headline text-xl">{item.title}</CardTitle>
-                <p className="mt-3 text-muted-foreground">{item.excerpt}</p>
-              </CardContent>
-              <CardFooter className="p-6 pt-0">
-                <Button variant="link" className="p-0">
-                  Leer más <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </CardFooter>
-            </Card>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {newsItems.map((item, idx) => (
+            <FlipCard key={idx} item={item} />
           ))}
-           <Card className="flex flex-col overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl md:col-span-2 lg:col-span-1">
-              <CardHeader className="p-0">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="https://placehold.co/600x400.png"
-                    alt="Próximos Eventos"
-                    width={600}
-                    height={400}
-                    data-ai-hint="calendar event"
-                    className="object-cover"
-                  />
-                </div>
-              </CardHeader>
-              <CardContent className="flex-1 p-6">
-                <p className="text-sm font-medium text-primary">AGENDA</p>
-                <CardTitle className="mt-2 font-headline text-xl">Calendario de Eventos</CardTitle>
-                <p className="mt-3 text-muted-foreground">Descubre los próximos encuentros, debates y actividades en tu ciudad.</p>
-              </CardContent>
-              <CardFooter className="p-6 pt-0">
-                <Button variant="link" className="p-0">
-                  Ver calendario <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </CardFooter>
-            </Card>
+
+          {/* Tarjeta de Agenda destacada con flip */}
+          <FlipCard
+            className="md:col-span-2 lg:col-span-1"
+            item={{
+              title: "Calendario de Eventos",
+              category: "AGENDA",
+              excerpt:
+                "Descubre los próximos encuentros, debates y actividades en tu ciudad.",
+              imageUrl: "https://placehold.co/600x400.png",
+              aiHint: "calendar event",
+              details:
+                "Filtra por ciudad y tipo de actividad. Activa recordatorios y comparte con tu red.",
+              date: "Próximas 2 semanas",
+              location: "Colombia",
+              readTime: "—",
+            }}
+          />
         </div>
+
         <div className="mt-12 text-center">
-            <Button size="lg">Ver todas las noticias</Button>
+          <Button size="lg">Ver todas las noticias</Button>
         </div>
       </div>
     </section>
