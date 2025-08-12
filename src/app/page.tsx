@@ -14,8 +14,8 @@ import { ArrowRight, PlayCircle } from "lucide-react";
 export default function Home() {
   return (
     <>
-      <Header />
       <main className="flex-1">
+        <Header />
         <ManifestoView />
 
         {/* Mobile-only Manifesto Content */}
