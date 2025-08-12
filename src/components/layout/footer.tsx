@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Github, Twitter, Facebook, Instagram } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
     <footer className="bg-secondary/50 backdrop-blur-sm">
       <div className="container mx-auto px-6 py-8">
         <div className="flex flex-col items-center text-center">
-          <h2 className="font-headline text-2xl font-bold">
-            <span className="text-primary">Serpa</span>
-            <span className="font-light text-foreground/80">Inmersivo</span>
-          </h2>
+          <Image 
+            src="/LandPage/logoHoracioSerpa.png"
+            alt="Logo Horacio Serpa"
+            width={200}
+            height={50}
+            className="h-auto"
+          />
 
           <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2">
             <a

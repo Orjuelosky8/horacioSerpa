@@ -6,6 +6,7 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const navLinks = [
   { href: "#biografia", label: "Quién Soy" },
@@ -53,10 +54,13 @@ export default function Header() {
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="font-headline text-2xl font-bold">
-            <span className="text-primary">Serpa</span>
-            <span className={cn("font-light", isScrolled ? "text-foreground/80" : "text-white/80")}>Inmersivo</span>
-          </span>
+          <Image
+            src="/LandPage/logoHoracioSerpa.png"
+            alt="Logo Horacio Serpa"
+            width={180}
+            height={40}
+            className="h-auto"
+          />
         </Link>
         <nav className="hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex">
           {navLinks.map((link) => (
