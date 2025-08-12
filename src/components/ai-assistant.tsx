@@ -45,19 +45,27 @@ export default function AiAssistant() {
     if (!input.trim()) return;
 
     const userMessage: Message = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     const currentInput = input;
     setInput("");
 
     startTransition(async () => {
       try {
-        const result = await animatedAiAssistant({ query: currentInput });
+        const result = await animatedAiAssistant({
+          query: currentInput,
+          history: newMessages.map(m => ({
+            role: m.role,
+            content: [{ text: m.content }],
+          })),
+        });
         const assistantMessage: Message = {
           role: "assistant",
           content: result.response,
         };
         setMessages((prev) => [...prev, assistantMessage]);
       } catch (error) {
+        console.error(error);
         const errorMessage: Message = {
           role: "assistant",
           content: "Lo siento, ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",

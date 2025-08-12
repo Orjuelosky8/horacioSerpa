@@ -12,6 +12,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const AnimatedAiAssistantInputSchema = z.object({
+  history: z.array(z.any()).describe('The conversation history.'),
   query: z.string().describe('The user query about Horacio Serpa.'),
 });
 export type AnimatedAiAssistantInput = z.infer<typeof AnimatedAiAssistantInputSchema>;
@@ -25,28 +26,26 @@ export async function animatedAiAssistant(input: AnimatedAiAssistantInput): Prom
   return animatedAiAssistantFlow(input);
 }
 
-const prompt = ai.definePrompt({
-  name: 'animatedAiAssistantPrompt',
-  input: {schema: AnimatedAiAssistantInputSchema},
-  output: {schema: AnimatedAiAssistantOutputSchema},
-  prompt: `You are an expert virtual assistant for the Horacio Serpa immersive campaign. Your goal is to answer questions about his life, political career, proposals, and legacy in a concise, kind, and neutral tone.
-
-  Base your answers on the information provided in the different sections of the immersive page: biography, proposals, news, etc.
-
-  Answer the following question:
-
-  {{query}}
-  `,
-});
-
 const animatedAiAssistantFlow = ai.defineFlow(
   {
     name: 'animatedAiAssistantFlow',
     inputSchema: AnimatedAiAssistantInputSchema,
     outputSchema: AnimatedAiAssistantOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
+  async ({ query, history }) => {
+    const { output } = await ai.generate({
+      prompt: `You are an expert virtual assistant for the Horacio Serpa immersive campaign. Your goal is to answer questions about his life, political career, proposals, and legacy in a concise, kind, and neutral tone.
+
+      Base your answers on the information provided in the different sections of the immersive page: biography, proposals, news, etc.
+      
+      Answer the following question:
+      
+      {{query}}
+      `,
+      history,
+      input: { query },
+      output: { schema: AnimatedAiAssistantOutputSchema },
+    });
     return output!;
   }
 );
