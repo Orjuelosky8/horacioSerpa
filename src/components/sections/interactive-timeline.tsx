@@ -1,36 +1,52 @@
+
+"use client";
+
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Briefcase, GraduationCap, Gavel } from "lucide-react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 const timelineEvents = [
   {
     icon: GraduationCap,
     date: "1965",
     title: "Grado en Derecho",
-    description: "Obtiene su título de abogado de la Universidad del Atlántico, sentando las bases de su carrera pública.",
+    description: "Obtiene su título de abogado de la Universidad del Atlántico.",
+    imageUrl: "https://placehold.co/400x500.png",
+    aiHint: "graduation scroll",
   },
   {
     icon: Gavel,
     date: "1970 - 1980",
     title: "Inicios en la Judicatura",
-    description: "Ejerce como Juez Promiscuo Municipal y Juez Penal del Circuito en Barrancabermeja.",
+    description: "Ejerce como Juez en Barrancabermeja.",
+    imageUrl: "https://placehold.co/400x500.png",
+    aiHint: "judge gavel court",
   },
   {
     icon: Briefcase,
     date: "1986 - 2002",
     title: "Congresista y Ministro",
-    description: "Una destacada carrera en el Congreso y como Ministro del Interior, de Gobierno y de la Presidencia.",
+    description: "Destacada carrera en el Congreso y como Ministro del Interior.",
+    imageUrl: "https://placehold.co/400x500.png",
+    aiHint: "politics congress",
   },
   {
     icon: BookOpen,
     date: "2006 - 2014",
     title: "Gobernador de Santander",
-    description: "Lidera el departamento de Santander, impulsando proyectos clave de desarrollo social y de infraestructura.",
+    description: "Lidera el departamento, impulsando proyectos de desarrollo.",
+    imageUrl: "https://placehold.co/400x500.png",
+    aiHint: "map region",
   },
 ];
 
 export default function InteractiveTimeline() {
+  const [hoveredImage, setHoveredImage] = useState<string | null>(null);
+
   return (
-    <section id="biografia" className="w-full py-20 md:py-32 bg-secondary/30">
+    <section id="biografia" className="relative w-full overflow-hidden py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
@@ -41,10 +57,29 @@ export default function InteractiveTimeline() {
           </p>
         </div>
 
+        {/* Floating Image Display */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <Image
+            src={hoveredImage || "https://placehold.co/400x500.png"}
+            alt="Timeline Event"
+            width={300}
+            height={400}
+            className={cn(
+              "rounded-lg object-cover shadow-2xl transition-all duration-500 ease-in-out",
+              hoveredImage ? "opacity-100 scale-100" : "opacity-0 scale-90"
+            )}
+          />
+        </div>
+
         <div className="relative max-w-2xl mx-auto">
           <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-border"></div>
           {timelineEvents.map((event, index) => (
-            <div key={index} className="relative mb-8 flex items-center">
+            <div
+              key={index}
+              className="relative mb-8 flex items-center"
+              onMouseEnter={() => setHoveredImage(event.imageUrl)}
+              onMouseLeave={() => setHoveredImage(null)}
+            >
               <div
                 className={`flex w-full items-center ${
                   index % 2 === 0 ? "justify-start" : "justify-end"
@@ -55,7 +90,7 @@ export default function InteractiveTimeline() {
                     index % 2 === 0 ? "pr-8" : "pl-8"
                   }`}
                 >
-                  <Card className="transition-shadow hover:shadow-xl">
+                  <Card className="backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80">
                     <CardHeader>
                       <CardTitle className="font-headline flex items-center gap-4">
                         <div>

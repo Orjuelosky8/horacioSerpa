@@ -55,10 +55,10 @@ export default function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/LandPage/logoHoracioSerpa.png"
+            src="/Landpage/logoHoracioSerpa.png"
             alt="Logo Horacio Serpa"
-            width={180}
-            height={40}
+            width={140}
+            height={30}
             className="h-auto"
           />
         </Link>
