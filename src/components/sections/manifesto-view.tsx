@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function ManifestoView() {
   return (
-    <section className="relative w-full h-[90svh] overflow-hidden">
+    <section className="relative w-full h-[90svh] overflow-hidden -mt-20">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video

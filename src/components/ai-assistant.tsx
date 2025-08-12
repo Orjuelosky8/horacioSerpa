@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useTransition } from "react";
-import { MessageSquare, Send, X, Loader, Bot } from "lucide-react";
+import { Send, X, Loader, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -46,15 +46,24 @@ export default function AiAssistant() {
 
     const userMessage: Message = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = input;
     setInput("");
 
     startTransition(async () => {
-      const result = await animatedAiAssistant({ query: input });
-      const assistantMessage: Message = {
-        role: "assistant",
-        content: result.response,
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
+      try {
+        const result = await animatedAiAssistant({ query: currentInput });
+        const assistantMessage: Message = {
+          role: "assistant",
+          content: result.response,
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      } catch (error) {
+        const errorMessage: Message = {
+          role: "assistant",
+          content: "Lo siento, ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      }
     });
   };
 
