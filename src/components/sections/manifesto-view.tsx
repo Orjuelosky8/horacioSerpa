@@ -24,7 +24,7 @@ export default function ManifestoView() {
       {/* Main Container */}
       <div className="relative z-10 h-full flex flex-col">
         {/* Mobile-only title < 640px */}
-        <div className="sm:hidden flex-shrink-0 pt-20 pb-4 text-center">
+        <div className="sm:hidden flex-shrink-0 pt-24 pb-4 text-center">
             <h1 className="font-headline text-5xl font-bold tracking-tight leading-tight text-white sm:text-6xl">
             Por una Colombia <br />
             <span className="text-primary">justa y unida</span>
@@ -42,12 +42,12 @@ export default function ManifestoView() {
         </div>
 
         {/* Image Container */}
-        <div className="absolute bottom-0 left-0 right-0 h-[85%] w-full">
+        <div className="absolute bottom-0 left-0 right-0 h-[85%] w-full sm:w-auto sm:h-full sm:object-right">
           <Image
             src="/Landpage/Horacio Jose 02 - Editado.png"
             alt="Horacio Serpa"
             fill
-            className="object-contain object-bottom opacity-90"
+            className="object-contain object-bottom sm:object-right opacity-90"
             priority
           />
         </div>
