@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function ManifestoView() {
   return (
-    <section className="relative w-full h-[90svh] overflow-hidden -mt-20">
+    <section className="relative w-full h-[90svh] overflow-hidden">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video
@@ -38,16 +38,32 @@ export default function ManifestoView() {
               Por una Colombia <br />
               <span className="text-primary">justa y unida</span>
             </h1>
+            <p className="mt-4 max-w-xl text-lg text-white/80">
+              Unidos por la experiencia, la integridad y un compromiso
+              inquebrantable con el futuro de nuestra nación.
+            </p>
+            <div className="mt-8 flex items-center gap-4">
+              <Button size="lg">
+                Conóceme <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-transparent text-white border-white/50 hover:bg-white/10 hover:text-white"
+              >
+                Únete a la campaña <PlayCircle className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
 
         {/* Image Container */}
-        <div className="absolute bottom-0 left-0 right-0 h-[85%] w-full sm:w-auto sm:h-full sm:object-right">
+        <div className="absolute bottom-0 h-[85%] w-full sm:w-1/2 sm:right-0 opacity-90">
           <Image
             src="/Landpage/Horacio Jose 02 - Editado.png"
             alt="Horacio Serpa"
             fill
-            className="object-contain object-bottom sm:object-right opacity-90"
+            className="object-contain object-bottom sm:object-right"
             priority
           />
         </div>
