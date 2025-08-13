@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Handshake, Heart, MessageCircle, Users } from "lucide-react";
+import { Handshake, Heart, Users, MessageCircle, ShieldCheck, Truck } from "lucide-react";
 
 export default function JoinCampaign() {
   return (
@@ -63,28 +63,28 @@ export default function JoinCampaign() {
                   <Label htmlFor="join-email">Correo Electrónico</Label>
                   <Input id="join-email" type="email" placeholder="tu@email.com" />
                 </div>
-                <div className="space-y-2">
+                 <div className="space-y-2">
                   <Label>¿Cómo te gustaría ayudar?</Label>
-                  <div className="grid grid-cols-2 gap-4 pt-2">
-                    <div className="flex items-center gap-2">
-                      <Checkbox id="interest-events" />
-                      <Label htmlFor="interest-events" className="flex items-center gap-1.5"><Users className="h-4 w-4"/> Eventos</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div className="flex items-center gap-2 rounded-md p-2 hover:bg-muted">
+                      <Checkbox id="interest-voz" />
+                      <Label htmlFor="interest-voz" className="flex items-center gap-1.5 cursor-pointer"><Users className="h-4 w-4 text-primary"/> Voz a voz</Label>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox id="interest-social" />
-                      <Label htmlFor="interest-social" className="flex items-center gap-1.5"><MessageCircle className="h-4 w-4"/> Redes</Label>
+                    <div className="flex items-center gap-2 rounded-md p-2 hover:bg-muted">
+                      <Checkbox id="interest-digital" />
+                      <Label htmlFor="interest-digital" className="flex items-center gap-1.5 cursor-pointer"><MessageCircle className="h-4 w-4 text-primary"/> Activismo digital</Label>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox id="interest-logistics" />
-                      <Label htmlFor="interest-logistics">Logística</Label>
+                    <div className="flex items-center gap-2 rounded-md p-2 hover:bg-muted">
+                      <Checkbox id="interest-voto" />
+                      <Label htmlFor="interest-voto" className="flex items-center gap-1.5 cursor-pointer"><ShieldCheck className="h-4 w-4 text-primary"/> Defensa del voto</Label>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox id="interest-other" />
-                      <Label htmlFor="interest-other">Testimonio</Label>
+                    <div className="flex items-center gap-2 rounded-md p-2 hover:bg-muted">
+                      <Checkbox id="interest-logistica" />
+                      <Label htmlFor="interest-logistica" className="flex items-center gap-1.5 cursor-pointer"><Truck className="h-4 w-4 text-primary"/> Logística</Label>
                     </div>
                   </div>
                 </div>
-                <Button type="submit" size="lg" className="w-full transition-transform duration-300 hover:scale-105">
+                <Button type="submit" size="lg" className="w-full transition-transform duration-300 hover:scale-105 animate-pulse">
                   Quiero ser parte del cambio
                 </Button>
               </form>
