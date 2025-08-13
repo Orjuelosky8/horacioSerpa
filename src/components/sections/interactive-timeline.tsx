@@ -12,7 +12,7 @@ const timelineEvents = [
     date: "1965",
     title: "Grado en Derecho",
     description: "Obtiene su título de abogado de la Universidad del Atlántico.",
-    imageUrl: "https://placehold.co/200x400.png",
+    imageUrl: "/Timeline/hs1.png",
     aiHint: "graduation scroll",
   },
   {
@@ -20,7 +20,7 @@ const timelineEvents = [
     date: "1970 - 1980",
     title: "Inicios en la Judicatura",
     description: "Ejerce como Juez en Barrancabermeja.",
-    imageUrl: "https://placehold.co/200x400.png",
+    imageUrl: "/Timeline/hs2.jpg",
     aiHint: "judge gavel court",
   },
   {
@@ -28,7 +28,7 @@ const timelineEvents = [
     date: "1986 - 2002",
     title: "Congresista y Ministro",
     description: "Destacada carrera en el Congreso y como Ministro del Interior.",
-    imageUrl: "https://placehold.co/600x800.png",
+    imageUrl: "/Timeline/hs3.jpg",
     aiHint: "politics congress",
   },
   {
@@ -36,7 +36,7 @@ const timelineEvents = [
     date: "2006 - 2014",
     title: "Gobernador de Santander",
     description: "Lidera el departamento, impulsando proyectos de desarrollo.",
-    imageUrl: "https://placehold.co/600x800.png",
+    imageUrl: "/Timeline/hs4.jpg",
     aiHint: "map region",
   },
 ];

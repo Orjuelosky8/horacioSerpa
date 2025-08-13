@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Github, Twitter, Facebook, Instagram } from "lucide-react";
+import { Twitter, Facebook, Instagram } from "lucide-react";
 import Image from "next/image";
 
 export default function Footer() {
@@ -58,7 +58,7 @@ export default function Footer() {
 
           <div className="-mx-2 mt-3 flex sm:mt-0">
             <Button variant="ghost" size="icon" asChild>
-              <a href="#" aria-label="Twitter">
+              <a href="https://x.com/HoracioJSerpa" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
                 <Twitter className="h-5 w-5" />
               </a>
             </Button>
@@ -68,7 +68,7 @@ export default function Footer() {
               </a>
             </Button>
             <Button variant="ghost" size="icon" asChild>
-              <a href="#" aria-label="Instagram">
+              <a href="https://www.instagram.com/horaciojserpa/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
             </Button>

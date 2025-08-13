@@ -89,10 +89,22 @@ export default {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        // Agregar keyframes para el deslizamiento
+        slideInLeft: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        slideInRight: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        // Agregar animaciones de deslizamiento
+        slideInLeft: 'slideInLeft 0.9s ease-out',
+        slideInRight: 'slideInRight 0.9s ease-out',
       },
     },
   },
