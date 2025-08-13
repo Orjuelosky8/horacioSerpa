@@ -1,15 +1,73 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useTransition } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { ArrowRight, Bot, PlayCircle, Send, User } from "lucide-react";
+import { Bot, Loader, PlayCircle, Send, User } from "lucide-react";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
+import { animatedAiAssistant } from "@/ai/flows/animated-ai-assistant";
+import { ScrollArea } from "../ui/scroll-area";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+
+type Message = {
+  role: "user" | "assistant";
+  content: string;
+};
 
 export default function AiChatVideo() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isPending, startTransition] = useTransition();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]')!.scrollTo({
+        top: scrollAreaRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [messages]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMessage: Message = { role: "user", content: input };
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+    const currentInput = input;
+    setInput("");
+
+    startTransition(async () => {
+      try {
+        const result = await animatedAiAssistant({
+          query: currentInput,
+          history: newMessages.map((m) => ({
+            role: m.role,
+            content: [{ text: m.content }],
+          })),
+        });
+        const assistantMessage: Message = {
+          role: "assistant",
+          content: result.response,
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      } catch (error) {
+        console.error(error);
+        const errorMessage: Message = {
+          role: "assistant",
+          content:
+            "Lo siento, ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      }
+    });
+  };
+
 
   return (
     <section id="ai-interaction" className="w-full py-20 md:py-32 bg-secondary/30">
@@ -66,36 +124,74 @@ export default function AiChatVideo() {
               <h3 className="font-headline text-xl text-center">Chatea con Horacio IA</h3>
             </div>
             <CardContent className="p-0">
-                <div className="h-96 bg-secondary/20 p-4 space-y-4 overflow-y-auto relative">
-                    {/* Wavy background */}
+                <ScrollArea className="h-96 relative" ref={scrollAreaRef}>
+                  <div className="p-4 space-y-4">
                     <div 
                         className="absolute inset-0 bg-repeat opacity-5"
                         style={{backgroundImage: `url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none'/%3e%3cpath d='M0 60C10.5 45.5 21.5 30.5 32 30C42.5 29.5 53.5 44 64 45C74.5 46 85.5 32.5 96 32C106.5 31.5 117.5 45.5 128 46C138.5 46.5 149.5 33 160 33' stroke='hsl(var(--primary))' stroke-width='2' stroke-linecap='square'/%3e%3c/svg%3e")`, backgroundSize: '100px 100px'}} 
                     />
                     
-                    {/* Mensajes de ejemplo */}
+                    {/* Mensaje de bienvenida */}
                     <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-                            <Bot className="h-5 w-5"/>
-                        </div>
+                        <Avatar className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground">
+                            <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
+                        </Avatar>
                         <div className="bg-background rounded-lg p-3 text-sm max-w-[80%] shadow">
                             <p>¡Hola! Soy el asistente virtual de Horacio Serpa. Estoy aquí para responder tus preguntas sobre su trayectoria y propuestas. ¿Cómo puedo ayudarte?</p>
                         </div>
                     </div>
-                    <div className="flex items-start gap-3 justify-end">
-                        <div className="bg-primary text-primary-foreground rounded-lg p-3 text-sm max-w-[80%] shadow">
-                           <p>¿Cuáles son sus principales propuestas en educación?</p>
+                     {messages.map((message, index) => (
+                      <div
+                        key={index}
+                        className={cn(
+                          "flex items-start gap-3",
+                          message.role === "user" ? "justify-end" : ""
+                        )}
+                      >
+                        {message.role === "assistant" && (
+                          <Avatar className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground">
+                            <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
+                          </Avatar>
+                        )}
+                        <div
+                          className={cn(
+                            "max-w-[80%] rounded-lg p-3 text-sm shadow",
+                            message.role === "user"
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-background"
+                          )}
+                        >
+                          <p>{message.content}</p>
                         </div>
-                         <div className="flex-shrink-0 h-8 w-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
-                            <User className="h-5 w-5"/>
+                        {message.role === "user" && (
+                          <Avatar className="flex-shrink-0 h-8 w-8 bg-muted text-muted-foreground">
+                            <AvatarFallback><User className="h-5 w-5"/></AvatarFallback>
+                          </Avatar>
+                        )}
+                      </div>
+                    ))}
+                    {isPending && (
+                      <div className="flex items-start gap-3">
+                        <Avatar className="flex-shrink-0 h-8 w-8 bg-primary text-primary-foreground">
+                            <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
+                        </Avatar>
+                        <div className="bg-background rounded-lg p-3 text-sm shadow">
+                          <Loader className="h-5 w-5 animate-spin" />
                         </div>
-                    </div>
-
-                </div>
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
                 <div className="p-4 border-t">
-                    <form className="flex gap-2">
-                        <Input placeholder="Escribe tu pregunta aquí..." className="flex-1" />
-                        <Button type="submit" size="icon">
+                    <form onSubmit={handleSubmit} className="flex gap-2">
+                        <Input 
+                          value={input}
+                          onChange={(e) => setInput(e.target.value)}
+                          placeholder="Escribe tu pregunta aquí..." 
+                          className="flex-1" 
+                          disabled={isPending}
+                        />
+                        <Button type="submit" size="icon" disabled={isPending}>
                             <Send className="h-4 w-4" />
                         </Button>
                     </form>
