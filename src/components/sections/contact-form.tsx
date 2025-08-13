@@ -30,8 +30,29 @@ export default function ContactForm() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="location">Ciudad/Departamento</Label>
-                  <Input id="location" placeholder="Ej: Bogotá, Cundinamarca" />
+                  <Label htmlFor="location">Ciudad</Label>
+                  <Select>
+                    <SelectTrigger id="location">
+                      <SelectValue placeholder="Selecciona tu ciudad" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bogota">Bogotá, D.C.</SelectItem>
+                      <SelectItem value="medellin">Medellín</SelectItem>
+                      <SelectItem value="cali">Cali</SelectItem>
+                      <SelectItem value="barranquilla">Barranquilla</SelectItem>
+                      <SelectItem value="cartagena">Cartagena</SelectItem>
+                      <SelectItem value="cucuta">Cúcuta</SelectItem>
+                      <SelectItem value="bucaramanga">Bucaramanga</SelectItem>
+                      <SelectItem value="pereira">Pereira</SelectItem>
+                      <SelectItem value="santa-marta">Santa Marta</SelectItem>
+                      <SelectItem value="ibague">Ibagué</SelectItem>
+                      <SelectItem value="manizales">Manizales</SelectItem>
+                      <SelectItem value="pasto">Pasto</SelectItem>
+                      <SelectItem value="villavicencio">Villavicencio</SelectItem>
+                      <SelectItem value="neiva">Neiva</SelectItem>
+                      <SelectItem value="otro">Otra</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="role">Soy un/a</Label>
