@@ -29,9 +29,36 @@ export default function ContactForm() {
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
+                 <div className="space-y-2">
                   <Label htmlFor="location">Ciudad</Label>
-                  <Input id="location" placeholder="Escribe tu ciudad" />
+                  <Select>
+                    <SelectTrigger id="location">
+                      <SelectValue placeholder="Selecciona tu ciudad" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="bogota">Bogotá</SelectItem>
+                        <SelectItem value="medellin">Medellín</SelectItem>
+                        <SelectItem value="cali">Cali</SelectItem>
+                        <SelectItem value="barranquilla">Barranquilla</SelectItem>
+                        <SelectItem value="cartagena">Cartagena</SelectItem>
+                        <SelectItem value="cucuta">Cúcuta</SelectItem>
+                        <SelectItem value="bucaramanga">Bucaramanga</SelectItem>
+                        <SelectItem value="pereira">Pereira</SelectItem>
+                        <SelectItem value="santa-marta">Santa Marta</SelectItem>
+                        <SelectItem value="ibague">Ibagué</SelectItem>
+                        <SelectItem value="pasto">Pasto</SelectItem>
+                        <SelectItem value="manizales">Manizales</SelectItem>
+                        <SelectItem value="neiva">Neiva</SelectItem>
+                        <SelectItem value="villavicencio">Villavicencio</SelectItem>
+                        <SelectItem value="valledupar">Valledupar</SelectItem>
+                        <SelectItem value="armenia">Armenia</SelectItem>
+                        <SelectItem value="monteria">Montería</SelectItem>
+                        <SelectItem value="sincelejo">Sincelejo</SelectItem>
+                        <SelectItem value="popayan">Popayán</SelectItem>
+                        <SelectItem value="tunja">Tunja</SelectItem>
+                        <SelectItem value="otro">Otra</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="role">Soy un/a</Label>
