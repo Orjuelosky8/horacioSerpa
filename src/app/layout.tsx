@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import AiAssistant from "@/components/ai-assistant";
 import SmoothScroller from "@/components/smooth-scroller";
 import SceneLoader from "@/components/scene-loader";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Serpa Inmersivo",
@@ -37,6 +38,8 @@ export default function RootLayout({
           <AiAssistant />
           <Toaster />
         </SmoothScroller>
+        <Script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></Script>
+        <Script async src="//www.instagram.com/embed.js"></Script>
       </body>
     </html>
   );
