@@ -84,7 +84,7 @@ export default function JoinCampaign() {
                     </div>
                   </div>
                 </div>
-                <Button type="submit" size="lg" className="w-full transition-transform duration-300 hover:scale-105 animate-pulse">
+                <Button type="submit" size="lg" className="w-full transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/20">
                   Quiero ser parte del cambio
                 </Button>
               </form>
