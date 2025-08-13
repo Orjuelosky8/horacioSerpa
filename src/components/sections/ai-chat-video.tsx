@@ -70,14 +70,14 @@ export default function AiChatVideo() {
 
 
   return (
-    <section id="ai-interaction" className="w-full py-20 md:py-32 bg-secondary/30">
+    <section id="habla-con-ia" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
-            Interactúa con la Campaña
+            Habla con mi Clon Digital
           </h2>
           <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
-            Resuelve tus dudas con nuestro asistente virtual y conoce más sobre nuestra visión en el siguiente video.
+            Pregúntale directamente a mi asistente de IA sobre mi trayectoria y propuestas. Además, conoce mi visión en el siguiente video.
           </p>
         </div>
 

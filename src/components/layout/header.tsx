@@ -12,6 +12,7 @@ const navLinks = [
   { href: "#biografia", label: "Quién Soy" },
   { href: "#propuestas", label: "Propuestas" },
   { href: "#noticias", label: "Noticias" },
+  { href: "#habla-con-ia", label: "Habla con mi IA" },
   { href: "#unete", label: "Únete" },
 ];
 
