@@ -10,6 +10,7 @@ import JoinCampaign from "@/components/sections/join-campaign";
 import ContactForm from "@/components/sections/contact-form";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PlayCircle } from "lucide-react";
+import AiChatVideo from "@/components/sections/ai-chat-video";
 
 export default function Home() {
   return (
@@ -45,6 +46,7 @@ export default function Home() {
         <DepthMasonry />
         <LiveCubesphere />
         <TestimonialReel />
+        <AiChatVideo />
         <JoinCampaign />
         <ContactForm />
       </main>
