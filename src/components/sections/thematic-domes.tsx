@@ -3,12 +3,14 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Scale, BookHeart, Stethoscope, Briefcase, ShieldCheck, Leaf, ArrowRight, X } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
+import { useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 const proposals = [
   {
+    id: 'justicia',
     icon: Scale,
     title: "Justicia",
     description: "Fortalecimiento del sistema judicial para una justicia más rápida, transparente y accesible para todos.",
@@ -18,9 +20,10 @@ const proposals = [
         "Fortalecimiento de la defensoría pública.",
         "Programas de acceso a la justicia en zonas rurales."
     ],
-    pdfUrl: "/propuestas/justicia.pdf",
+    pdfUrl: "/Propuestas/justicia.pdf",
   },
   {
+    id: 'educacion',
     icon: BookHeart,
     title: "Educación",
     description: "Inversión en educación de calidad desde la primera infancia hasta la universidad, con enfoque en tecnología.",
@@ -33,6 +36,7 @@ const proposals = [
     pdfUrl: "/propuestas/educacion.pdf",
   },
   {
+    id: 'salud',
     icon: Stethoscope,
     title: "Salud",
     description: "Un sistema de salud preventivo y eficiente que garantice cobertura universal y atención digna en todo el territorio.",
@@ -45,6 +49,7 @@ const proposals = [
     pdfUrl: "/propuestas/salud.pdf",
   },
   {
+    id: 'empleo',
     icon: Briefcase,
     title: "Empleo",
     description: "Creación de empleos de calidad a través del apoyo a emprendedores, la industria nacional y la inversión.",
@@ -57,6 +62,7 @@ const proposals = [
     pdfUrl: "/propuestas/empleo.pdf",
   },
   {
+    id: 'derechos-humanos',
     icon: ShieldCheck,
     title: "Derechos Humanos",
     description: "Protección y promoción de los derechos humanos como pilar fundamental de una sociedad pacífica y equitativa.",
@@ -69,6 +75,7 @@ const proposals = [
     pdfUrl: "/propuestas/derechos-humanos.pdf",
   },
   {
+    id: 'medio-ambiente',
     icon: Leaf,
     title: "Medio Ambiente",
     description: "Políticas para la protección de nuestra biodiversidad, el fomento de energías limpias y el desarrollo sostenible.",
@@ -82,8 +89,9 @@ const proposals = [
   },
 ];
 
+type Proposal = typeof proposals[0];
 
-function FlipCard({ proposal }: { proposal: typeof proposals[0] }) {
+function FlipCard({ proposal, onOpenModal }: { proposal: Proposal, onOpenModal: () => void }) {
     return (
       <div className="group w-full h-80 [perspective:1000px]">
         <div className="relative h-full w-full rounded-xl shadow-lg transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
@@ -114,40 +122,88 @@ function FlipCard({ proposal }: { proposal: typeof proposals[0] }) {
                     </ul>
                 </div>
                 <div className="mt-4 text-center">
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="outline">
-                                Conoce más <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-4xl h-[90vh] p-0">
-                            <DialogHeader className="p-4 border-b flex-row justify-between items-center">
-                                <DialogTitle className="font-headline">{proposal.title}</DialogTitle>
-                                <DialogClose asChild>
-                                    <Button variant="ghost" size="icon">
-                                        <X className="h-5 w-5" />
-                                        <span className="sr-only">Cerrar</span>
-                                    </Button>
-                                </DialogClose>
-                            </DialogHeader>
-                            <div className="h-full w-full p-4 pt-0">
-                                <iframe 
-                                    src={proposal.pdfUrl}
-                                    className="w-full h-full border-0 rounded-b-lg"
-                                    title={`Propuesta ${proposal.title}`}
-                                />
-                            </div>
-                        </DialogContent>
-                    </Dialog>
+                    <Button variant="outline" onClick={onOpenModal}>
+                        Conoce más <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                 </div>
             </Card>
           </div>
         </div>
       </div>
     );
-  }
+}
+
+function PdfViewerModal({ 
+    isOpen, 
+    onOpenChange, 
+    proposals, 
+    selectedProposal, 
+    setSelectedProposal 
+}: { 
+    isOpen: boolean, 
+    onOpenChange: (isOpen: boolean) => void,
+    proposals: Proposal[],
+    selectedProposal: Proposal | null,
+    setSelectedProposal: (proposal: Proposal) => void,
+}) {
+    if (!selectedProposal) return null;
+
+    const handleSelectChange = (proposalId: string) => {
+        const newProposal = proposals.find(p => p.id === proposalId);
+        if (newProposal) {
+            setSelectedProposal(newProposal);
+        }
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-5xl w-[90%] h-[90vh] flex flex-col p-0">
+                <DialogHeader className="p-4 border-b flex-row justify-between items-center flex-shrink-0">
+                    <DialogTitle className="font-headline flex-grow">
+                        <Select value={selectedProposal.id} onValueChange={handleSelectChange}>
+                            <SelectTrigger className="w-full md:w-[300px] text-lg">
+                                <SelectValue placeholder="Selecciona una propuesta" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {proposals.map(p => (
+                                    <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </DialogTitle>
+                    <DialogClose asChild>
+                        <Button variant="ghost" size="icon">
+                            <X className="h-5 w-5" />
+                            <span className="sr-only">Cerrar</span>
+                        </Button>
+                    </DialogClose>
+                </DialogHeader>
+                <div className="flex-grow p-4 pt-0">
+                    <iframe 
+                        src={selectedProposal.pdfUrl}
+                        className="w-full h-full border-0 rounded-b-lg"
+                        title={`Propuesta ${selectedProposal.title}`}
+                    />
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
 
 export default function ThematicDomes() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
+
+  const handleOpenModal = (proposal: Proposal) => {
+    setSelectedProposal(proposal);
+    setIsModalOpen(true);
+  };
+  
+  const handleSetSelected = (proposal: Proposal) => {
+    setSelectedProposal(proposal);
+  };
+
   return (
     <section id="propuestas" className="w-full py-20 md:py-32">
       <div className="container mx-auto px-6">
@@ -160,12 +216,18 @@ export default function ThematicDomes() {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {proposals.map((proposal, index) => (
-            <FlipCard key={index} proposal={proposal} />
+          {proposals.map((proposal) => (
+            <FlipCard key={proposal.id} proposal={proposal} onOpenModal={() => handleOpenModal(proposal)} />
           ))}
         </div>
       </div>
+       <PdfViewerModal
+          isOpen={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          proposals={proposals}
+          selectedProposal={selectedProposal}
+          setSelectedProposal={handleSetSelected}
+        />
     </section>
   );
 }
-

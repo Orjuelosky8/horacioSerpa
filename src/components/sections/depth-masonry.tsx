@@ -26,7 +26,7 @@ const newsItems: NewsItem[] = [
     category: "Justicia",
     excerpt:
       "Un profundo vistazo a los puntos clave de la propuesta de reforma judicial y su impacto en el país.",
-    imageUrl: "https://placehold.co/600x400.png",
+    imageUrl: "/News/not1.avif",
     aiHint: "justice law",
     details:
       "Puntos clave: acceso a la justicia, descongestión, digitalización de procesos y fortalecimiento de la defensoría.",
@@ -39,7 +39,7 @@ const newsItems: NewsItem[] = [
     category: "Educación",
     excerpt:
       "Detalles del plan para fortalecer la educación pública desde la primera infancia hasta la universidad.",
-    imageUrl: "https://placehold.co/600x700.png",
+    imageUrl: "/News/not2.webp",
     aiHint: "education classroom",
     details:
       "Núcleos del plan: infraestructura, formación docente, conectividad y becas de acceso.",
@@ -52,7 +52,7 @@ const newsItems: NewsItem[] = [
     category: "Salud",
     excerpt:
       "Se presenta un enfoque en la prevención de enfermedades y el fortalecimiento de la atención primaria.",
-    imageUrl: "https://placehold.co/600x500.png",
+    imageUrl: "/News/not3.jpg",
     aiHint: "health doctor",
     details:
       "Líneas: tamizaje temprano, rutas de atención, telemedicina y equipos territoriales.",
@@ -65,7 +65,7 @@ const newsItems: NewsItem[] = [
     category: "Empleo",
     excerpt:
       "Iniciativas para fomentar el emprendimiento y atraer inversión que genere empleos de calidad.",
-    imageUrl: "https://placehold.co/600x600.png",
+    imageUrl: "/News/not4.jpg",
     aiHint: "jobs industry",
     details:
       "Ejes: simplificación regulatoria, clústeres regionales, compras públicas y economía creativa.",
@@ -253,7 +253,7 @@ export default function DepthMasonry() {
               category: "AGENDA",
               excerpt:
                 "Descubre los próximos encuentros, debates y actividades en tu ciudad.",
-              imageUrl: "https://placehold.co/600x400.png",
+              imageUrl: "/News/not5.jpg",
               aiHint: "calendar event",
               details:
                 "Filtra por ciudad y tipo de actividad. Activa recordatorios y comparte con tu red.",
