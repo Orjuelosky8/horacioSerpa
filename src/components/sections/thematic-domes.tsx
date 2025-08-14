@@ -1,7 +1,11 @@
+
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scale, BookHeart, Stethoscope, Briefcase, ShieldCheck, Leaf, ArrowRight } from "lucide-react";
+import { Scale, BookHeart, Stethoscope, Briefcase, ShieldCheck, Leaf, ArrowRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 
 const proposals = [
   {
@@ -14,6 +18,7 @@ const proposals = [
         "Fortalecimiento de la defensoría pública.",
         "Programas de acceso a la justicia en zonas rurales."
     ],
+    pdfUrl: "/propuestas/justicia.pdf",
   },
   {
     icon: BookHeart,
@@ -25,6 +30,7 @@ const proposals = [
         "Becas y créditos condonables para educación superior.",
         "Infraestructura y conectividad para colegios públicos."
     ],
+    pdfUrl: "/propuestas/educacion.pdf",
   },
   {
     icon: Stethoscope,
@@ -36,6 +42,7 @@ const proposals = [
         "Reducción de los tiempos de espera para especialistas.",
         "Transparencia en el manejo de los recursos de la salud."
     ],
+    pdfUrl: "/propuestas/salud.pdf",
   },
   {
     icon: Briefcase,
@@ -47,6 +54,7 @@ const proposals = [
         "Inversión en sectores estratégicos como el turismo y la tecnología.",
         "Programas de formación para el trabajo."
     ],
+    pdfUrl: "/propuestas/empleo.pdf",
   },
   {
     icon: ShieldCheck,
@@ -58,6 +66,7 @@ const proposals = [
         "Protección a líderes sociales y defensores de DDHH.",
         "Políticas de inclusión para minorías."
     ],
+    pdfUrl: "/propuestas/derechos-humanos.pdf",
   },
   {
     icon: Leaf,
@@ -69,6 +78,7 @@ const proposals = [
         "Lucha frontal contra la deforestación.",
         "Incentivos a la producción y consumo sostenible."
     ],
+    pdfUrl: "/propuestas/medio-ambiente.pdf",
   },
 ];
 
@@ -104,9 +114,31 @@ function FlipCard({ proposal }: { proposal: typeof proposals[0] }) {
                     </ul>
                 </div>
                 <div className="mt-4 text-center">
-                    <Button variant="outline">
-                        Conoce más <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline">
+                                Conoce más <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-4xl h-[90vh] p-0">
+                            <DialogHeader className="p-4 border-b flex-row justify-between items-center">
+                                <DialogTitle className="font-headline">{proposal.title}</DialogTitle>
+                                <DialogClose asChild>
+                                    <Button variant="ghost" size="icon">
+                                        <X className="h-5 w-5" />
+                                        <span className="sr-only">Cerrar</span>
+                                    </Button>
+                                </DialogClose>
+                            </DialogHeader>
+                            <div className="h-full w-full p-4 pt-0">
+                                <iframe 
+                                    src={proposal.pdfUrl}
+                                    className="w-full h-full border-0 rounded-b-lg"
+                                    title={`Propuesta ${proposal.title}`}
+                                />
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </Card>
           </div>
@@ -136,3 +168,4 @@ export default function ThematicDomes() {
     </section>
   );
 }
+
