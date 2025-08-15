@@ -6,6 +6,7 @@ import AiAssistant from "@/components/ai-assistant";
 import SmoothScroller from "@/components/smooth-scroller";
 import SceneLoader from "@/components/scene-loader";
 import Script from "next/script";
+import SocialSidebar from "@/components/layout/social-sidebar";
 
 export const metadata: Metadata = {
   title: "Serpa Inmersivo",
@@ -32,6 +33,7 @@ export default function RootLayout({
           <div className="fixed inset-0 -z-10 h-full w-full">
             <SceneLoader />
           </div>
+          <SocialSidebar />
           <div className="relative z-10 flex min-h-screen flex-col">
             {children}
           </div>

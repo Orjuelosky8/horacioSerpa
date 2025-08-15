@@ -9,7 +9,6 @@ import TestimonialReel from "@/components/sections/testimonial-reel";
 import JoinCampaign from "@/components/sections/join-campaign";
 import ContactForm from "@/components/sections/contact-form";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, PlayCircle } from "lucide-react";
 import AiChatVideo from "@/components/sections/ai-chat-video";
 import Gallery from "@/components/sections/gallery";
 
@@ -28,15 +27,11 @@ export default function Home() {
               inquebrantable con el futuro de nuestra nación.
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-4 w-full max-w-sm mx-auto">
-              <Button size="lg" className="w-full">
-                Conóceme <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full"
+               <Button 
+                size="lg" 
+                className="w-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
               >
-                Únete a la campaña <PlayCircle className="ml-2 h-5 w-5" />
+                Únete a la Campaña
               </Button>
             </div>
           </div>
