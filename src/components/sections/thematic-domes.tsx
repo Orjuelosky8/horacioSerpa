@@ -20,7 +20,7 @@ const proposals = [
         "Fortalecimiento de la defensoría pública.",
         "Programas de acceso a la justicia en zonas rurales."
     ],
-    pdfUrl: "/Propuestas/justicia.pdf",
+    pdfUrl: "/propuestas/justicia.pdf",
   },
   {
     id: 'educacion',
@@ -158,26 +158,35 @@ function PdfViewerModal({
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-5xl w-[90%] h-[90vh] flex flex-col p-0">
-                <DialogHeader className="p-4 border-b flex-row justify-between items-center flex-shrink-0">
-                    <DialogTitle className="font-headline flex-grow">
-                        <Select value={selectedProposal.id} onValueChange={handleSelectChange}>
-                            <SelectTrigger className="w-full md:w-[300px] text-lg">
-                                <SelectValue placeholder="Selecciona una propuesta" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {proposals.map(p => (
-                                    <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </DialogTitle>
-                    <DialogClose asChild>
-                        <Button variant="ghost" size="icon">
-                            <X className="h-5 w-5" />
-                            <span className="sr-only">Cerrar</span>
-                        </Button>
-                    </DialogClose>
-                </DialogHeader>
+            <DialogHeader className="p-4 border-b flex-row justify-between items-center flex-shrink-0">
+              <DialogTitle className="font-headline flex-grow">
+                <Select value={selectedProposal.id} onValueChange={handleSelectChange}>
+                  <SelectTrigger className="w-full md:w-[300px] text-lg">
+                    <SelectValue placeholder="Selecciona una propuesta" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {proposals.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </DialogTitle>
+              
+              {/* Botón de cierre con hover */}
+              <DialogClose asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="hover:bg-yellow-400 hover:border-yellow-500 hover:text-black border border-transparent rounded-full p-2"
+                >
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Cerrar</span>
+                </Button>
+              </DialogClose>
+            </DialogHeader>
+
                 <div className="flex-grow p-4 pt-0">
                     <iframe 
                         src={selectedProposal.pdfUrl}

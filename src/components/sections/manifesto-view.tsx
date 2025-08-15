@@ -30,7 +30,7 @@ export default function ManifestoView() {
           <div className="container mx-auto px-6 h-full flex items-center">
             <SocialSidebar />
             <div className="w-full md:w-1/2 text-left text-white pl-0 sm:pl-20">
-              <h1 className="font-headline text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+              <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                 Por una Colombia <br />
                 <span className="text-primary">justa y unida</span>
               </h1>
@@ -50,7 +50,7 @@ export default function ManifestoView() {
           </div>
           
           {/* Desktop Image */}
-          <div className="absolute bottom-0 h-full w-1/2 right-0 opacity-90">
+          <div className="absolute bottom-0 h-[85%] w-1/2 right-0 opacity-90">
             <Image
               src="/Landpage/Horacio Jose 02 - Editado.png"
               alt="Horacio Serpa"

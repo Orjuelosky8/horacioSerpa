@@ -68,3 +68,7 @@
   }
 }
 
+/* Selecciona el botón de cierre por su clase y la posición absoluta */
+div[role="dialog"] button.absolute {
+  display: none !important;
+}

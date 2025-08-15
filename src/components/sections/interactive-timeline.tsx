@@ -1,49 +1,124 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Briefcase, GraduationCap, Gavel } from "lucide-react";
+import { Card, CardContent, CardHeader, CardFooter, CardTitle } from "@/components/ui/card";
+import { Home, BookOpen, Briefcase, GraduationCap, Gavel, Building, Users, Instagram, X } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+
 
 const timelineEvents = [
   {
-    icon: GraduationCap,
-    date: "1965",
-    title: "Grado en Derecho",
-    description: "Obtiene su título de abogado de la Universidad del Atlántico.",
-    imageUrl: "/Timeline/hs1.png",
-    aiHint: "graduation scroll",
+    icon: Home, // puedes usar un ícono relacionado con origen o familia
+    date: "1982",
+    title: "Origen y raíces",
+    description:
+      "Nace en Barrancabermeja el 20 de julio de 1982, hijo del jurista y líder liberal Horacio Serpa Uribe. Desde joven hereda un profundo compromiso con el servicio público y la defensa de los derechos ciudadanos.",
+    imageUrl: "/Timeline/hs0.jpg",
+    aiHint: "birth family roots",
+    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
   },
   {
-    icon: Gavel,
-    date: "1970 - 1980",
-    title: "Inicios en la Judicatura",
-    description: "Ejerce como Juez en Barrancabermeja.",
-    imageUrl: "/Timeline/hs2.jpg",
-    aiHint: "judge gavel court",
+    icon: GraduationCap,
+    date: "2000s",
+    title: "Formación académica",
+    description:
+      "Administrador de Empresas del CESA, estudios en Negocios Internacionales y Política Económica en American University (EE. UU.), práctica en el BID, especialización en Gobierno y Asuntos Públicos (Externado/Columbia University) y Magíster en Gobierno y Políticas Públicas.",
+    imageUrl: "/Timeline/hs1.png",
+    aiHint: "university graduation academic achievement",
+    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
   },
   {
     icon: Briefcase,
-    date: "1986 - 2002",
-    title: "Congresista y Ministro",
-    description: "Destacada carrera en el Congreso y como Ministro del Interior.",
-    imageUrl: "/Timeline/hs3.jpg",
-    aiHint: "politics congress",
+    date: "2004 - 2008",
+    title: "Experiencia en el sector privado",
+    description:
+      "Trabaja en la Banca Corporativa de Bancolombia y como consultor en 7-24 Consultores, adquiriendo conocimientos clave sobre el sector empresarial y financiero.",
+    imageUrl: "/Timeline/hs2.jpg",
+    aiHint: "corporate business work",
+    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
   },
   {
-    icon: BookOpen,
-    date: "2006 - 2014",
-    title: "Gobernador de Santander",
-    description: "Lidera el departamento, impulsando proyectos de desarrollo.",
+    icon: Building,
+    date: "2011 - 2017",
+    title: "Liderazgo en Bogotá",
+    description:
+      "Elegido Concejal de Bogotá, impulsa la creación de la Secretaría de Seguridad y la Secretaría de la Mujer. En 2017 es elegido por unanimidad Presidente del Concejo, destacando por su capacidad de diálogo y liderazgo.",
+    imageUrl: "/Timeline/hs3.jpg",
+    aiHint: "city government council leadership",
+    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
+  },
+  {
+    icon: Gavel,
+    date: "2018 - 2022",
+    title: "Senado de la República",
+    description:
+      "Con más de 93.000 votos, llega al Senado. Promueve leyes como Matrícula Cero, Ley de Turismo y Registro de Obras Inconclusas, beneficiando a miles de colombianos y apoyando el desarrollo en tiempos de crisis.",
     imageUrl: "/Timeline/hs4.jpg",
-    aiHint: "map region",
+    aiHint: "politics congress lawmaking",
+    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
+  },
+  {
+    icon: Users,
+    date: "2023",
+    title: "Compromiso con Bucaramanga",
+    description:
+      "Candidato a la Alcaldía de Bucaramanga con la campaña ciudadana 'Ser Pa’ la Gente'. Aunque no resultó electo, reafirmó su compromiso con el progreso de su tierra natal.",
+    imageUrl: "/Timeline/hs5.jpg",
+    aiHint: "city leadership campaign",
+    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
   },
 ];
+
+function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, onOpenChange: (open: boolean) => void, reelUrl: string | null, title: string | null }) {
+    if (!reelUrl) return null;
+
+    // To embed a reel, the URL needs to be in the format: https://www.instagram.com/reel/YourReelId/embed/
+    const embedUrl = reelUrl.endsWith('/') ? `${reelUrl}embed/` : `${reelUrl}/embed/`;
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-sm w-[90%] p-0 aspect-[9/16] bg-black border-0">
+                <DialogHeader className="absolute top-2 right-2 z-10">
+                  <DialogClose asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="text-white bg-black/30 hover:bg-black/50 rounded-full"
+                    >
+                      <X className="h-5 w-5" />
+                      <span className="sr-only">Cerrar</span>
+                    </Button>
+                  </DialogClose>
+                </DialogHeader>
+                <iframe
+                    src={embedUrl}
+                    className="w-full h-full border-0 rounded-lg"
+                    allowFullScreen
+                    title={`Instagram Reel: ${title}`}
+                />
+            </DialogContent>
+        </Dialog>
+    );
+}
+
 
 export default function InteractiveTimeline() {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null); // se mantiene (no usado visualmente)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReelUrl, setSelectedReelUrl] = useState<string | null>(null);
+  const [selectedReelTitle, setSelectedReelTitle] = useState<string | null>(null);
+
+
+  const handleOpenReel = (reelUrl: string, title: string) => {
+    setSelectedReelUrl(reelUrl);
+    setSelectedReelTitle(title);
+    setIsModalOpen(true);
+  };
+
 
   return (
     <section id="biografia" className="relative w-full overflow-hidden py-20 md:py-32 bg-secondary/30">
@@ -103,7 +178,7 @@ export default function InteractiveTimeline() {
                       aria-describedby={`hint-${index}`}
                     >
                       <Card className={cn(
-                        "backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80",
+                        "backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80 flex flex-col h-full",
                         isHovered && "ring-2 ring-primary"
                       )}>
                         <CardHeader>
@@ -114,18 +189,26 @@ export default function InteractiveTimeline() {
                             </div>
                           </CardTitle>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="flex-grow">
                           <p className="text-sm text-muted-foreground">{event.description}</p>
                           <p id={`hint-${index}`} className="sr-only">Ilustración sugerida: {event.aiHint}</p>
                         </CardContent>
+                        {event.reelUrl && (
+                          <CardFooter className="pt-4">
+                              <Button variant="outline" size="sm" className="w-full" onClick={() => handleOpenReel(event.reelUrl, event.title)}>
+                                <Instagram className="mr-2 h-4 w-4" />
+                                Ver Reel
+                              </Button>
+                          </CardFooter>
+                        )}
                       </Card>
                     </button>
 
                     {/* IMAGEN EN MÓVIL (sm) – aparece al hacer hover/focus/touch */}
                     <div
                       className={cn(
-                        "md:hidden mt-4 transition-opacity opacity-50",
-                        isHovered ? "opacity-100" : "opacity-50 pointer-events-none"
+                        "md:hidden mt-4 transition-opacity opacity-100",
+                        // isHovered ? "opacity-100" : "opacity-50 pointer-events-none"
                       )}
                     >
                       <div className="relative">
@@ -205,6 +288,12 @@ export default function InteractiveTimeline() {
           })}
         </div>
       </div>
+       <ReelModal 
+        isOpen={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        reelUrl={selectedReelUrl}
+        title={selectedReelTitle}
+       />
     </section>
   );
 }
