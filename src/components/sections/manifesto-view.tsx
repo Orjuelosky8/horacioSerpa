@@ -50,19 +50,31 @@ export default function ManifestoView() {
         </div>
 
         {/* Mobile-only layout */}
-        <div className="sm:hidden h-full flex flex-col pt-24 text-center">
-            <h1 className="font-headline text-5xl font-bold tracking-tight leading-tight text-white px-4">
+        <div className="sm:hidden h-full flex flex-col justify-between pt-24 pb-4">
+            <h1 className="font-headline text-5xl font-bold tracking-tight leading-tight text-white px-4 text-center">
               Por una Colombia <br />
               <span className="text-primary">justa y unida</span>
             </h1>
-            <div className="flex-1 relative">
-                <Image
-                    src="/Landpage/Horacio Jose 02 - Editado.png"
-                    alt="Horacio Serpa"
-                    fill
-                    className="object-contain object-bottom"
-                    priority
-                />
+            <div className="flex-1 flex items-end -mb-4">
+                <div className="relative w-3/4 h-full">
+                    <Image
+                        src="/Landpage/Horacio Jose 02 - Editado.png"
+                        alt="Horacio Serpa"
+                        fill
+                        className="object-contain object-left-bottom"
+                        priority
+                    />
+                </div>
+                <div className="w-1/4 flex justify-center items-center pr-4">
+                    <Button
+                        size="lg"
+                        variant="outline"
+                        className="bg-white/10 text-white border-white/50 hover:bg-white/20 h-auto p-3 flex flex-col gap-1 rounded-full aspect-square justify-center"
+                    >
+                        <PlayCircle className="h-8 w-8 ml-0" />
+                        <span className="text-xs font-semibold uppercase tracking-wider">Únete</span>
+                    </Button>
+                </div>
             </div>
         </div>
         
