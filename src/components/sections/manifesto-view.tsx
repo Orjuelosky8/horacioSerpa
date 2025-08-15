@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { PlayCircle } from "lucide-react";
 import Image from "next/image";
+import SocialSidebar from "../layout/social-sidebar";
 
 export default function ManifestoView() {
   return (
@@ -25,6 +25,7 @@ export default function ManifestoView() {
       <div className="relative z-10 h-full flex flex-col">
         {/* Content for > 640px */}
         <div className="container mx-auto px-6 h-full flex items-center">
+          <SocialSidebar />
           <div className="w-full md:w-1/2 text-left text-white pl-0 sm:pl-20">
             <h1 className="font-headline text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
               Por una Colombia <br />
