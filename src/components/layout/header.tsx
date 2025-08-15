@@ -54,7 +54,7 @@ export default function Header() {
       isScrolled ? "border-border/50 bg-background/80 backdrop-blur-xl" : "bg-transparent border-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 md:pl-0">
           <Image
             src="/Landpage/logoHoracioSerpa.png"
             alt="Logo Horacio Serpa"

@@ -63,8 +63,9 @@ export default function ManifestoView() {
 
         {/* --- Mobile View (<768px) --- */}
         <div className="md:hidden h-full flex flex-col justify-between p-6 relative text-white text-center">
+            <SocialSidebar />
             {/* Top Content: Title and Text */}
-            <div className="flex-shrink-0 z-10">
+            <div className="flex-shrink-0 z-10 pt-20">
                  <h1 className="font-headline text-5xl font-bold tracking-tight">
                     Por una Colombia <br />
                     <span className="text-primary">justa y unida</span>

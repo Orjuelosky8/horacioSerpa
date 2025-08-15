@@ -23,12 +23,12 @@ export default function SocialSidebar() {
 
   return (
     <aside className={cn(
-        "absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2 hidden md:flex flex-col items-center gap-4"
+        "absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2 flex flex-col items-center gap-4"
       )}
       id="social-sidebar"
     >
-      <span className="text-sm font-semibold text-white/80 [writing-mode:vertical-lr] tracking-widest uppercase">Síguenos</span>
-      <div className="h-16 w-px bg-white/30" />
+      <span className="text-sm font-semibold text-white/80 [writing-mode:vertical-lr] tracking-widest uppercase hidden md:inline">Síguenos</span>
+      <div className="h-16 w-px bg-white/30 hidden md:inline" />
       {socialLinks.map((social) => (
         <Button
           key={social.name}
