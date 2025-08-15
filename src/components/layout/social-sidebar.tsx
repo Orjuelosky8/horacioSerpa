@@ -23,7 +23,7 @@ export default function SocialSidebar() {
 
   return (
     <aside className={cn(
-        "absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2 hidden sm:flex flex-col items-center gap-4"
+        "absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2 hidden md:flex flex-col items-center gap-4"
       )}
       id="social-sidebar"
     >
