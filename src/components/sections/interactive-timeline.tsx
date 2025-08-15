@@ -28,7 +28,7 @@ const timelineEvents = [
       "Administrador de Empresas del CESA, estudios en Negocios Internacionales y Política Económica en American University (EE. UU.), práctica en el BID, especialización en Gobierno y Asuntos Públicos (Externado/Columbia University) y Magíster en Gobierno y Políticas Públicas.",
     imageUrl: "/Timeline/hs1.png",
     aiHint: "university graduation academic achievement",
-    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
+    reelUrl: "https://www.instagram.com/p/DF-Yn4oRNrt/",
   },
   {
     icon: Briefcase,
@@ -38,7 +38,7 @@ const timelineEvents = [
       "Trabaja en la Banca Corporativa de Bancolombia y como consultor en 7-24 Consultores, adquiriendo conocimientos clave sobre el sector empresarial y financiero.",
     imageUrl: "/Timeline/hs2.jpg",
     aiHint: "corporate business work",
-    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
+    reelUrl: "https://www.instagram.com/p/DF2ywvPJL0s/",
   },
   {
     icon: Building,
@@ -73,15 +73,33 @@ const timelineEvents = [
 ];
 
 function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, onOpenChange: (open: boolean) => void, reelUrl: string | null, title: string | null }) {
-    if (!reelUrl) return null;
+    if (!reelUrl || !title) return null;
 
-    // To embed a reel, the URL needs to be in the format: https://www.instagram.com/reel/YourReelId/embed/
     const embedUrl = reelUrl.endsWith('/') ? `${reelUrl}embed` : `${reelUrl}/embed`;
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-sm w-[90%] p-0 aspect-[9/16] bg-black border-0">
-                <DialogHeader className="absolute top-2 right-2 z-10">
+            <DialogContent className="max-w-md w-[90vw] p-0 bg-transparent border-0 shadow-none">
+                <div className="relative w-full max-w-sm mx-auto">
+                    {/* Phone Frame */}
+                    <div className="relative aspect-[9/18] bg-black rounded-[40px] shadow-2xl p-3 border-4 border-neutral-800">
+                        <div className="absolute top-6 left-0 h-8 w-1 bg-neutral-700 rounded-r-lg" />
+                        <div className="absolute top-20 left-0 h-16 w-1 bg-neutral-700 rounded-r-lg" />
+                        <div className="absolute top-24 right-0 h-16 w-1 bg-neutral-700 rounded-l-lg" />
+                        
+                        <div className="w-full h-full bg-black rounded-[28px] overflow-hidden">
+                           <iframe
+                                src={embedUrl}
+                                className="w-full h-full border-0"
+                                allowFullScreen
+                                title={`Instagram Reel: ${title}`}
+                            />
+                        </div>
+                         {/* Notch */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl" />
+                    </div>
+                </div>
+                 <DialogHeader className="absolute top-2 right-2 z-10">
                   <DialogClose asChild>
                     <Button 
                       variant="ghost" 
@@ -93,12 +111,6 @@ function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, 
                     </Button>
                   </DialogClose>
                 </DialogHeader>
-                <iframe
-                    src={embedUrl}
-                    className="w-full h-full border-0 rounded-lg"
-                    allowFullScreen
-                    title={`Instagram Reel: ${title}`}
-                />
             </DialogContent>
         </Dialog>
     );
