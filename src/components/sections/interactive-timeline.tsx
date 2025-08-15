@@ -11,14 +11,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@
 
 const timelineEvents = [
   {
-    icon: Home, // puedes usar un ícono relacionado con origen o familia
+    icon: Home,
     date: "1982",
     title: "Origen y raíces",
     description:
       "Nace en Barrancabermeja el 20 de julio de 1982, hijo del jurista y líder liberal Horacio Serpa Uribe. Desde joven hereda un profundo compromiso con el servicio público y la defensa de los derechos ciudadanos.",
     imageUrl: "/Timeline/hs0.jpg",
     aiHint: "birth family roots",
-    reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
+    reelUrl: "https://www.instagram.com/reel/Cy1ESFWAwZC/",
   },
   {
     icon: GraduationCap,
@@ -76,7 +76,7 @@ function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, 
     if (!reelUrl) return null;
 
     // To embed a reel, the URL needs to be in the format: https://www.instagram.com/reel/YourReelId/embed/
-    const embedUrl = reelUrl.endsWith('/') ? `${reelUrl}embed/` : `${reelUrl}/embed/`;
+    const embedUrl = reelUrl.endsWith('/') ? `${reelUrl}embed` : `${reelUrl}/embed`;
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
