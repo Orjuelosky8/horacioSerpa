@@ -62,10 +62,21 @@ export default function ManifestoView() {
         </div>
 
         {/* --- Mobile View (<768px) --- */}
-        <div className="md:hidden h-full flex flex-col justify-end relative text-white text-center">
-            {/* Image fills bottom part of the screen */}
-            <div className="absolute bottom-0 left-0 w-full h-2/3">
-                <Image
+        <div className="md:hidden h-full flex flex-col justify-between p-6 relative text-white text-center">
+            {/* Top Content: Title and Text */}
+            <div className="flex-shrink-0 z-10">
+                 <h1 className="font-headline text-5xl font-bold tracking-tight">
+                    Por una Colombia <br />
+                    <span className="text-primary">justa y unida</span>
+                </h1>
+                <p className="mt-4 max-w-sm mx-auto text-base text-white/80">
+                    Unidos por la experiencia, la integridad y un compromiso inquebrantable.
+                </p>
+            </div>
+
+            {/* Middle Content: Image */}
+            <div className="relative w-full flex-grow h-[50%] -mb-10">
+                 <Image
                     src="/Landpage/Horacio Jose 02 - Editado.png"
                     alt="Horacio Serpa"
                     fill
@@ -73,24 +84,15 @@ export default function ManifestoView() {
                     priority
                 />
             </div>
-            {/* Content overlay */}
-            <div className="relative z-10 p-6 flex flex-col items-center h-full justify-between">
-                <div />
-                <div className="flex flex-col items-center">
-                    <h1 className="font-headline text-5xl font-bold tracking-tight">
-                        Por una Colombia <br />
-                        <span className="text-primary">justa y unida</span>
-                    </h1>
-                    <p className="mt-4 max-w-sm text-base text-white/80">
-                        Unidos por la experiencia, la integridad y un compromiso inquebrantable.
-                    </p>
-                    <Button 
-                        size="lg" 
-                        className="mt-8 px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 shadow-2xl shadow-black/40"
-                    >
-                        Únete a la Campaña
-                    </Button>
-                </div>
+            
+            {/* Bottom Content: Button */}
+            <div className="flex-shrink-0 z-10">
+                <Button 
+                    size="lg" 
+                    className="w-full max-w-xs mx-auto px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 shadow-2xl shadow-black/40"
+                >
+                    Únete a la Campaña
+                </Button>
             </div>
         </div>
       </div>
