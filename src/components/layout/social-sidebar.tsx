@@ -1,5 +1,6 @@
 import { Twitter, Instagram, Facebook } from "lucide-react";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 export default function SocialSidebar() {
   const socialLinks = [
@@ -21,7 +22,13 @@ export default function SocialSidebar() {
   ];
 
   return (
-    <aside className="fixed left-4 md:left-6 top-1/2 z-30 -translate-y-1/2 hidden sm:flex flex-col items-center gap-4">
+    <aside className={cn(
+        "fixed left-4 md:left-6 top-1/2 z-30 -translate-y-1/2 hidden sm:flex flex-col items-center gap-4",
+        // Ocultar al hacer scroll hacia abajo
+        "transition-opacity duration-300 opacity-100"
+      )}
+      id="social-sidebar"
+    >
       <span className="text-sm font-semibold text-white/80 [writing-mode:vertical-lr] tracking-widest uppercase">Síguenos</span>
       <div className="h-16 w-px bg-white/30" />
       {socialLinks.map((social) => (
@@ -39,4 +46,26 @@ export default function SocialSidebar() {
       ))}
     </aside>
   );
+}
+
+const useScrollObserver = () => {
+    if (typeof window === 'undefined') return;
+
+    const observer = new IntersectionObserver((entries) => {
+        const sidebar = document.getElementById('social-sidebar');
+        if (!sidebar) return;
+
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                sidebar.classList.remove('opacity-0');
+            } else {
+                sidebar.classList.add('opacity-0');
+            }
+        });
+    });
+
+    const target = document.querySelector('#manifesto-section');
+    if (target) {
+        observer.observe(target);
+    }
 }

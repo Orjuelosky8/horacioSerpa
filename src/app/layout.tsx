@@ -33,9 +33,11 @@ export default function RootLayout({
           <div className="fixed inset-0 -z-10 h-full w-full">
             <SceneLoader />
           </div>
-          <SocialSidebar />
-          <div className="relative z-10 flex min-h-screen flex-col">
-            {children}
+          <div className="relative">
+            <SocialSidebar />
+            <main className="relative z-10 flex min-h-screen flex-col">
+              {children}
+            </main>
           </div>
           <AiAssistant />
           <Toaster />

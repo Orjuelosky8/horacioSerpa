@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function ManifestoView() {
   return (
-    <section className="relative w-full h-[90svh] -mt-20">
+    <section className="relative w-full h-[90svh] -mt-20" id="manifesto-section">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video
@@ -25,7 +25,7 @@ export default function ManifestoView() {
       <div className="relative z-10 h-full flex flex-col">
         {/* Content for > 640px */}
         <div className="container mx-auto px-6 h-full flex items-center">
-          <div className="w-full md:w-1/2 text-left text-white">
+          <div className="w-full md:w-1/2 text-left text-white pl-0 sm:pl-20">
             <h1 className="font-headline text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
               Por una Colombia <br />
               <span className="text-primary">justa y unida</span>
