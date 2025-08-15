@@ -11,6 +11,7 @@ import ContactForm from "@/components/sections/contact-form";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import AiChatVideo from "@/components/sections/ai-chat-video";
+import Gallery from "@/components/sections/gallery";
 
 export default function Home() {
   return (
@@ -44,6 +45,7 @@ export default function Home() {
         <InteractiveTimeline />
         <ThematicDomes />
         <DepthMasonry />
+        <Gallery />
         <LiveCubesphere />
         <TestimonialReel />
         <AiChatVideo />
