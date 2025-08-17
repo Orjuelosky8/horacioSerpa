@@ -73,48 +73,56 @@ const timelineEvents = [
 ];
 
 function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, onOpenChange: (open: boolean) => void, reelUrl: string | null, title: string | null }) {
-    if (!reelUrl || !title) return null;
+  if (!reelUrl || !title) return null;
 
-    const embedUrl = reelUrl.endsWith('/') ? `${reelUrl}embed` : `${reelUrl}/embed`;
+  const embedUrl = reelUrl.endsWith('/') ? `${reelUrl}embed` : `${reelUrl}/embed`;
 
-    return (
-        <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-md w-[90vw] p-0 bg-transparent border-0 shadow-none">
-                <div className="relative w-full max-w-sm mx-auto">
-                    {/* Phone Frame */}
-                    <div className="relative aspect-[9/18] bg-black rounded-[40px] shadow-2xl p-3 border-4 border-neutral-800">
-                        <div className="absolute top-6 left-0 h-8 w-1 bg-neutral-700 rounded-r-lg" />
-                        <div className="absolute top-20 left-0 h-16 w-1 bg-neutral-700 rounded-r-lg" />
-                        <div className="absolute top-24 right-0 h-16 w-1 bg-neutral-700 rounded-l-lg" />
-                        
-                        <div className="w-full h-full bg-black rounded-[28px] overflow-hidden">
-                           <iframe
-                                src={embedUrl}
-                                className="w-full h-full border-0"
-                                allowFullScreen
-                                title={`Instagram Reel: ${title}`}
-                            />
-                        </div>
-                         {/* Notch */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl" />
-                    </div>
-                </div>
-                 <DialogHeader className="absolute top-2 right-2 z-10">
-                  <DialogClose asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="text-white bg-black/30 hover:bg-black/50 rounded-full"
-                    >
-                      <X className="h-5 w-5" />
-                      <span className="sr-only">Cerrar</span>
-                    </Button>
-                  </DialogClose>
-                </DialogHeader>
-            </DialogContent>
-        </Dialog>
-    );
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent
+        className="max-w-md w-[90vw] h-[500px] p-0 bg-transparent border-0 shadow-xl transition-transform transform scale-95 hover:scale-100 duration-300 ease-in-out"
+      >
+
+
+        <div className="relative w-full mx-auto">
+          {/* Phone Frame with gradient border and subtle shadow */}
+          <div className="relative w-full h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-[40px] shadow-2xl p-3 border-4 border-neutral-800 transform transition-all hover:scale-105 overflow-hidden">
+            <div className="absolute top-6 left-0 h-8 w-1 bg-neutral-700 rounded-r-lg" />
+            <div className="absolute top-20 left-0 h-16 w-1 bg-neutral-700 rounded-r-lg" />
+            <div className="absolute top-24 right-0 h-16 w-1 bg-neutral-700 rounded-l-lg" />
+
+            <div className="w-full h-full bg-black rounded-[28px] overflow-hidden shadow-2xl transition-transform transform hover:scale-105">
+              <iframe
+                src={embedUrl}
+                className="w-full h-full border-0 rounded-[28px] transition-all ease-in-out duration-500"
+                allowFullScreen
+                title={`Instagram Reel: ${title}`}
+              />
+            </div>
+            {/* Notch with cool hover effect */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gradient-to-r from-purple-600 to-pink-600 rounded-b-xl shadow-md hover:scale-105" />
+          </div>
+        </div>
+
+        <DialogHeader className="absolute top-2 right-2 z-10">
+          <DialogClose asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white bg-black/50 hover:bg-black/70 rounded-full transition-all ease-in-out duration-300"
+            >
+              <X className="h-5 w-5" />
+              <span className="sr-only">Cerrar</span>
+            </Button>
+          </DialogClose>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  );
 }
+
+
+
 
 
 export default function InteractiveTimeline() {
@@ -179,8 +187,9 @@ export default function InteractiveTimeline() {
                   <div className={cn("w-full sm:w-5/6 md:w-1/2", isLeft ? "pr-0 md:pr-8" : "pl-0 md:pl-8")}
                   >
                     {/* Accesibilidad: hover/focus para mostrar imagen; sin click */}
-                    <button
-                      type="button"
+                    <div
+                      role="group"
+                      tabIndex={0}
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
                       onFocus={() => setHoveredIndex(index)}
@@ -214,7 +223,7 @@ export default function InteractiveTimeline() {
                           </CardFooter>
                         )}
                       </Card>
-                    </button>
+                    </div>
 
                     {/* IMAGEN EN MÓVIL (sm) – aparece al hacer hover/focus/touch */}
                     <div
