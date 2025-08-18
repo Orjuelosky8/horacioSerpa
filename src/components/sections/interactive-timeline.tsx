@@ -80,10 +80,11 @@ function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-md w-[90vw] h-[500px] p-0 bg-transparent border-0 shadow-xl transition-transform transform scale-95 hover:scale-100 duration-300 ease-in-out"
+        className="max-w-md w-[90vw] h-[75vh] p-0 bg-transparent border-0 shadow-xl transition-transform transform scale-95 hover:scale-100 duration-300 ease-in-out"
       >
-
-
+        <DialogHeader>
+            <DialogTitle className="sr-only">Instagram Reel: {title}</DialogTitle>
+        </DialogHeader>
         <div className="relative w-full mx-auto">
           {/* Phone Frame with gradient border and subtle shadow */}
           <div className="relative w-full h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-[40px] shadow-2xl p-3 border-4 border-neutral-800 transform transition-all hover:scale-105 overflow-hidden">

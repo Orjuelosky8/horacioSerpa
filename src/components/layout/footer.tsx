@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container mx-auto px-6 py-8">
         <div className="flex flex-col items-center text-center">
           <Image 
-            src="/Landpage/logoHoracioSerpa.png"
+            src="/Landpage/HoracioSerpa_logo.png"
             alt="Logo Horacio Serpa"
             width={140}
             height={40}

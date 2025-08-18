@@ -56,7 +56,7 @@ export default function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2 md:pl-0">
           <Image
-            src="/Landpage/logoHoracioSerpa.png"
+            src="/Landpage/HoracioSerpa_logo.png"
             alt="Logo Horacio Serpa"
             width={140}
             height={30}
