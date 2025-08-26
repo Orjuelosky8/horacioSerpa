@@ -150,28 +150,35 @@ export default function AiAssistant() {
             <div className="absolute bottom-full mb-4 flex flex-col items-center gap-4">
               {actionButtons.map((btn, index) => {
                 const angle = -90 - (index * 45); // Spread buttons in a 90-degree arc upwards
-                const transform = `rotate(${angle}deg) translate(85px) rotate(${-angle}deg) scale(1)`;
+                const transform = `rotate(${angle}deg) translate(85px) rotate(${-angle}deg)`;
 
                 const buttonEl = (
-                   <Button
-                      asChild={btn.isLink}
-                      size="icon"
-                      className="h-14 w-14 rounded-full bg-secondary text-secondary-foreground shadow-lg transition-all duration-300 ease-in-out hover:scale-110 hover:bg-primary hover:text-primary-foreground animate-in fade-in zoom-in-50"
-                      style={{ transitionDelay: `${index * 50}ms` }}
-                      aria-label={btn.label}
-                      onClick={!btn.isLink ? btn.action : undefined}
+                   <div 
+                      className="transition-all duration-300"
+                      style={{
+                          transform: isActionsOpen ? transform : 'scale(0)',
+                          transitionDelay: isActionsOpen ? `${index * 50}ms` : '0ms'
+                      }}
                     >
-                      {btn.isLink ? (
-                        <a href={btn.href} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full h-full">
-                          {btn.icon}
-                        </a>
-                      ) : (
-                        btn.icon
-                      )}
-                    </Button>
+                      <Button
+                        asChild={btn.isLink}
+                        size="icon"
+                        className="h-14 w-14 rounded-full bg-secondary text-secondary-foreground shadow-lg transition-all duration-300 ease-in-out hover:scale-110 hover:bg-primary hover:text-primary-foreground"
+                        aria-label={btn.label}
+                        onClick={!btn.isLink ? btn.action : undefined}
+                      >
+                        {btn.isLink ? (
+                          <Link href={btn.href!} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full h-full">
+                            {btn.icon}
+                          </Link>
+                        ) : (
+                          btn.icon
+                        )}
+                      </Button>
+                    </div>
                 );
 
-                return <div key={btn.id} style={{transform: `translateY(${-65 * (index +1)}px)`}} className="transition-transform duration-300 ease-in-out">{buttonEl}</div>
+                return <div key={btn.id}>{buttonEl}</div>
               })}
             </div>
           )}
