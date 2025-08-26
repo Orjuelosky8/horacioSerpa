@@ -21,7 +21,7 @@ export default function Home() {
       <ThematicDomes />
       <DepthMasonry />
       <Gallery />
-      <LiveCubesphere />
+      {/* <LiveCubesphere /> // REDES SOCCIALES */}
       <TestimonialReel />
       <AiChatVideo />
       <JoinCampaign />

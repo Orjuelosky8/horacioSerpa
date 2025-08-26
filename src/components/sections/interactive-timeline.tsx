@@ -80,43 +80,72 @@ function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-md w-[90vw] h-[75vh] p-0 bg-transparent border-0 shadow-xl transition-transform transform scale-95 hover:scale-100 duration-300 ease-in-out"
+        className={cn(
+          "max-w-md w-[90vw] h-[75vh] p-0 bg-transparent border-0 shadow-2xl",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out",
+          "data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
+          "data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+        )}
       >
-        <DialogHeader>
-            <DialogTitle className="sr-only">Instagram Reel: {title}</DialogTitle>
+        <DialogHeader className="sr-only">
+            <DialogTitle>Instagram Reel: {title}</DialogTitle>
         </DialogHeader>
         <div className="relative w-full mx-auto">
-          {/* Phone Frame with gradient border and subtle shadow */}
-          <div className="relative w-full h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-[40px] shadow-2xl p-3 border-4 border-neutral-800 transform transition-all hover:scale-105 overflow-hidden">
-            <div className="absolute top-6 left-0 h-8 w-1 bg-neutral-700 rounded-r-lg" />
-            <div className="absolute top-20 left-0 h-16 w-1 bg-neutral-700 rounded-r-lg" />
-            <div className="absolute top-24 right-0 h-16 w-1 bg-neutral-700 rounded-l-lg" />
+          {/* Borde degradado de marca */}
+          <div
+            className={cn(
+              "relative w-full h-full rounded-[36px] p-[3px]",
+              "bg-gradient-to-br from-[#bd9b53] via-[#db143c] to-[#bd9b53]",
+              // Ligero hover sin exagerar
+              "transition-transform duration-300 motion-reduce:transition-none",
+              // "hover:scale-[1.02]"
+            )}
+          >
+            {/* Marco oscuro + vidrio */}
+            <div
+              className={cn(
+                "relative w-full h-[70vh] rounded-[32px] bg-[#0b0b0c]/90",
+                "backdrop-blur-md ring-1 ring-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+              )}
+            >
+              {/* Notch/acento sutil */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-[7px] rounded-b-md
+                              bg-gradient-to-r from-[#bd9b53] to-[#db143c] opacity-90" />
 
-            <div className="w-full h-full bg-black rounded-[28px] overflow-hidden shadow-2xl transition-transform transform hover:scale-105">
-              <iframe
-                src={embedUrl}
-                className="w-full h-full border-0 rounded-[28px] transition-all ease-in-out duration-500"
-                allowFullScreen
-                title={`Instagram Reel: ${title}`}
-              />
+              {/* Panel de reproducción */}
+              <div className="absolute inset-[10px] rounded-2xl overflow-hidden bg-black/80 ring-1 ring-white/10">
+                <iframe
+                  src={embedUrl}
+                  className="w-full h-full border-0"
+                  allowFullScreen
+                  title={`Instagram Reel: ${title}`}
+                />
+              </div>
             </div>
-            {/* Notch with cool hover effect */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gradient-to-r from-purple-600 to-pink-600 rounded-b-xl shadow-md hover:scale-105" />
           </div>
         </div>
 
-        <DialogHeader className="absolute top-2 right-2 z-10">
-          <DialogClose asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white bg-black/50 hover:bg-black/70 rounded-full transition-all ease-in-out duration-300"
-            >
-              <X className="h-5 w-5" />
-              <span className="sr-only">Cerrar</span>
-            </Button>
-          </DialogClose>
+        {/* Cerrar */}
+        <DialogHeader className="absolute top-2 right-2 z-10 sr-only">
+          <DialogTitle>Instagram Reel: {title}</DialogTitle>
         </DialogHeader>
+
+        <DialogClose asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "absolute top-3 right-3 rounded-full",
+              "bg-black/40 hover:bg-black/60",
+              "ring-1 ring-white/10 focus-visible:outline-none",
+              "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40",
+              "focus-visible:ring-[#ececd4]"
+            )}
+          >
+            <X className="h-5 w-5 text-[#ececd4]" />
+            <span className="sr-only">Cerrar</span>
+          </Button>
+        </DialogClose>
       </DialogContent>
     </Dialog>
   );
@@ -292,8 +321,8 @@ export default function InteractiveTimeline() {
                     <Image
                       src={event.imageUrl}
                       alt={`Ilustración: ${event.title}`}
-                      width={200}
-                      height={300}
+                      width={300}
+                      height={350}
                       className="rounded-xl shadow-2xl object-cover"
                     />
                     {/* Flecha apuntando hacia la tarjeta (inward) */}
