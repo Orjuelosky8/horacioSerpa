@@ -78,7 +78,7 @@ div[role="dialog"] button.absolute {
 @keyframes typeLoop {
   0%, 10%  { width: 0 }
   50%      { width: 100% } /* terminado de escribir */
-  60%      { width: 100% } /* pequeña pausa visible */
+  70%      { width: 100% } /* pequeña pausa visible */
   100%     { width: 0 }    /* borrar */
 }
 

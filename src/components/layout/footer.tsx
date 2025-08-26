@@ -2,10 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function Footer() {
+  const btnBase =
+    "rounded-2xl h-14 w-14 border border-foreground/20 border-b-2 border-r-2 " +
+    "text-muted-foreground shadow-sm shadow-black/10 mr-1 mb-1 " + // margen más pronunciado a la derecha/abajo
+    "transition-all ease-out hover:rotate-[-360deg] " +
+    "hover:bg-primary/10 hover:text-primary hover:border-primary/30";
+
   return (
-    <footer className="bg-secondary/70 backdrop-blur-lg py-16">
+    <footer className=" rounded-t-[25%] bg-[#ffd16f] backdrop-blur-lg pt-12 pb-2">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center">
           <Image
@@ -17,10 +25,11 @@ export default function Footer() {
             priority
           />
 
-          <p className="mt-6 font-headline text-xl sm:text-2xl tracking-tight text-foreground text-center">
+          {/* Frase con typewriter loop infinito (5s) y colores alternados */}
+          <p className="mt-6 font-headline text-xl sm:text-2xl tracking-tight text-foreground text-center user-select-none">
             <span
               className="inline-block overflow-hidden align-bottom border-r border-current pr-1
-               [animation:typeLoop_5s_steps(22,end)infinite,blink.9s_steps(1,end)_infinite]"
+              [animation:typeLoop_5s_steps(22,end)infinite,blink.9s_steps(1,end)_infinite]"
               style={{ whiteSpace: "nowrap", width: "0ch" }}
             >
               <span className="text-primary font-semibold">El cambio</span>{" "}
@@ -29,48 +38,46 @@ export default function Footer() {
             </span>
           </p>
 
-          <p className="mt-0 font-headline text-2xl sm:text-3xl tracking-tight text-foreground text-center">
-            <span className="text-foreground italic text-sm">'Hagamos Historia' </span>{" "}
+          <p className="mt-0 font-headline text-2xl sm:text-3xl tracking-tight text-foreground text-center user-select-none">
+            <span className="text-foreground italic text-sm">'Hagamos Historia(s)'</span>{" "}
           </p>
 
-          <div className="mt-2 flex justify-center gap-8">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full h-16 w-16 text-muted-foreground hover:bg-primary/20 hover:text-primary"
-              asChild
-            >
+          {/* Redes */}
+          <div className="mt-2 flex justify-center gap-5">
+            <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
               <Link href="https://facebook.com" aria-label="Facebook">
-                <Facebook className="h-8 w-8" />
+                <Facebook className="h-9 w-9" />
               </Link>
             </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full h-16 w-16 text-muted-foreground hover:bg-primary/20 hover:text-primary"
-              asChild
-            >
+            <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
               <Link href="https://instagram.com" aria-label="Instagram">
-                <Instagram className="h-8 w-8" />
+                <Instagram className="h-9 w-9" />
               </Link>
             </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full h-16 w-16 text-muted-foreground hover:bg-primary/20 hover:text-primary"
-              asChild
-            >
+            <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
               <Link href="https://youtube.com" aria-label="YouTube">
-                <Youtube className="h-8 w-8" />
+                <Youtube className="h-9 w-9" />
+              </Link>
+            </Button>
+
+            <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
+              <Link href="https://tiktok.com" aria-label="TikTok">
+                <FaTiktok className="h-9 w-9" />
+              </Link>
+            </Button>
+
+            <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
+              <Link href="https://wa.me/57XXXXXXXXXX" aria-label="WhatsApp">
+                <FaWhatsapp className="h-9 w-9" />
               </Link>
             </Button>
           </div>
 
-
-
-          <p className="mt-8 text-sm text-muted-foreground">
+          {/* Divisor y derechos pegados abajo */}
+          <div className="mt-8 w-full border-t border-border" />
+          <p className="mt-4 text-xs text-muted-foreground">
             © {new Date().getFullYear()} Horacio Serpa. Todos los derechos reservados.
           </p>
         </div>
