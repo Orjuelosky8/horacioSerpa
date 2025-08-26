@@ -132,8 +132,8 @@ const PhotoCarousel = () => {
 const VideoCarousel = () => {
   const [selectedVideo, setSelectedVideo] = useState(videoGallery[0]);
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    containScroll: 'keepSnaps',
-    align: 'start',
+    containScroll: "keepSnaps",
+    align: "start",
   });
 
   return (
@@ -142,7 +142,7 @@ const VideoCarousel = () => {
         <iframe
           key={selectedVideo.id}
           className="w-full h-full"
-          src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${selectedVideo.youtubeId}`}
+          src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${selectedVideo.youtubeId}`}
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -154,11 +154,16 @@ const VideoCarousel = () => {
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex -ml-4">
             {videoGallery.map((video) => (
-              <div className="flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] pl-4" key={video.id}>
-                <Card 
+              <div
+                className="flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] pl-4"
+                key={video.id}
+              >
+                <Card
                   className={cn(
                     "relative aspect-video overflow-hidden rounded-xl shadow-md cursor-pointer transition-all duration-300",
-                    selectedVideo.id === video.id ? "ring-4 ring-primary scale-105" : "hover:scale-105 hover:ring-2 ring-primary/50"
+                    selectedVideo.id === video.id
+                      ? "ring-4 ring-primary scale-105"
+                      : "hover:scale-105 hover:ring-2 ring-primary/50"
                   )}
                   onClick={() => setSelectedVideo(video)}
                 >
@@ -171,7 +176,7 @@ const VideoCarousel = () => {
                   />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-75 group-hover:opacity-100 transition-opacity">
                     <div className="h-10 w-10 text-white/80 bg-black/50 rounded-full flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M7.5 1.5a.75.75 0 0 0-.75.75v19.5a.75.75 0 0 0 1.5 0V2.25A.75.75 0 0 0 7.5 1.5Zm-4.5 9a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm19.5 0a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm-4.5-3a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm0 6a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm-12-6a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-.75-.75Zm1.5 9a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-3Zm15-3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-.75-.75Zm1.5 9a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-3Zm-12-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 1.5 0v-3A.75.75 0 0 0 9 7.5Zm1.5 9a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-3Z" /></svg>
+                      <Video className="h-5 w-5" />
                     </div>
                   </div>
                 </Card>
@@ -217,5 +222,3 @@ export default function Gallery() {
     </section>
   );
 }
-
-    
