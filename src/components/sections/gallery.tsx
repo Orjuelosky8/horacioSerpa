@@ -49,7 +49,7 @@ const photoGallery = [
 ];
 
 const videoGallery = [
-  { id: "video1", youtubeId: "dQw4w9WgXcQ", title: "Mensaje a la Nación", description: "Unas palabras sobre el futuro que estamos construyendo juntos." },
+  { id: "video1", youtubeId: "68LmsTWnSbQ", title: "Mensaje a la Nación", description: "Unas palabras sobre el futuro que estamos construyendo juntos." },
   { id: "video2", youtubeId: "3tmd-ClpJxA", title: "Recorriendo el País", description: "Conoce las historias y los rostros que nos inspiran a seguir adelante." },
   { id: "video3", youtubeId: "LXb3EKWsInQ", title: "Propuestas Clave", description: "Explicamos nuestras ideas para la educación, la salud y el empleo." },
   { id: "video4", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país." },
@@ -122,8 +122,8 @@ const PhotoCarousel = () => {
       </div>
 
       <div className="text-center mt-8 w-full max-w-2xl">
-        <h3 className="font-headline text-2xl font-bold text-primary">{selectedPhoto.title}</h3>
-        <p className="mt-2 text-muted-foreground">{selectedPhoto.description}</p>
+        <h3 className="font-headline text-2xl font-bold text-primary">{selectedPhoto?.title}</h3>
+        <p className="mt-2 text-muted-foreground">{selectedPhoto?.description}</p>
       </div>
     </div>
   );
@@ -131,63 +131,112 @@ const PhotoCarousel = () => {
 
 const VideoCarousel = () => {
   const [selectedVideo, setSelectedVideo] = useState(videoGallery[0]);
+  const autoplayRef = useRef(Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true }));
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    containScroll: "keepSnaps",
     align: "start",
-  });
+    loop: true,
+    containScroll: "trimSnaps",
+  }, [autoplayRef.current]);
+
+  const handleThumbClick = useCallback((video: (typeof videoGallery)[number], index: number) => {
+    if (!emblaApi) return;
+    setSelectedVideo(video);
+    emblaApi.scrollTo(index);
+    autoplayRef.current.reset();
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    const selectedIndex = emblaApi.selectedScrollSnap();
+    setSelectedVideo(videoGallery[selectedIndex]);
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", onSelect);
+    // Ensure the initial video is synced
+    onSelect();
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
   return (
     <div className="w-full">
-      <div className="w-full max-w-4xl mx-auto aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden mb-8 relative">
-        <iframe
-          key={selectedVideo.id}
-          className="w-full h-full"
-          src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${selectedVideo.youtubeId}`}
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+      <div className="w-full max-w-6xl mx-auto">
+        <div className="relative aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden mb-8">
+          {selectedVideo && (
+            <iframe
+              key={selectedVideo.id}
+              className="absolute inset-0 w-full h-full"
+              src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${selectedVideo.youtubeId}&modestbranding=1&rel=0&iv_load_policy=3`}
+              title={selectedVideo.title}
+              frameBorder="0"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          )}
+        </div>
       </div>
 
-      <div className="relative w-full max-w-5xl mx-auto">
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex -ml-4">
-            {videoGallery.map((video) => (
-              <div
-                className="flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] pl-4"
-                key={video.id}
-              >
-                <Card
-                  className={cn(
-                    "relative aspect-video overflow-hidden rounded-xl shadow-md cursor-pointer transition-all duration-300",
-                    selectedVideo.id === video.id
-                      ? "ring-4 ring-primary scale-105"
-                      : "hover:scale-105 hover:ring-2 ring-primary/50"
-                  )}
-                  onClick={() => setSelectedVideo(video)}
+      <div className="relative w-full max-w-7xl mx-auto">
+        <div className="overflow-hidden px-2" ref={emblaRef}>
+          <div className="flex -ml-4 will-change-transform">
+            {videoGallery.map((video, i) => {
+              const isActive = selectedVideo?.id === video.id;
+              return (
+                <div
+                  className="flex-[0_0_55%] sm:flex-[0_0_40%] md:flex-[0_0_30%] lg:flex-[0_0_25%] xl:flex-[0_0_20%] pl-4"
+                  key={video.id}
                 >
-                  <Image
-                    src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
-                    alt={video.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-75 group-hover:opacity-100 transition-opacity">
-                    <div className="h-10 w-10 text-white/80 bg-black/50 rounded-full flex items-center justify-center">
-                      <Video className="h-5 w-5" />
+                  <Card
+                    className={cn(
+                      "group relative aspect-video overflow-hidden rounded-xl shadow-md cursor-pointer transition-all duration-300",
+                      isActive
+                        ? "ring-4 ring-primary scale-[1.03]"
+                        : "hover:scale-[1.02] hover:ring-2 ring-primary/50"
+                    )}
+                    onClick={() => handleThumbClick(video, i)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleThumbClick(video, i);
+                      }
+                    }}
+                    aria-label={`Reproducir: ${video.title}`}
+                    aria-selected={isActive}
+                  >
+                    <img
+                      src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
+                      alt={video.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+
+                    <div className="pointer-events-none absolute inset-0 bg-black/35 flex items-center justify-center opacity-75 group-hover:opacity-100 transition-opacity">
+                      <div className="h-10 w-10 text-white/90 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-[1px]">
+                        <Video className="h-5 w-5" />
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              </div>
-            ))}
+
+                    <div className="absolute bottom-0 left-0 right-0 p-2 text-xs sm:text-sm text-white/95 bg-gradient-to-t from-black/70 to-transparent">
+                      <span className="line-clamp-1">{video.title}</span>
+                    </div>
+                  </Card>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default function Gallery() {
   return (
@@ -222,3 +271,5 @@ export default function Gallery() {
     </section>
   );
 }
+
+    
