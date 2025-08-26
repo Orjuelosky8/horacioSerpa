@@ -7,13 +7,19 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const navLinks = [
-  { href: "#biografia", label: "Quién Soy" },
-  { href: "#propuestas", label: "Propuestas" },
-  { href: "#noticias", label: "Noticias" },
-  { href: "#habla-con-ia", label: "Habla con mi IA" },
-  { href: "#unete", label: "Únete" },
+  { href: "#biografia", label: "Quién Soy", description: "Aquí conocerás más sobre mi historia, mis raíces y mi trayectoria." },
+  { href: "#propuestas", label: "Propuestas", description: "Descubre las ideas y proyectos para construir un futuro mejor." },
+  { href: "#noticias", label: "Noticias", description: "Mantente al día con las últimas novedades y actividades de la campaña." },
+  { href: "#habla-con-ia", label: "Habla con mi IA", description: "Conversa con mi asistente virtual para resolver tus dudas al instante." },
+  { href: "#unete", label: "Únete", description: "Tu apoyo es fundamental. ¡Súmate al cambio y participa activamente!" },
 ];
 
 export default function Header() {
@@ -63,23 +69,31 @@ export default function Header() {
             className="h-auto"
           />
         </Link>
-        <nav className="hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "relative rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
-                activeLink === link.href && "text-primary-foreground"
-              )}
-            >
-              {activeLink === link.href && (
-                <span className="absolute inset-0 -z-10 rounded-full bg-primary" />
-              )}
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <TooltipProvider delayDuration={150}>
+          <nav className="hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex">
+            {navLinks.map((link) => (
+              <Tooltip key={link.href}>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      "relative rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
+                      activeLink === link.href && "text-primary-foreground"
+                    )}
+                  >
+                    {activeLink === link.href && (
+                      <span className="absolute inset-0 -z-10 rounded-full bg-primary" />
+                    )}
+                    {link.label}
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{link.description}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </nav>
+        </TooltipProvider>
         <div className="flex items-center gap-2">
           <Sheet>
             <SheetTrigger asChild>
