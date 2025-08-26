@@ -49,12 +49,13 @@ const photoGallery = [
 ];
 
 const videoGallery = [
-  { id: "video1", youtubeId: "68LmsTWnSbQ", title: "Mensaje a la Nación", description: "Unas palabras sobre el futuro que estamos construyendo juntos." },
-  { id: "video2", youtubeId: "3tmd-ClpJxA", title: "Recorriendo el País", description: "Conoce las historias y los rostros que nos inspiran a seguir adelante." },
-  { id: "video3", youtubeId: "LXb3EKWsInQ", title: "Propuestas Clave", description: "Explicamos nuestras ideas para la educación, la salud y el empleo." },
-  { id: "video4", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país." },
+  { id: "video1", youtubeId: "GaveIyGE4_g", title: "Herencia familiar: Horacio José Serpa revela secretos de su vida política", description: "", src: "https://www.youtube.com/embed/GaveIyGE4_g?si=xtb_3FO6j_HvB7uA"},
+  { id: "video2", youtubeId: "68LmsTWnSbQ", title: "Mi papá no me quería en la política: Horacio José Serpa", description: "Conoce las historias y los rostros que nos inspiran a seguir adelante.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
+  { id: "video3", youtubeId: "LXb3EKWsInQ", title: "Propuestas Clave", description: "Explicamos nuestras ideas para la educación, la salud y el empleo.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
+  { id: "video4", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
+  { id: "video5", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
+  { id: "video6", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
 ];
-
 
 const PhotoCarousel = () => {
   const options: EmblaOptionsType = { loop: true, align: 'center' };
@@ -100,7 +101,7 @@ const PhotoCarousel = () => {
                   src={image.src}
                   alt={image.alt}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   data-ai-hint={image.aiHint}
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
@@ -126,21 +127,43 @@ const PhotoCarousel = () => {
     </div>
   );
 };
-
 const VideoCarousel = () => {
   const [selectedVideo, setSelectedVideo] = useState(videoGallery[0]);
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    align: "start", 
-    containScroll: "trimSnaps" 
+    align: 'start', 
+    containScroll: 'trimSnaps' 
   });
+
+  // Definir estados para la visibilidad de los botones de navegación
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Lógica para actualizar la visibilidad de los botones
+  useEffect(() => {
+    setCanScrollPrev(currentIndex > 0);
+    setCanScrollNext(currentIndex < videoGallery.length - 1);
+  }, [currentIndex]);
 
   const handleThumbClick = useCallback((video: typeof videoGallery[0], index: number) => {
     setSelectedVideo(video);
+    setCurrentIndex(index);
     if (emblaApi) emblaApi.scrollTo(index);
   }, [emblaApi]);
 
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+  const scrollPrev = useCallback(() => {
+    if (emblaApi && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+      emblaApi.scrollPrev();
+    }
+  }, [emblaApi, currentIndex]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi && currentIndex < videoGallery.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      emblaApi.scrollNext();
+    }
+  }, [emblaApi, currentIndex]);
 
   return (
     <div className="w-full max-w-5xl mx-auto">
@@ -148,42 +171,48 @@ const VideoCarousel = () => {
       <div className="mb-8">
         <div className="relative aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden">
           <iframe
-            key={selectedVideo.id}
-            className="absolute inset-0 w-full h-full"
-            src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${selectedVideo.youtubeId}&modestbranding=1&rel=0&iv_load_policy=3&controls=1`}
-            title={selectedVideo.title}
+            width="100%"
+            height="450"
+            src={selectedVideo.src}
+            title="YouTube video player"
             frameBorder="0"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           />
         </div>
-         <div className="text-center mt-4">
-            <h3 className="font-headline text-2xl font-bold text-primary">{selectedVideo.title}</h3>
-            <p className="mt-1 text-muted-foreground">{selectedVideo.description}</p>
+        <div className="text-center mt-4">
+          <h3 className="font-headline text-2xl font-bold text-primary">{selectedVideo.title}</h3>
         </div>
       </div>
 
       {/* Carrusel de Miniaturas */}
       <div className="relative w-full">
-        <Button onClick={scrollPrev} size="icon" variant="outline" className="absolute -left-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm">
-          <ArrowLeft className="h-5 w-5"/>
+        {/* Botón hacia la izquierda */}
+        <Button
+          onClick={scrollPrev}
+          size="icon"
+          variant="outline"
+          className={`absolute -left-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm transition-opacity duration-300 ${canScrollPrev ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        >
+          <ArrowLeft className="h-5 w-5" />
         </Button>
-        <div className="overflow-hidden" ref={emblaRef}>
+
+        <div className="overflow-hidden pb-4 pt-6" ref={emblaRef}>
           <div className="flex -ml-4">
             {videoGallery.map((video, i) => (
               <div
                 className="flex-[0_0_50%] sm:flex-[0_0_33.33%] md:flex-[0_0_25%] pl-4"
                 key={video.id}
+                onClick={() => handleThumbClick(video, i)}
               >
                 <Card
                   className={cn(
                     "group relative aspect-video overflow-hidden rounded-xl shadow-md cursor-pointer transition-all duration-300",
-                    selectedVideo.id === video.id 
-                    ? "ring-4 ring-primary scale-[1.03]" 
-                    : "hover:scale-[1.02] hover:ring-2 ring-primary/50"
+                    selectedVideo.id === video.id
+                      ? "ring-4 ring-primary/60 scale-[1.03]"
+                      : "hover:scale-[1.02] hover:ring-2 ring-primary/50"
                   )}
-                  onClick={() => handleThumbClick(video, i)}
                   role="button"
                   tabIndex={0}
                   aria-label={`Seleccionar video: ${video.title}`}
@@ -204,14 +233,20 @@ const VideoCarousel = () => {
             ))}
           </div>
         </div>
-        <Button onClick={scrollNext} size="icon" variant="outline" className="absolute -right-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm">
-          <ArrowRight className="h-5 w-5"/>
+
+        {/* Botón hacia la derecha */}
+        <Button
+          onClick={scrollNext}
+          size="icon"
+          variant="outline"
+          className={`absolute -right-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm transition-opacity duration-300 ${canScrollNext ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        >
+          <ArrowRight className="h-5 w-5" />
         </Button>
       </div>
     </div>
   );
 };
-
 
 export default function Gallery() {
   return (

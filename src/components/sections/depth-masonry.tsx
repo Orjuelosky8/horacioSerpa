@@ -73,6 +73,28 @@ const newsItems: NewsItem[] = [
     location: "Barranquilla, Colombia",
     readTime: "4 min",
   },
+  {
+    title: "Foro sobre Sostenibilidad Ambiental",
+    category: "Medio Ambiente",
+    excerpt: "Expertos debaten sobre el futuro de las energías limpias y la protección de la biodiversidad en Colombia.",
+    imageUrl: "/News/not5.jpg",
+    aiHint: "sustainability environment",
+    details: "Se discutirán políticas de transición energética, economía circular y conservación de ecosistemas estratégicos.",
+    date: "15 Ago 2025",
+    location: "Leticia, Amazonas",
+    readTime: "6 min"
+  },
+  {
+    title: "Alianza por la Transparencia",
+    category: "Gobierno",
+    excerpt: "Presentamos una nueva plataforma digital para el seguimiento en tiempo real de la contratación pública.",
+    imageUrl: "https://placehold.co/800x600.png",
+    aiHint: "transparency government",
+    details: "La herramienta permitirá a cualquier ciudadano auditar los contratos estatales, promoviendo la veeduría.",
+    date: "18 Ago 2025",
+    location: "Virtual",
+    readTime: "3 min"
+  }
 ];
 
 function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
@@ -244,24 +266,6 @@ export default function DepthMasonry() {
           {newsItems.map((item, idx) => (
             <FlipCard key={idx} item={item} />
           ))}
-
-          {/* Tarjeta de Agenda destacada con flip */}
-          <FlipCard
-            className="md:col-span-2 lg:col-span-1"
-            item={{
-              title: "Calendario de Eventos",
-              category: "AGENDA",
-              excerpt:
-                "Descubre los próximos encuentros, debates y actividades en tu ciudad.",
-              imageUrl: "/News/not5.jpg",
-              aiHint: "calendar event",
-              details:
-                "Filtra por ciudad y tipo de actividad. Activa recordatorios y comparte con tu red.",
-              date: "Próximas 2 semanas",
-              location: "Colombia",
-              readTime: "—",
-            }}
-          />
         </div>
 
         <div className="mt-12 text-center">

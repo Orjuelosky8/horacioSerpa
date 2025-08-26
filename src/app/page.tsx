@@ -11,6 +11,7 @@ import ContactForm from "@/components/sections/contact-form";
 import { Button } from "@/components/ui/button";
 import AiChatVideo from "@/components/sections/ai-chat-video";
 import Gallery from "@/components/sections/gallery";
+import EventsCalendar from "@/components/sections/events-calendar";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <InteractiveTimeline />
       <ThematicDomes />
       <DepthMasonry />
+      <EventsCalendar />
       <Gallery />
       {/* <LiveCubesphere /> // REDES SOCCIALES */}
       <TestimonialReel />
