@@ -72,3 +72,23 @@
 div[role="dialog"] button.absolute {
   display: none !important;
 }
+
+
+/* Footer y posible implementación futura en más secciones*/
+@keyframes typeLoop {
+  0%, 10%  { width: 0 }
+  50%      { width: 100% } /* terminado de escribir */
+  60%      { width: 100% } /* pequeña pausa visible */
+  100%     { width: 0 }    /* borrar */
+}
+
+@keyframes blink { 50% { border-color: transparent } }
+
+/* Respeto de accesibilidad: si el usuario reduce animaciones, mostramos estático */
+@media (prefers-reduced-motion: reduce) {
+  [class*="typeLoop"] {
+    animation: none !important;
+    width: auto !important;
+    border-right: 0 !important;
+  }
+}
