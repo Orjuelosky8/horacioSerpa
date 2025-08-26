@@ -13,7 +13,7 @@ export default function Footer() {
     "hover:bg-primary/10 hover:text-primary hover:border-primary/30";
 
   return (
-    <footer className=" rounded-t-[25%] bg-[#ffd16f] backdrop-blur-lg pt-0 pb-2">
+    <footer className=" rounded-t-[25%] bg-[#ffd16f] backdrop-blur-lg mt-[-60px] pt-6 pb-2">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center">
           <Image

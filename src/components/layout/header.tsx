@@ -57,7 +57,7 @@ export default function Header() {
   return (
     <header className={cn(
       "sticky top-0 z-40 w-full transition-all duration-300",
-      isScrolled ? "border-border/50 bg-background/80 backdrop-blur-xl" : "bg-transparent border-transparent"
+      isScrolled ? "border-border/50 bg-[#ffd16f]/80 backdrop-blur-xl" : "bg-transparent border-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2 md:pl-0">

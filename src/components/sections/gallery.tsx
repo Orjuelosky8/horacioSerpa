@@ -1,72 +1,133 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, PlayCircle, Video, Camera } from "lucide-react";
+import { ArrowLeft, ArrowRight, Video, Camera } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import useEmblaCarousel from "embla-carousel-react";
+import useEmblaCarousel, { EmblaCarouselType, EmblaOptionsType } from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 
 const photoGallery = [
-  { src: "/images/gallery/photo1.jpg", alt: "Horacio Serpa en evento político", aiHint: "political rally" },
-  { src: "/images/gallery/photo2.jpg", alt: "Retrato de Horacio Serpa", aiHint: "politician portrait" },
-  { src: "/images/gallery/photo3.jpg", alt: "Horacio Serpa con la comunidad", aiHint: "community meeting" },
-  { src: "/images/gallery/photo4.jpg", alt: "Horacio Serpa en debate", aiHint: "political debate" },
-  { src: "/images/gallery/photo5.jpg", alt: "Campaña en la calle", aiHint: "campaign street" },
-  { src: "/images/gallery/photo6.jpg", alt: "Jóvenes apoyando la campaña", aiHint: "youth support" },
+  { 
+    src: "/images/gallery/galeriahjs1.jpg", 
+    alt: "Horacio Serpa en evento político", 
+    aiHint: "political rally",
+    title: "Compromiso en las Calles",
+    description: "Recorriendo el país, escuchando a la gente y construyendo propuestas desde el territorio."
+  },
+  { 
+    src: "/images/gallery/galeriahjs2.jpg", 
+    alt: "Retrato de Horacio Serpa", 
+    aiHint: "politician portrait",
+    title: "Una Visión Clara",
+    description: "La experiencia y la integridad como pilares para un futuro más justo para todos los colombianos."
+  },
+  { 
+    src: "/images/gallery/galeriahjs3.png", 
+    alt: "Horacio Serpa con la comunidad", 
+    aiHint: "community meeting",
+    title: "Diálogo Ciudadano",
+    description: "El poder de la gente es la base de nuestra campaña. Juntos construimos el cambio."
+  },
+  { 
+    src: "/images/gallery/galeriahjs4.jpg", 
+    alt: "Horacio Serpa en debate", 
+    aiHint: "political debate",
+    title: "Debate de Ideas",
+    description: "Defendiendo nuestras propuestas con argumentos sólidos y la convicción de un mejor porvenir."
+  },
+  { 
+    src: "/images/gallery/galeriahjs5.jpg", 
+    alt: "Campaña en la calle", 
+    aiHint: "campaign street",
+    title: "La Fuerza del Voluntariado",
+    description: "Miles de manos unidas por un solo propósito: transformar Colombia."
+  },
 ];
 
 const videoGallery = [
-  { id: "video1", src: "/videos/gallery/video1.mp4", thumbnail: "/images/gallery/thumb1.jpg", title: "Mensaje a la Nación", aiHint: "political speech" },
-  { id: "video2", src: "/videos/gallery/video2.mp4", thumbnail: "/images/gallery/thumb2.jpg", title: "Recorriendo el País", aiHint: "community travel" },
-  { id: "video3", src: "/videos/gallery/video3.mp4", thumbnail: "/images/gallery/thumb3.jpg", title: "Propuestas Clave", aiHint: "interview proposals" },
-  { id: "video4", src: "/videos/gallery/video4.mp4", thumbnail: "/images/gallery/thumb4.jpg", title: "Debate de Ideas", aiHint: "political debate" },
+  { id: "video1", youtubeId: "dQw4w9WgXcQ", title: "Mensaje a la Nación", description: "Unas palabras sobre el futuro que estamos construyendo juntos." },
+  { id: "video2", youtubeId: "3tmd-ClpJxA", title: "Recorriendo el País", description: "Conoce las historias y los rostros que nos inspiran a seguir adelante." },
+  { id: "video3", youtubeId: "LXb3EKWsInQ", title: "Propuestas Clave", description: "Explicamos nuestras ideas para la educación, la salud y el empleo." },
+  { id: "video4", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país." },
 ];
 
+
 const PhotoCarousel = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: 'center',
-    containScroll: 'trimSnaps',
-  });
+  const options: EmblaOptionsType = { loop: true, align: 'center' };
+  const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [autoplay.current]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+
+  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    setScrollSnaps(emblaApi.scrollSnapList());
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+  }, [emblaApi, onSelect]);
 
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
+
+  const selectedPhoto = photoGallery[selectedIndex];
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto py-12">
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex -ml-4" style={{ perspective: '1000px' }}>
+    <div className="relative w-full flex flex-col items-center">
+      <div className="overflow-hidden w-full max-w-6xl" ref={emblaRef}>
+        <div className="flex -ml-4 items-center h-[500px]">
           {photoGallery.map((image, index) => (
-            <div className="flex-shrink-0 flex-grow-0 basis-1/2 md:basis-1/3 pl-4" key={index}>
-              <Card className="relative aspect-[3/4] overflow-hidden rounded-2xl shadow-lg transition-transform duration-500 ease-out transform-gpu hover:scale-105">
+            <div 
+              className="flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] pl-4" 
+              key={index}
+              onClick={() => scrollTo(index)}
+            >
+              <Card 
+                className={cn(
+                  "relative aspect-[3/4] overflow-hidden rounded-2xl shadow-lg transition-all duration-500 ease-out transform-gpu cursor-pointer",
+                  index === selectedIndex
+                    ? "scale-100 opacity-100"
+                    : "scale-75 opacity-50 blur-sm hover:opacity-75 hover:blur-none"
+                )}
+              >
                 <Image
                   src={image.src}
                   alt={image.alt}
                   fill
                   className="object-cover"
                   data-ai-hint={image.aiHint}
-                  sizes="(max-width: 768px) 50vw, 33vw"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
               </Card>
             </div>
           ))}
         </div>
       </div>
-      <div className="absolute top-1/2 left-0 right-0 flex justify-between items-center -translate-y-1/2 px-4 md:-px-8">
-        <Button onClick={scrollPrev} size="icon" variant="outline" className="rounded-full h-12 w-12 bg-background/50 hover:bg-background">
+      
+      <div className="w-full max-w-6xl relative mt-4">
+        <Button onClick={scrollPrev} size="icon" variant="outline" className="absolute left-0 top-1/2 -translate-y-1/2 rounded-full h-12 w-12 bg-background/50 hover:bg-background z-10">
           <ArrowLeft />
         </Button>
-        <Button onClick={scrollNext} size="icon" variant="outline" className="rounded-full h-12 w-12 bg-background/50 hover:bg-background">
+        <Button onClick={scrollNext} size="icon" variant="outline" className="absolute right-0 top-1/2 -translate-y-1/2 rounded-full h-12 w-12 bg-background/50 hover:bg-background z-10">
           <ArrowRight />
         </Button>
+      </div>
+
+      <div className="text-center mt-8 w-full max-w-2xl">
+        <h3 className="font-headline text-2xl font-bold text-primary">{selectedPhoto.title}</h3>
+        <p className="mt-2 text-muted-foreground">{selectedPhoto.description}</p>
       </div>
     </div>
   );
 };
-
 
 const VideoCarousel = () => {
   const [selectedVideo, setSelectedVideo] = useState(videoGallery[0]);
@@ -77,22 +138,23 @@ const VideoCarousel = () => {
 
   return (
     <div className="w-full">
-      {/* Video Player */}
       <div className="w-full max-w-4xl mx-auto aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden mb-8 relative">
-        <video key={selectedVideo.src} src={selectedVideo.src} className="w-full h-full object-cover" controls autoPlay muted loop>
-          Tu navegador no soporta el tag de video.
-        </video>
-         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-          <h3 className="text-white font-headline text-2xl">{selectedVideo.title}</h3>
-        </div>
+        <iframe
+          key={selectedVideo.id}
+          className="w-full h-full"
+          src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${selectedVideo.youtubeId}`}
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
       </div>
 
-      {/* Thumbnails Carousel */}
       <div className="relative w-full max-w-5xl mx-auto">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex -ml-4">
             {videoGallery.map((video) => (
-              <div className="flex-shrink-0 flex-grow-0 basis-1/2 md:basis-1/4 lg:basis-1/5 pl-4" key={video.id}>
+              <div className="flex-[0_0_50%] md:flex-[0_0_33.33%] lg:flex-[0_0_25%] pl-4" key={video.id}>
                 <Card 
                   className={cn(
                     "relative aspect-video overflow-hidden rounded-xl shadow-md cursor-pointer transition-all duration-300",
@@ -101,15 +163,16 @@ const VideoCarousel = () => {
                   onClick={() => setSelectedVideo(video)}
                 >
                   <Image
-                    src={video.thumbnail}
+                    src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
                     alt={video.title}
                     fill
                     className="object-cover"
-                    data-ai-hint={video.aiHint}
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-75 group-hover:opacity-100">
-                    <PlayCircle className="h-10 w-10 text-white/80"/>
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-75 group-hover:opacity-100 transition-opacity">
+                    <div className="h-10 w-10 text-white/80 bg-black/50 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M7.5 1.5a.75.75 0 0 0-.75.75v19.5a.75.75 0 0 0 1.5 0V2.25A.75.75 0 0 0 7.5 1.5Zm-4.5 9a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm19.5 0a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm-4.5-3a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm0 6a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Zm-12-6a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-.75-.75Zm1.5 9a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-3Zm15-3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-.75-.75Zm1.5 9a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-3Zm-12-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 1.5 0v-3A.75.75 0 0 0 9 7.5Zm1.5 9a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-3Z" /></svg>
+                    </div>
                   </div>
                 </Card>
               </div>
@@ -120,7 +183,6 @@ const VideoCarousel = () => {
     </div>
   );
 };
-
 
 export default function Gallery() {
   return (
@@ -155,3 +217,5 @@ export default function Gallery() {
     </section>
   );
 }
+
+    
