@@ -61,7 +61,6 @@ const PhotoCarousel = () => {
   const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [autoplay.current]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
     setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -69,7 +68,6 @@ const PhotoCarousel = () => {
 
   useEffect(() => {
     if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
@@ -131,107 +129,84 @@ const PhotoCarousel = () => {
 
 const VideoCarousel = () => {
   const [selectedVideo, setSelectedVideo] = useState(videoGallery[0]);
-  const autoplayRef = useRef(Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true }));
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    align: "start", 
+    containScroll: "trimSnaps" 
+  });
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: "start",
-    loop: true,
-    containScroll: "trimSnaps",
-  }, [autoplayRef.current]);
-
-  const handleThumbClick = useCallback((video: (typeof videoGallery)[number], index: number) => {
-    if (!emblaApi) return;
+  const handleThumbClick = useCallback((video: typeof videoGallery[0], index: number) => {
     setSelectedVideo(video);
-    emblaApi.scrollTo(index);
-    autoplayRef.current.reset();
+    if (emblaApi) emblaApi.scrollTo(index);
   }, [emblaApi]);
 
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    const selectedIndex = emblaApi.selectedScrollSnap();
-    setSelectedVideo(videoGallery[selectedIndex]);
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    emblaApi.on("select", onSelect);
-    // Ensure the initial video is synced
-    onSelect();
-    return () => {
-      emblaApi.off("select", onSelect);
-    };
-  }, [emblaApi, onSelect]);
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
   return (
-    <div className="w-full">
-      <div className="w-full max-w-6xl mx-auto">
-        <div className="relative aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden mb-8">
-          {selectedVideo && (
-            <iframe
-              key={selectedVideo.id}
-              className="absolute inset-0 w-full h-full"
-              src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${selectedVideo.youtubeId}&modestbranding=1&rel=0&iv_load_policy=3`}
-              title={selectedVideo.title}
-              frameBorder="0"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          )}
+    <div className="w-full max-w-5xl mx-auto">
+      {/* Video Principal */}
+      <div className="mb-8">
+        <div className="relative aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden">
+          <iframe
+            key={selectedVideo.id}
+            className="absolute inset-0 w-full h-full"
+            src={`https://www.youtube-nocookie.com/embed/${selectedVideo.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${selectedVideo.youtubeId}&modestbranding=1&rel=0&iv_load_policy=3&controls=1`}
+            title={selectedVideo.title}
+            frameBorder="0"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+         <div className="text-center mt-4">
+            <h3 className="font-headline text-2xl font-bold text-primary">{selectedVideo.title}</h3>
+            <p className="mt-1 text-muted-foreground">{selectedVideo.description}</p>
         </div>
       </div>
 
-      <div className="relative w-full max-w-7xl mx-auto">
-        <div className="overflow-hidden px-2" ref={emblaRef}>
-          <div className="flex -ml-4 will-change-transform">
-            {videoGallery.map((video, i) => {
-              const isActive = selectedVideo?.id === video.id;
-              return (
-                <div
-                  className="flex-[0_0_55%] sm:flex-[0_0_40%] md:flex-[0_0_30%] lg:flex-[0_0_25%] xl:flex-[0_0_20%] pl-4"
-                  key={video.id}
+      {/* Carrusel de Miniaturas */}
+      <div className="relative w-full">
+        <Button onClick={scrollPrev} size="icon" variant="outline" className="absolute -left-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm">
+          <ArrowLeft className="h-5 w-5"/>
+        </Button>
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex -ml-4">
+            {videoGallery.map((video, i) => (
+              <div
+                className="flex-[0_0_50%] sm:flex-[0_0_33.33%] md:flex-[0_0_25%] pl-4"
+                key={video.id}
+              >
+                <Card
+                  className={cn(
+                    "group relative aspect-video overflow-hidden rounded-xl shadow-md cursor-pointer transition-all duration-300",
+                    selectedVideo.id === video.id 
+                    ? "ring-4 ring-primary scale-[1.03]" 
+                    : "hover:scale-[1.02] hover:ring-2 ring-primary/50"
+                  )}
+                  onClick={() => handleThumbClick(video, i)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Seleccionar video: ${video.title}`}
                 >
-                  <Card
-                    className={cn(
-                      "group relative aspect-video overflow-hidden rounded-xl shadow-md cursor-pointer transition-all duration-300",
-                      isActive
-                        ? "ring-4 ring-primary scale-[1.03]"
-                        : "hover:scale-[1.02] hover:ring-2 ring-primary/50"
-                    )}
-                    onClick={() => handleThumbClick(video, i)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        handleThumbClick(video, i);
-                      }
-                    }}
-                    aria-label={`Reproducir: ${video.title}`}
-                    aria-selected={isActive}
-                  >
-                    <img
-                      src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
-                      alt={video.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-
-                    <div className="pointer-events-none absolute inset-0 bg-black/35 flex items-center justify-center opacity-75 group-hover:opacity-100 transition-opacity">
-                      <div className="h-10 w-10 text-white/90 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-[1px]">
-                        <Video className="h-5 w-5" />
-                      </div>
+                  <img
+                    src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
+                    alt={video.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center p-2">
+                    <div className="h-10 w-10 text-white/90 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Video className="h-5 w-5" />
                     </div>
-
-                    <div className="absolute bottom-0 left-0 right-0 p-2 text-xs sm:text-sm text-white/95 bg-gradient-to-t from-black/70 to-transparent">
-                      <span className="line-clamp-1">{video.title}</span>
-                    </div>
-                  </Card>
-                </div>
-              );
-            })}
+                  </div>
+                </Card>
+              </div>
+            ))}
           </div>
         </div>
+        <Button onClick={scrollNext} size="icon" variant="outline" className="absolute -right-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm">
+          <ArrowRight className="h-5 w-5"/>
+        </Button>
       </div>
     </div>
   );
@@ -271,5 +246,3 @@ export default function Gallery() {
     </section>
   );
 }
-
-    
