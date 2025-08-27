@@ -101,7 +101,7 @@ const PhotoCarousel = () => {
                   src={image.src}
                   alt={image.alt}
                   fill
-                  className="object-contain"
+                  className="object-cover" /* Contain para que se vea todoa pero se le pierde magia */ 
                   data-ai-hint={image.aiHint}
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
@@ -127,6 +127,7 @@ const PhotoCarousel = () => {
     </div>
   );
 };
+
 const VideoCarousel = () => {
   const [selectedVideo, setSelectedVideo] = useState(videoGallery[0]);
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
