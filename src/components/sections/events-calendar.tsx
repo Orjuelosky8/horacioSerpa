@@ -274,7 +274,7 @@ export default function EventsCalendar() {
                         </Select>
                     </CardContent>
                 </Card>
-                 <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm">
+                 <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm self-start">
                     <Calendar
                         mode="single"
                         selected={date}
@@ -287,7 +287,7 @@ export default function EventsCalendar() {
                           event: "bg-primary/20 text-primary-foreground rounded-full font-bold",
                           selected: "bg-primary text-primary-foreground",
                         }}
-                        className="w-full p-4"
+                        className="p-4"
                         footer={date ? <Button variant="ghost" size="sm" onClick={() => setDate(undefined)}>Limpiar selección</Button> : undefined}
                     />
                 </Card>

@@ -101,7 +101,7 @@ const PhotoCarousel = () => {
                   src={image.src}
                   alt={image.alt}
                   fill
-                  className="object-cover" /* Contain para que se vea todoa pero se le pierde magia */ 
+                  className="object-cover"
                   data-ai-hint={image.aiHint}
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
@@ -135,36 +135,33 @@ const VideoCarousel = () => {
     containScroll: 'trimSnaps' 
   });
 
-  // Definir estados para la visibilidad de los botones de navegación
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, []);
 
-  // Lógica para actualizar la visibilidad de los botones
   useEffect(() => {
-    setCanScrollPrev(currentIndex > 0);
-    setCanScrollNext(currentIndex < videoGallery.length - 1);
-  }, [currentIndex]);
+    if (!emblaApi) return;
+    onSelect(emblaApi);
+    emblaApi.on('reInit', onSelect);
+    emblaApi.on('select', onSelect);
+  }, [emblaApi, onSelect]);
 
-  const handleThumbClick = useCallback((video: typeof videoGallery[0], index: number) => {
+
+  const handleThumbClick = useCallback((video: typeof videoGallery[0]) => {
     setSelectedVideo(video);
-    setCurrentIndex(index);
-    if (emblaApi) emblaApi.scrollTo(index);
-  }, [emblaApi]);
+  }, []);
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi && currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-      emblaApi.scrollPrev();
-    }
-  }, [emblaApi, currentIndex]);
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi && currentIndex < videoGallery.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      emblaApi.scrollNext();
-    }
-  }, [emblaApi, currentIndex]);
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
 
   return (
     <div className="w-full max-w-5xl mx-auto">
@@ -172,14 +169,16 @@ const VideoCarousel = () => {
       <div className="mb-8">
         <div className="relative aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden">
           <iframe
+            key={selectedVideo.id}
             width="100%"
-            height="450"
-            src={selectedVideo.src}
+            height="100%"
+            src={`${selectedVideo.src.replace('embed/', 'embed/')}?autoplay=1&mute=1`}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
+            className="absolute top-0 left-0 w-full h-full"
           />
         </div>
         <div className="text-center mt-4">
@@ -189,12 +188,11 @@ const VideoCarousel = () => {
 
       {/* Carrusel de Miniaturas */}
       <div className="relative w-full">
-        {/* Botón hacia la izquierda */}
         <Button
           onClick={scrollPrev}
           size="icon"
           variant="outline"
-          className={`absolute -left-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm transition-opacity duration-300 ${canScrollPrev ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          className={cn("absolute -left-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm transition-opacity duration-300", !canScrollPrev && "opacity-0 pointer-events-none")}
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -205,7 +203,7 @@ const VideoCarousel = () => {
               <div
                 className="flex-[0_0_50%] sm:flex-[0_0_33.33%] md:flex-[0_0_25%] pl-4"
                 key={video.id}
-                onClick={() => handleThumbClick(video, i)}
+                onClick={() => handleThumbClick(video)}
               >
                 <Card
                   className={cn(
@@ -235,12 +233,11 @@ const VideoCarousel = () => {
           </div>
         </div>
 
-        {/* Botón hacia la derecha */}
         <Button
           onClick={scrollNext}
           size="icon"
           variant="outline"
-          className={`absolute -right-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm transition-opacity duration-300 ${canScrollNext ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          className={cn("absolute -right-5 top-1/2 -translate-y-1/2 rounded-full h-10 w-10 bg-background/80 hover:bg-background z-10 backdrop-blur-sm transition-opacity duration-300", !canScrollNext && "opacity-0 pointer-events-none")}
         >
           <ArrowRight className="h-5 w-5" />
         </Button>
@@ -252,8 +249,8 @@ const VideoCarousel = () => {
 export default function Gallery() {
   return (
     <section id="galeria" className="w-full py-20 md:py-32 bg-secondary/30">
-      <div className="container mx-auto px-6">
-        <div className="mb-12 text-center">
+      <div className="container mx-auto px-0 md:px-6">
+        <div className="mb-12 text-center px-6">
           <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
             Galería de Momentos
           </h2>

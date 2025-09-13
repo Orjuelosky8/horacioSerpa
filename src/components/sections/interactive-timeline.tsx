@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardFooter, CardTitle } from "@/components/ui/card";
 import { Home, BookOpen, Briefcase, GraduationCap, Gavel, Building, Users, Instagram, X } from "lucide-react";
 import Image from "next/image";
@@ -96,9 +97,7 @@ function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, 
             className={cn(
               "relative w-full h-full rounded-[36px] p-[3px]",
               "bg-gradient-to-br from-[#bd9b53] via-[#db143c] to-[#bd9b53]",
-              // Ligero hover sin exagerar
               "transition-transform duration-300 motion-reduce:transition-none",
-              // "hover:scale-[1.02]"
             )}
           >
             {/* Marco oscuro + vidrio */}
@@ -125,11 +124,6 @@ function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, 
           </div>
         </div>
 
-        {/* Cerrar */}
-        <DialogHeader className="absolute top-2 right-2 z-10 sr-only">
-          <DialogTitle>Instagram Reel: {title}</DialogTitle>
-        </DialogHeader>
-
         <DialogClose asChild>
           <Button
             variant="ghost"
@@ -152,23 +146,52 @@ function ReelModal({ isOpen, onOpenChange, reelUrl, title }: { isOpen: boolean, 
 }
 
 
-
-
-
 export default function InteractiveTimeline() {
-  const [hoveredImage, setHoveredImage] = useState<string | null>(null); // se mantiene (no usado visualmente)
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReelUrl, setSelectedReelUrl] = useState<string | null>(null);
   const [selectedReelTitle, setSelectedReelTitle] = useState<string | null>(null);
-
 
   const handleOpenReel = (reelUrl: string, title: string) => {
     setSelectedReelUrl(reelUrl);
     setSelectedReelTitle(title);
     setIsModalOpen(true);
   };
+  
+  const cardVariants = {
+    offscreen: {
+      opacity: 0,
+      x: -100,
+    },
+    onscreen: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 50,
+        damping: 20,
+        delay: i * 0.2,
+      },
+    }),
+  };
 
+  const imageVariants = {
+    offscreen: {
+      opacity: 0,
+      x: 100,
+      scale: 0.8,
+    },
+    onscreen: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 50,
+        damping: 20,
+        delay: i * 0.2,
+      },
+    }),
+  };
 
   return (
     <section id="biografia" className="relative w-full overflow-hidden py-20 md:py-32 bg-secondary/30">
@@ -182,67 +205,40 @@ export default function InteractiveTimeline() {
           </p>
         </div>
 
-        {/* Floating Image Display (conservado pero oculto) */}
-        <div className="pointer-events-none absolute inset-0 hidden">
-          <Image
-            src={hoveredImage || "https://placehold.co/400x500.png"}
-            alt="Timeline Event"
-            width={300}
-            height={400}
-            className={cn(
-              "rounded-lg object-cover shadow-2xl transition-all duration-500 ease-in-out",
-              hoveredImage ? "opacity-100 scale-100" : "opacity-0 scale-90"
-            )}
-          />
-        </div>
-
-        {/* Línea central de la timeline */}
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative max-w-5xl mx-auto">
           <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-border" />
 
           {timelineEvents.map((event, index) => {
-            const isLeft = index % 2 === 0; // tarjeta a la izquierda en layout alternado
-            const isHovered = hoveredIndex === index;
+            const isLeft = index % 2 === 0;
 
             return (
-              <div key={index} className="relative mb-16">
-                {/* Ícono en la línea */}
-                <div className="absolute left-1/2 top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background ring-4 ring-primary">
+              <div key={index} className="relative mb-8 md:mb-16 grid grid-cols-1 md:grid-cols-2 md:gap-12 items-center">
+                 {/* ICONO */}
+                 <div className={cn(
+                    "absolute left-1/2 top-4 md:top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 md:-translate-y-1/2 items-center justify-center rounded-full bg-background ring-4 ring-primary",
+                    "md:top-1/2 -translate-y-[-1rem] md:-translate-y-1/2" // Ajuste para móvil
+                )}>
                   <event.icon className="h-5 w-5 text-primary" />
                 </div>
-
-                {/* FILA PRINCIPAL: tarjeta alterna izquierda/derecha */}
-                <div className={cn("relative flex items-center", isLeft ? "justify-start" : "justify-end")}
-                >
-                  <div className={cn("w-full sm:w-5/6 md:w-1/2", isLeft ? "pr-0 md:pr-8" : "pl-0 md:pl-8")}
-                  >
-                    {/* Accesibilidad: hover/focus para mostrar imagen; sin click */}
-                    <div
-                      role="group"
-                      tabIndex={0}
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      onMouseLeave={() => setHoveredIndex(null)}
-                      onFocus={() => setHoveredIndex(index)}
-                      onBlur={() => setHoveredIndex(null)}
-                      onTouchStart={() => setHoveredIndex(index)}
-                      className="block w-full text-left focus:outline-none"
-                      aria-describedby={`hint-${index}`}
+                
+                {isLeft ? (
+                  <>
+                    {/* CARD (IZQUIERDA) */}
+                    <motion.div
+                      initial="offscreen"
+                      whileInView="onscreen"
+                      viewport={{ once: true, amount: 0.5 }}
+                      variants={cardVariants}
+                      custom={index}
+                      className="md:col-start-1 md:row-start-1"
                     >
-                      <Card className={cn(
-                        "backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80 flex flex-col h-full",
-                        isHovered && "ring-2 ring-primary"
-                      )}>
+                      <Card className="backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80 flex flex-col h-full w-full">
                         <CardHeader>
-                          <CardTitle className="font-headline flex items-center gap-4">
-                            <div>
-                              <p className="text-sm font-semibold text-primary">{event.date}</p>
-                              <h3 className="text-lg">{event.title}</h3>
-                            </div>
-                          </CardTitle>
+                            <p className="text-sm font-semibold text-primary">{event.date}</p>
+                            <CardTitle className="font-headline text-lg">{event.title}</CardTitle>
                         </CardHeader>
                         <CardContent className="flex-grow">
                           <p className="text-sm text-muted-foreground">{event.description}</p>
-                          <p id={`hint-${index}`} className="sr-only">Ilustración sugerida: {event.aiHint}</p>
                         </CardContent>
                         {event.reelUrl && (
                           <CardFooter className="pt-4">
@@ -253,87 +249,76 @@ export default function InteractiveTimeline() {
                           </CardFooter>
                         )}
                       </Card>
-                    </div>
-
-                    {/* IMAGEN EN MÓVIL (sm) – aparece al hacer hover/focus/touch */}
-                    <div
-                      className={cn(
-                        "md:hidden mt-4 transition-opacity opacity-100",
-                        // isHovered ? "opacity-100" : "opacity-50 pointer-events-none"
-                      )}
+                    </motion.div>
+                    
+                    {/* IMAGE (DERECHA) */}
+                    <motion.div
+                      initial="offscreen"
+                      whileInView="onscreen"
+                      viewport={{ once: true, amount: 0.5 }}
+                      variants={imageVariants}
+                      custom={index}
+                      className="md:col-start-2 md:row-start-1 mt-6 md:mt-0"
                     >
-                      <div className="relative">
-                        <Image
-                          src={event.imageUrl}
-                          alt={`Ilustración: ${event.title}`}
-                          width={300}
-                          height={150}
-                          className="w-full h-48 object-cover rounded-lg shadow-md"
-                        />
-                        {/* Flecha hacia la tarjeta (arriba del borde superior) */}
-                        <span
-                          className={cn(
-                            "absolute -top-2 left-4 block h-3 w-3 rotate-45 bg-background shadow",
-                            // en móvil la tarjeta siempre está arriba de la imagen
-                            ""
-                          )}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      <Image
+                        src={event.imageUrl}
+                        alt={`Ilustración: ${event.title}`}
+                        width={500}
+                        height={350}
+                        className="rounded-lg shadow-xl object-cover w-full h-64 md:h-auto"
+                      />
+                    </motion.div>
+                  </>
+                ) : (
+                  <>
+                    {/* IMAGE (IZQUIERDA) */}
+                    <motion.div
+                      initial="offscreen"
+                      whileInView="onscreen"
+                      viewport={{ once: true, amount: 0.5 }}
+                      variants={cardVariants}
+                      custom={index}
+                      className="md:col-start-1 md:row-start-1 mt-6 md:mt-0"
+                    >
+                       <Image
+                        src={event.imageUrl}
+                        alt={`Ilustración: ${event.title}`}
+                        width={500}
+                        height={350}
+                        className="rounded-lg shadow-xl object-cover w-full h-64 md:h-auto"
+                      />
+                    </motion.div>
 
-                {/* IMAGEN EN PANTALLAS MEDIANAS (md) – lado opuesto a la tarjeta */}
-                <div
-                  className={cn(
-                    "hidden md:block lg2:hidden absolute top-1/2 -translate-y-1/2 transition-all duration-300",
-                    isHovered ? "opacity-100" : "opacity-0 pointer-events-none",
-                    isLeft ? "right-0 translate-x" : "left-0 -translate-x"
-                  )}
-                >
-                  <div className="relative">
-                    <Image
-                      src={event.imageUrl}
-                      alt={`Ilustración: ${event.title}`}
-                      width={320}
-                      height={150}
-                      className="rounded-lg shadow-xl object-cover"
-                    />
-                    {/* Flecha apuntando hacia la tarjeta (hacia el centro de la timeline) */}
-                    <span
-                      className={cn(
-                        "absolute top-1/2 -translate-y-1/2 block h-3 w-3 rotate-45 bg-background shadow",
-                        isLeft ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2"
-                      )}
-                    />
-                  </div>
-                </div>
+                    {/* CARD (DERECHA) */}
+                    <motion.div
+                      initial="offscreen"
+                      whileInView="onscreen"
+                      viewport={{ once: true, amount: 0.5 }}
+                      variants={imageVariants}
+                      custom={index}
+                      className="md:col-start-2 md:row-start-1"
+                    >
+                      <Card className="backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80 flex flex-col h-full w-full">
+                        <CardHeader>
+                            <p className="text-sm font-semibold text-primary">{event.date}</p>
+                            <CardTitle className="font-headline text-lg">{event.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                          <p className="text-sm text-muted-foreground">{event.description}</p>
+                        </CardContent>
+                        {event.reelUrl && (
+                          <CardFooter className="pt-4">
+                              <Button variant="outline" size="sm" className="w-full" onClick={() => handleOpenReel(event.reelUrl, event.title)}>
+                                <Instagram className="mr-2 h-4 w-4" />
+                                Ver Reel
+                              </Button>
+                          </CardFooter>
+                        )}
+                      </Card>
+                    </motion.div>
+                  </>
+                )}
 
-                {/* IMAGEN EN PANTALLAS GRANDES (lg+) – mismo lado que la tarjeta pero más hacia afuera */}
-                <div
-                  className={cn(
-                    "hidden lg2:block absolute top-1/2 -translate-y-1/2 transition-all duration-300",
-                    isHovered ? "opacity-100" : "opacity-0 pointer-events-none",
-                    isLeft ? "left-0 -translate-x-[120%]" : "right-0 translate-x-[120%]"
-                  )}
-                >
-                  <div className="relative">
-                    <Image
-                      src={event.imageUrl}
-                      alt={`Ilustración: ${event.title}`}
-                      width={300}
-                      height={350}
-                      className="rounded-xl shadow-2xl object-cover"
-                    />
-                    {/* Flecha apuntando hacia la tarjeta (inward) */}
-                    <span
-                      className={cn(
-                        "absolute top-1/2 -translate-y-1/2 block h-3 w-3 rotate-45 bg-background shadow",
-                        isLeft ? "right-0 translate-x-1/2" : "left-0 -translate-x-1/2"
-                      )}
-                    />
-                  </div>
-                </div>
               </div>
             );
           })}

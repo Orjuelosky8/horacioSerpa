@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CalendarDays, Clock, MapPin } from "lucide-react";
+import { ArrowRight, CalendarDays, Clock, MapPin, Pin, PinOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type NewsItem = {
@@ -131,10 +131,9 @@ function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
         {/* Cara frontal */}
         <div
           className={cn(
-            //"absolute inset-0",
             "bg-gold",
             "[backface-visibility:hidden]",
-            "rounded-2xl overflow-hidden"
+            "rounded-2xl overflow-hidden flex flex-col h-full"
           )}
         >
           <CardHeader className="p-0 relative">
@@ -163,12 +162,12 @@ function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
               </div>
             </div>
           </CardHeader>
-          <CardContent className="p-6">
+          <CardContent className="p-6 flex-grow">
             <CardTitle className="font-headline text-xl">{item.title}</CardTitle>
             <p className="mt-3 text-sm text-muted-foreground">{item.excerpt}</p>
           </CardContent>
           <CardFooter className="flex items-center justify-between p-6 pt-0">
-            <Button variant="link" className="p-0">
+            <Button variant="link" className="p-0 text-sm">
               Leer más <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
             {/* Indicador de flip */}
@@ -178,9 +177,9 @@ function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
               onKeyDown={onKey}
               aria-pressed={flipped}
               aria-label="Ver más información de esta tarjeta"
-              className="rounded-full border px-3 py-1 text-xs text-muted-foreground hover:bg-muted"
+              className="rounded-full border px-3 py-1 text-xs text-muted-foreground hover:bg-muted md:hidden"
             >
-              Voltear
+              Ver más
             </button>
           </CardFooter>
         </div>
@@ -191,14 +190,14 @@ function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
             "absolute inset-0",
             "bg-background",
             "[transform:rotateY(180deg)] [backface-visibility:hidden]",
-            "rounded-2xl overflow-hidden"
+            "rounded-2xl overflow-hidden flex flex-col h-full"
           )}
         >
           <CardHeader className="p-6 pb-0">
             <p className="text-xs font-semibold text-primary">Detalles</p>
             <CardTitle className="mt-1 font-headline text-lg">{item.title}</CardTitle>
           </CardHeader>
-          <CardContent className="p-6 space-y-4">
+          <CardContent className="p-6 space-y-4 flex-grow">
             {item.details ? (
               <p className="text-sm text-muted-foreground">{item.details}</p>
             ) : (
@@ -233,10 +232,10 @@ function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
             </ul>
           </CardContent>
           <CardFooter className="flex items-center justify-between p-6 pt-0">
-            <Button size="sm" onClick={toggle}>
+            <Button size="sm" onClick={toggle} className="md:hidden">
               Volver
             </Button>
-            <Button variant="link" className="p-0">
+            <Button variant="link" className="p-0 text-sm">
               Leer artículo completo <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardFooter>
