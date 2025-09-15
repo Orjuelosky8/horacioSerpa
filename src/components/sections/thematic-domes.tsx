@@ -2,11 +2,12 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scale, BookHeart, Stethoscope, Briefcase, ShieldCheck, Leaf, ArrowRight, X } from "lucide-react";
+import { Scale, BookHeart, Stethoscope, Briefcase, ShieldCheck, Leaf, ArrowRight, X, FileText } from "lucide-react";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const proposals = [
   {
@@ -20,7 +21,7 @@ const proposals = [
         "Fortalecimiento de la defensoría pública.",
         "Programas de acceso a la justicia en zonas rurales."
     ],
-    pdfUrl: "/propuestas/justicia.pdf",
+    pdfUrl: "/propuestas/Justicia.pdf",
   },
   {
     id: 'educacion',
@@ -33,7 +34,7 @@ const proposals = [
         "Becas y créditos condonables para educación superior.",
         "Infraestructura y conectividad para colegios públicos."
     ],
-    pdfUrl: "/propuestas/educacion.pdf",
+    pdfUrl: "/propuestas/Educacion.pdf",
   },
   {
     id: 'salud',
@@ -46,7 +47,7 @@ const proposals = [
         "Reducción de los tiempos de espera para especialistas.",
         "Transparencia en el manejo de los recursos de la salud."
     ],
-    pdfUrl: "/propuestas/salud.pdf",
+    pdfUrl: "/propuestas/Salud.pdf",
   },
   {
     id: 'empleo',
@@ -59,7 +60,7 @@ const proposals = [
         "Inversión en sectores estratégicos como el turismo y la tecnología.",
         "Programas de formación para el trabajo."
     ],
-    pdfUrl: "/propuestas/empleo.pdf",
+    pdfUrl: "/propuestas/Empleo.pdf",
   },
   {
     id: 'derechos-humanos',
@@ -72,7 +73,7 @@ const proposals = [
         "Protección a líderes sociales y defensores de DDHH.",
         "Políticas de inclusión para minorías."
     ],
-    pdfUrl: "/propuestas/derechos-humanos.pdf",
+    pdfUrl: "/propuestas/DerechosHumanos.pdf",
   },
   {
     id: 'medio-ambiente',
@@ -85,7 +86,7 @@ const proposals = [
         "Lucha frontal contra la deforestación.",
         "Incentivos a la producción y consumo sostenible."
     ],
-    pdfUrl: "/propuestas/medio-ambiente.pdf",
+    pdfUrl: "/propuestas/MedioAmbiente.pdf",
   },
 ];
 
@@ -146,6 +147,7 @@ function PdfViewerModal({
     selectedProposal: Proposal | null,
     setSelectedProposal: (proposal: Proposal) => void,
 }) {
+    const isMobile = useIsMobile();
     if (!selectedProposal) return null;
 
     const handleSelectChange = (proposalId: string) => {
@@ -174,7 +176,6 @@ function PdfViewerModal({
                 </Select>
               </DialogTitle>
               
-              {/* Botón de cierre con hover */}
               <DialogClose asChild>
                 <Button 
                   variant="ghost" 
@@ -188,11 +189,26 @@ function PdfViewerModal({
             </DialogHeader>
 
                 <div className="flex-grow p-4 pt-0">
-                    <iframe 
-                        src={selectedProposal.pdfUrl}
-                        className="w-full h-full border-0 rounded-b-lg"
-                        title={`Propuesta ${selectedProposal.title}`}
-                    />
+                    {isMobile ? (
+                         <div className="flex flex-col items-center justify-center h-full text-center">
+                            <FileText className="h-16 w-16 text-muted-foreground mb-4" />
+                            <h3 className="text-xl font-semibold mb-2">Visualización móvil</h3>
+                            <p className="text-muted-foreground mb-6 max-w-sm">
+                                Para una mejor experiencia, te recomendamos abrir el documento en el visor de PDF de tu dispositivo.
+                            </p>
+                            <Button asChild size="lg">
+                                <a href={selectedProposal.pdfUrl} target="_blank" rel="noopener noreferrer">
+                                    Ver Propuesta en PDF
+                                </a>
+                            </Button>
+                        </div>
+                    ) : (
+                        <iframe 
+                            src={selectedProposal.pdfUrl}
+                            className="w-full h-full border-0 rounded-b-lg"
+                            title={`Propuesta ${selectedProposal.title}`}
+                        />
+                    )}
                 </div>
             </DialogContent>
         </Dialog>

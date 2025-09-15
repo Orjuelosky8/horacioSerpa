@@ -122,7 +122,7 @@ const PhotoCarousel = () => {
         </Button>
       </div>
 
-      <div className="text-center mt-8 w-full max-w-2xl">
+      <div className="text-center mt-8 w-full max-w-2xl px-6">
         <h3 className="font-headline text-2xl font-bold text-primary">{selectedPhoto?.title}</h3>
         <p className="mt-2 text-muted-foreground">{selectedPhoto?.description}</p>
       </div>
@@ -168,7 +168,7 @@ const VideoCarousel = () => {
   if (!selectedVideo) return null;
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto px-6">
       {/* Video Principal */}
       <div className="mb-8">
         <div className="relative aspect-video rounded-2xl bg-black shadow-2xl overflow-hidden">
@@ -201,7 +201,7 @@ const VideoCarousel = () => {
           <ArrowLeft className="h-5 w-5" />
         </Button>
 
-        <div className="overflow-hidden pb-4 pt-6" ref={emblaRef}>
+        <div className="overflow-hidden pb-4" ref={emblaRef}>
           <div className="flex -ml-4">
             {videoGallery.map((video) => (
               <div
@@ -253,7 +253,7 @@ const VideoCarousel = () => {
 export default function Gallery() {
   return (
     <section id="galeria" className="w-full py-20 md:py-32 bg-secondary/30">
-      <div className="container mx-auto px-0 md:px-6">
+      <div className="container mx-auto px-0">
         <div className="mb-12 text-center px-6">
           <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
             Galería de Momentos
@@ -283,4 +283,3 @@ export default function Gallery() {
     </section>
   );
 }
-

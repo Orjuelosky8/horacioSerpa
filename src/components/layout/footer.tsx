@@ -13,7 +13,8 @@ export default function Footer() {
     "hover:bg-primary/10 hover:text-primary hover:border-primary/30";
 
   return (
-    <footer className=" rounded-t-[25%] bg-[#ffd16f] backdrop-blur-lg mt-[-70px] pt-6 pb-2">
+    <footer className=" rounded-t-[25%] bg-[#d8b15d] backdrop-blur-lg mt-[-70px] pt-6 pb-2"> 
+    {/* ffd16f es el anterior fondo (mas encendido) */}
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center">
           <Image
@@ -78,7 +79,7 @@ export default function Footer() {
           {/* Divisor y derechos pegados abajo */}
           <div className="mt-8 w-full border-t border-border" />
           <p className="mt-4 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Horacio Serpa. Todos los derechos reservados.
+            © {new Date().getFullYear()} Horacio Jose Serpa. Todos los derechos reservados. - Diseño de Página web por Politech IA.
           </p>
         </div>
       </div>
