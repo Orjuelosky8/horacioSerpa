@@ -244,56 +244,60 @@ export default function EventsCalendar() {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-1 flex flex-col gap-6">
-                <Card className="shadow-2xl bg-background/80 backdrop-blur-sm">
-                    <CardHeader>
-                        <CardTitle className="font-headline">Filtrar Eventos</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
-                            <Input 
-                                placeholder="Buscar por nombre..." 
-                                className="pl-10"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+        <div className="grid grid-cols-1 lg2:grid-cols-3 gap-12">
+            <div className="lg2:col-span-1">
+                <div className="flex flex-col md:flex-row lg2:flex-col items-start md:items-center lg2:items-stretch gap-6">
+                    <Card className="w-full md:w-auto shadow-2xl bg-background/80 backdrop-blur-sm">
+                        <CardHeader>
+                            <CardTitle className="font-headline">Filtrar Eventos</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
+                                <Input 
+                                    placeholder="Buscar por nombre..." 
+                                    className="pl-10"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </div>
+                            <Select value={typeFilter} onValueChange={setTypeFilter}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Filtrar por tipo" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">Todos los tipos</SelectItem>
+                                    <SelectItem value="Debate">Debate</SelectItem>
+                                    <SelectItem value="Encuentro">Encuentro</SelectItem>
+                                    <SelectItem value="Virtual">Virtual</SelectItem>
+                                    <SelectItem value="Foro">Foro</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </CardContent>
+                    </Card>
+                    <div className="w-full flex justify-center">
+                         <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm self-start inline-block">
+                            <Calendar
+                                mode="single"
+                                selected={date}
+                                onSelect={setDate}
+                                locale={es}
+                                modifiers={{
+                                event: eventDates,
+                                }}
+                                modifiersClassNames={{
+                                event: "bg-primary/20 text-primary-foreground rounded-full font-bold",
+                                selected: "bg-primary text-primary-foreground",
+                                }}
+                                className="p-4"
+                                footer={date ? <Button variant="ghost" size="sm" onClick={() => setDate(undefined)}>Limpiar selección</Button> : undefined}
                             />
-                        </div>
-                        <Select value={typeFilter} onValueChange={setTypeFilter}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Filtrar por tipo" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Todos los tipos</SelectItem>
-                                <SelectItem value="Debate">Debate</SelectItem>
-                                <SelectItem value="Encuentro">Encuentro</SelectItem>
-                                <SelectItem value="Virtual">Virtual</SelectItem>
-                                <SelectItem value="Foro">Foro</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </CardContent>
-                </Card>
-                 <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm self-start">
-                    <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        locale={es}
-                        modifiers={{
-                          event: eventDates,
-                        }}
-                        modifiersClassNames={{
-                          event: "bg-primary/20 text-primary-foreground rounded-full font-bold",
-                          selected: "bg-primary text-primary-foreground",
-                        }}
-                        className="p-4"
-                        footer={date ? <Button variant="ghost" size="sm" onClick={() => setDate(undefined)}>Limpiar selección</Button> : undefined}
-                    />
-                </Card>
+                        </Card>
+                    </div>
+                </div>
             </div>
 
-            <div className="lg:col-span-2">
+            <div className="lg2:col-span-2">
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="font-headline text-2xl font-bold">
                         {date ? `Eventos para el ${format(date, 'd \'de\' MMMM', { locale: es })}` : 'Próximos Eventos'}
