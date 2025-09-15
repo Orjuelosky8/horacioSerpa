@@ -89,7 +89,7 @@ const newsItems: NewsItem[] = [
     title: "Alianza por la Transparencia",
     category: "Gobierno",
     excerpt: "Presentamos una nueva plataforma digital para el seguimiento en tiempo real de la contratación pública.",
-    imageUrl: "https://placehold.co/800x600.png",
+    imageUrl: "/News/ImagenHoracioVanguardia.jpg",
     aiHint: "transparency government",
     details: "La herramienta permitirá a cualquier ciudadano auditar los contratos estatales, promoviendo la veeduría.",
     date: "18 Ago 2025",
@@ -269,7 +269,15 @@ export default function DepthMasonry() {
         </div>
 
         <div className="mt-12 text-center">
-          <Button size="lg">Ver todas las noticias</Button>
+          <Button asChild size="lg">
+            <a 
+              href="https://www.vanguardia.com/autor/horacio-jose-serpa/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Ver todas las noticias
+            </a>
+          </Button>
         </div>
       </div>
     </section>
