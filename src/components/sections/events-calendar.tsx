@@ -246,8 +246,8 @@ export default function EventsCalendar() {
 
         <div className="grid grid-cols-1 lg2:grid-cols-3 gap-12">
             <div className="lg2:col-span-1">
-                <div className="flex flex-col md:flex-row lg2:flex-col items-start md:items-center lg2:items-stretch gap-6">
-                    <Card className="w-full md:w-auto shadow-2xl bg-background/80 backdrop-blur-sm">
+                <div className="flex flex-col md:flex-row lg2:flex-col items-center md:items-start lg2:items-stretch gap-8">
+                    <Card className="w-full md:flex-1 lg2:w-auto shadow-2xl bg-background/80 backdrop-blur-sm">
                         <CardHeader>
                             <CardTitle className="font-headline">Filtrar Eventos</CardTitle>
                         </CardHeader>
@@ -275,7 +275,7 @@ export default function EventsCalendar() {
                             </Select>
                         </CardContent>
                     </Card>
-                    <div className="w-full flex justify-center">
+                    <div className="w-full md:w-auto flex justify-center">
                          <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm self-start inline-block">
                             <Calendar
                                 mode="single"
