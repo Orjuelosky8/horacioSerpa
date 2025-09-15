@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -89,6 +89,7 @@ export default function Header() {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{link.description}</p>
+                  <Tooltip.Arrow />
                 </TooltipContent>
               </Tooltip>
             ))}
@@ -103,6 +104,7 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
+              <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
               <nav className="flex flex-col gap-6 pt-12">
                 {navLinks.map((link) => (
                   <Link

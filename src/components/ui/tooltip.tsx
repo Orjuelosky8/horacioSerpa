@@ -7,7 +7,9 @@ import { cn } from "@/lib/utils"
 
 const TooltipProvider = TooltipPrimitive.Provider
 
-const Tooltip = TooltipPrimitive.Root
+const Tooltip = Object.assign(TooltipPrimitive.Root, {
+  Arrow: TooltipPrimitive.Arrow
+})
 
 const TooltipTrigger = TooltipPrimitive.Trigger
 
@@ -26,7 +28,7 @@ const TooltipContent = React.forwardRef<
       {...props}
     >
       {children}
-      <TooltipPrimitive.Arrow className="fill-popover stroke-primary/20" width={11} height={5} />
+      
     </TooltipPrimitive.Content>
   </TooltipPrimitive.Portal>
 ))
