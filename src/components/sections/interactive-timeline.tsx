@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -206,31 +207,136 @@ export default function InteractiveTimeline() {
         </div>
 
         <div className="relative max-w-5xl mx-auto">
-          <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-border" />
+          <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-border/50" />
 
           {timelineEvents.map((event, index) => {
             const isLeft = index % 2 === 0;
 
             return (
-              <div key={index} className="relative mb-8 md:mb-16 grid grid-cols-1 md:grid-cols-2 md:gap-12 items-center">
-                 {/* ICONO */}
-                 <div className={cn(
-                    "absolute left-1/2 top-4 md:top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 md:-translate-y-1/2 items-center justify-center rounded-full bg-background ring-4 ring-primary",
-                    "md:top-1/2 -translate-y-[-1rem] md:-translate-y-1/2" // Ajuste para móvil
-                )}>
-                  <event.icon className="h-5 w-5 text-primary" />
-                </div>
+              <div key={index} className="relative mb-12 md:mb-16">
                 
-                {isLeft ? (
-                  <>
-                    {/* CARD (IZQUIERDA) */}
-                    <motion.div
+                {/* --- Vista de Escritorio --- */}
+                <div className="hidden md:grid md:grid-cols-2 md:gap-16 items-center">
+                  <div className={cn(
+                      "absolute left-1/2 top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background ring-4 ring-primary"
+                  )}>
+                    <event.icon className="h-5 w-5 text-primary" />
+                  </div>
+                
+                  {isLeft ? (
+                    <>
+                      {/* CARD (IZQUIERDA) */}
+                      <motion.div
+                        initial="offscreen"
+                        whileInView="onscreen"
+                        viewport={{ once: true, amount: 0.5 }}
+                        variants={cardVariants}
+                        custom={index}
+                        className="md:col-start-1"
+                      >
+                        <Card className="backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80 flex flex-col h-full w-full">
+                          <CardHeader>
+                              <p className="text-sm font-semibold text-primary">{event.date}</p>
+                              <CardTitle className="font-headline text-lg">{event.title}</CardTitle>
+                          </CardHeader>
+                          <CardContent className="flex-grow">
+                            <p className="text-sm text-muted-foreground">{event.description}</p>
+                          </CardContent>
+                          {event.reelUrl && (
+                            <CardFooter className="pt-4">
+                                <Button variant="outline" size="sm" className="w-full" onClick={() => handleOpenReel(event.reelUrl, event.title)}>
+                                  <Instagram className="mr-2 h-4 w-4" />
+                                  Ver Reel
+                                </Button>
+                            </CardFooter>
+                          )}
+                        </Card>
+                      </motion.div>
+                      
+                      {/* IMAGE (DERECHA) */}
+                      <motion.div
+                        initial="offscreen"
+                        whileInView="onscreen"
+                        viewport={{ once: true, amount: 0.5 }}
+                        variants={imageVariants}
+                        custom={index}
+                        className="md:col-start-2"
+                      >
+                        <Image
+                          src={event.imageUrl}
+                          alt={`Ilustración: ${event.title}`}
+                          width={500}
+                          height={350}
+                          className="rounded-lg shadow-xl object-cover w-full h-auto aspect-[4/3] transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                        />
+                      </motion.div>
+                    </>
+                  ) : (
+                    <>
+                      {/* IMAGE (IZQUIERDA) */}
+                      <motion.div
+                        initial="offscreen"
+                        whileInView="onscreen"
+                        viewport={{ once: true, amount: 0.5 }}
+                        variants={cardVariants}
+                        custom={index}
+                        className="md:col-start-1"
+                      >
+                         <Image
+                          src={event.imageUrl}
+                          alt={`Ilustración: ${event.title}`}
+                          width={500}
+                          height={350}
+                          className="rounded-lg shadow-xl object-cover w-full h-auto aspect-[4/3] transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                        />
+                      </motion.div>
+
+                      {/* CARD (DERECHA) */}
+                      <motion.div
+                        initial="offscreen"
+                        whileInView="onscreen"
+                        viewport={{ once: true, amount: 0.5 }}
+                        variants={imageVariants}
+                        custom={index}
+                        className="md:col-start-2"
+                      >
+                        <Card className="backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80 flex flex-col h-full w-full">
+                          <CardHeader>
+                              <p className="text-sm font-semibold text-primary">{event.date}</p>
+                              <CardTitle className="font-headline text-lg">{event.title}</CardTitle>
+                          </CardHeader>
+                          <CardContent className="flex-grow">
+                            <p className="text-sm text-muted-foreground">{event.description}</p>
+                          </CardContent>
+                          {event.reelUrl && (
+                            <CardFooter className="pt-4">
+                                <Button variant="outline" size="sm" className="w-full" onClick={() => handleOpenReel(event.reelUrl, event.title)}>
+                                  <Instagram className="mr-2 h-4 w-4" />
+                                  Ver Reel
+                                </Button>
+                            </CardFooter>
+                          )}
+                        </Card>
+                      </motion.div>
+                    </>
+                  )}
+                </div>
+
+                {/* --- Vista Móvil --- */}
+                <div className="md:hidden flex flex-col items-center gap-6">
+                  <div className={cn(
+                      "relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-background ring-4 ring-primary"
+                  )}>
+                    <event.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  
+                   <motion.div
                       initial="offscreen"
                       whileInView="onscreen"
                       viewport={{ once: true, amount: 0.5 }}
                       variants={cardVariants}
                       custom={index}
-                      className="md:col-start-1 md:row-start-1"
+                      className="w-full"
                     >
                       <Card className="backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80 flex flex-col h-full w-full">
                         <CardHeader>
@@ -250,75 +356,24 @@ export default function InteractiveTimeline() {
                         )}
                       </Card>
                     </motion.div>
-                    
-                    {/* IMAGE (DERECHA) */}
-                    <motion.div
+                  
+                   <motion.div
                       initial="offscreen"
                       whileInView="onscreen"
                       viewport={{ once: true, amount: 0.5 }}
                       variants={imageVariants}
                       custom={index}
-                      className="md:col-start-2 md:row-start-1 mt-6 md:mt-0"
+                      className="w-full"
                     >
                       <Image
                         src={event.imageUrl}
                         alt={`Ilustración: ${event.title}`}
                         width={500}
                         height={350}
-                        className="rounded-lg shadow-xl object-cover w-full h-64 md:h-auto"
+                        className="rounded-lg shadow-xl object-cover w-full h-64 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
                       />
                     </motion.div>
-                  </>
-                ) : (
-                  <>
-                    {/* IMAGE (IZQUIERDA) */}
-                    <motion.div
-                      initial="offscreen"
-                      whileInView="onscreen"
-                      viewport={{ once: true, amount: 0.5 }}
-                      variants={cardVariants}
-                      custom={index}
-                      className="md:col-start-1 md:row-start-1 mt-6 md:mt-0"
-                    >
-                       <Image
-                        src={event.imageUrl}
-                        alt={`Ilustración: ${event.title}`}
-                        width={500}
-                        height={350}
-                        className="rounded-lg shadow-xl object-cover w-full h-64 md:h-auto"
-                      />
-                    </motion.div>
-
-                    {/* CARD (DERECHA) */}
-                    <motion.div
-                      initial="offscreen"
-                      whileInView="onscreen"
-                      viewport={{ once: true, amount: 0.5 }}
-                      variants={imageVariants}
-                      custom={index}
-                      className="md:col-start-2 md:row-start-1"
-                    >
-                      <Card className="backdrop-blur-sm bg-background/50 transition-all duration-300 hover:shadow-2xl hover:bg-background/80 flex flex-col h-full w-full">
-                        <CardHeader>
-                            <p className="text-sm font-semibold text-primary">{event.date}</p>
-                            <CardTitle className="font-headline text-lg">{event.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex-grow">
-                          <p className="text-sm text-muted-foreground">{event.description}</p>
-                        </CardContent>
-                        {event.reelUrl && (
-                          <CardFooter className="pt-4">
-                              <Button variant="outline" size="sm" className="w-full" onClick={() => handleOpenReel(event.reelUrl, event.title)}>
-                                <Instagram className="mr-2 h-4 w-4" />
-                                Ver Reel
-                              </Button>
-                          </CardFooter>
-                        )}
-                      </Card>
-                    </motion.div>
-                  </>
-                )}
-
+                </div>
               </div>
             );
           })}
@@ -333,3 +388,4 @@ export default function InteractiveTimeline() {
     </section>
   );
 }
+

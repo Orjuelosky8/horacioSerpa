@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useTransition } from 'react';
@@ -246,7 +247,7 @@ export default function EventsCalendar() {
 
         <div className="grid grid-cols-1 lg2:grid-cols-3 gap-12">
             <div className="lg2:col-span-1">
-                <div className="flex flex-col md:flex-row lg2:flex-col items-center md:items-start lg2:items-stretch gap-8">
+                <div className="flex flex-col items-center md:items-start md:flex-row md:gap-8 lg2:flex-col lg2:gap-8">
                     <Card className="w-full md:flex-1 lg2:w-auto shadow-2xl bg-background/80 backdrop-blur-sm">
                         <CardHeader>
                             <CardTitle className="font-headline">Filtrar Eventos</CardTitle>
@@ -275,7 +276,7 @@ export default function EventsCalendar() {
                             </Select>
                         </CardContent>
                     </Card>
-                    <div className="w-full md:w-auto flex justify-center">
+                    <div className="w-full flex justify-center md:w-auto mt-8 md:mt-0">
                          <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm self-start inline-block">
                             <Calendar
                                 mode="single"

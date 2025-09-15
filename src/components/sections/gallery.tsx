@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
@@ -49,13 +50,14 @@ const photoGallery = [
 ];
 
 const videoGallery = [
-  { id: "video1", youtubeId: "GaveIyGE4_g", title: "Herencia familiar: Horacio José Serpa revela secretos de su vida política", description: "", src: "https://www.youtube.com/embed/GaveIyGE4_g?si=xtb_3FO6j_HvB7uA"},
-  { id: "video2", youtubeId: "68LmsTWnSbQ", title: "Mi papá no me quería en la política: Horacio José Serpa", description: "Conoce las historias y los rostros que nos inspiran a seguir adelante.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
-  { id: "video3", youtubeId: "LXb3EKWsInQ", title: "Propuestas Clave", description: "Explicamos nuestras ideas para la educación, la salud y el empleo.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
-  { id: "video4", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
-  { id: "video5", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
-  { id: "video6", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube.com/embed/68LmsTWnSbQ?si=X-Uh4Q9PWPwYZ1KR" },
+  { id: "video1", youtubeId: "GaveIyGE4_g", title: "Herencia familiar: Horacio José Serpa revela secretos de su vida política", description: "", src: "https://www.youtube-nocookie.com/embed/GaveIyGE4_g"},
+  { id: "video2", youtubeId: "68LmsTWnSbQ", title: "Mi papá no me quería en la política: Horacio José Serpa", description: "Conoce las historias y los rostros que nos inspiran a seguir adelante.", src: "https://www.youtube-nocookie.com/embed/68LmsTWnSbQ" },
+  { id: "video3", youtubeId: "LXb3EKWsInQ", title: "Propuestas Clave", description: "Explicamos nuestras ideas para la educación, la salud y el empleo.", src: "https://www.youtube-nocookie.com/embed/LXb3EKWsInQ" },
+  { id: "video4", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube-nocookie.com/embed/p_PJbmrX4uk" },
+  { id: "video5", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas 2", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube-nocookie.com/embed/p_PJbmrX4uk" },
+  { id: "video6", youtubeId: "p_PJbmrX4uk", title: "Debate de Ideas 3", description: "Nuestra participación en el gran debate nacional sobre el futuro del país.", src: "https://www.youtube-nocookie.com/embed/p_PJbmrX4uk" },
 ];
+
 
 const PhotoCarousel = () => {
   const options: EmblaOptionsType = { loop: true, align: 'center' };
@@ -163,6 +165,8 @@ const VideoCarousel = () => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
+  if (!selectedVideo) return null;
+
   return (
     <div className="w-full max-w-5xl mx-auto">
       {/* Video Principal */}
@@ -172,7 +176,7 @@ const VideoCarousel = () => {
             key={selectedVideo.id}
             width="100%"
             height="100%"
-            src={`${selectedVideo.src.replace('embed/', 'embed/')}?autoplay=1&mute=1`}
+            src={`${selectedVideo.src}?autoplay=1&mute=1`}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -199,7 +203,7 @@ const VideoCarousel = () => {
 
         <div className="overflow-hidden pb-4 pt-6" ref={emblaRef}>
           <div className="flex -ml-4">
-            {videoGallery.map((video, i) => (
+            {videoGallery.map((video) => (
               <div
                 className="flex-[0_0_50%] sm:flex-[0_0_33.33%] md:flex-[0_0_25%] pl-4"
                 key={video.id}
@@ -279,3 +283,4 @@ export default function Gallery() {
     </section>
   );
 }
+
