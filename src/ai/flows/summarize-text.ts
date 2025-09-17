@@ -34,7 +34,7 @@ const summarizeTextFlow = ai.defineFlow(
   },
   async ({ text, maxLength }) => {
     const { output } = await ai.generate({
-      prompt: `Generate a concise and natural-sounding summary for the following text.
+      prompt: `Generate a concise and natural-sounding summary for the following text. The summary must be in Spanish.
       ${maxLength ? `The summary must be no more than ${maxLength} characters long.` : ''}
       
       Text to summarize:
