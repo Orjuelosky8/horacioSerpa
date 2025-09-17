@@ -1,5 +1,4 @@
 import Papa from 'papaparse';
-import { summarizeText } from '@/ai/flows/summarize-text';
 
 export type NewsItem = {
   title: string;
@@ -30,13 +29,12 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
                 complete: async (results) => {
                     try {
                         const newsData = results.data as any[];
-                        const formattedNewsPromises: Promise<NewsItem | null>[] = newsData.slice(0, 6).map(async (row, index) => {
+                        const formattedNews = newsData.slice(0, 6).map((row, index) => {
                           if (!row.Titulo) return null;
                           
                           const content = row.Contenido || "Contenido no disponible.";
-                          
-                          const summary = await summarizeText({ text: content, maxLength: 100 });
-                          const excerpt = summary.summary;
+                          const sentences = content.split('.').filter((s: string) => s.trim().length > 0);
+                          const excerpt = sentences.slice(0, 2).join('. ') + (sentences.length > 2 ? '.' : '');
                           
                           return {
                             title: row.Titulo || "Título no disponible",
@@ -48,7 +46,6 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
                             aiHint: "news article",
                             readingTime: Math.floor(Math.random() * (5 - 2 + 1)) + 2,
                         }});
-                        const formattedNews = await Promise.all(formattedNewsPromises);
                         resolve(formattedNews.filter(Boolean) as NewsItem[]);
                     } catch(e) {
                       reject(e);
