@@ -17,6 +17,7 @@ type NewsItem = {
   aiHint?: string;
   date?: string;
   link?: string;
+  readingTime?: number;
 };
 
 async function getNewsFromSheet(): Promise<NewsItem[]> {
@@ -33,15 +34,20 @@ async function getNewsFromSheet(): Promise<NewsItem[]> {
                 header: true,
                 complete: (results) => {
                     const newsData = results.data as any[];
-                    const formattedNews: NewsItem[] = newsData.slice(0, 6).map((row, index) => ({
+                    const formattedNews: NewsItem[] = newsData.slice(0, 6).map((row, index) => {
+                      const content = row.Contenido || "Contenido no disponible.";
+                      const excerpt = content.length > 100 ? content.substring(0, 100) + '...' : content;
+                      
+                      return {
                         title: row.Titulo || "Título no disponible",
                         date: row.Fecha_Publicacion || new Date().toLocaleDateString(),
-                        excerpt: row.Contenido || "Contenido no disponible.",
+                        excerpt: excerpt,
                         link: row.Link,
                         category: "Noticia",
                         imageUrl: `https://placehold.co/800x600?text=Noticia+${index + 1}`,
                         aiHint: "news article",
-                    }));
+                        readingTime: Math.floor(Math.random() * 4) + 2, // Random number between 2 and 5
+                    }});
                     resolve(formattedNews);
                 },
                 error: (error: any) => {
@@ -103,15 +109,22 @@ function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
                 priority={false}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute left-4 top-4 flex items-center gap-2">
+              <div className="absolute left-4 top-4 flex flex-wrap items-center gap-2">
                 <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow">
                   {item.category}
                 </span>
-                {item.date ? (
-                  <span className="rounded-full bg-black/50 px-2 py-1 text-[10px] text-white backdrop-blur">
+                {item.date && (
+                  <span className="rounded-full bg-black/50 px-2 py-1 text-[10px] text-white backdrop-blur flex items-center gap-1">
+                    <CalendarDays className="h-3 w-3"/>
                     {item.date}
                   </span>
-                ) : null}
+                )}
+                 {item.readingTime && (
+                  <span className="rounded-full bg-black/50 px-2 py-1 text-[10px] text-white backdrop-blur flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    {item.readingTime} min.
+                  </span>
+                )}
               </div>
             </div>
           </CardHeader>
@@ -151,12 +164,18 @@ function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
             <CardTitle className="mt-1 font-headline text-lg">{item.title}</CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-4 flex-grow">
-            <p className="text-sm text-muted-foreground">Más información sobre esta noticia.</p>
+            <p className="text-sm text-muted-foreground">{item.excerpt}</p>
             <div className="grid grid-cols-1 gap-3 text-sm">
               {item.date && (
                 <div className="flex items-center gap-2">
                   <CalendarDays className="h-4 w-4 text-primary" />
-                  <span>{item.date}</span>
+                  <span>Publicado: {item.date}</span>
+                </div>
+              )}
+              {item.readingTime && (
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-primary" />
+                  <span>Lectura: {item.readingTime} min. aprox.</span>
                 </div>
               )}
             </div>
@@ -214,4 +233,3 @@ export default async function DepthMasonry() {
     </section>
   );
 }
-
