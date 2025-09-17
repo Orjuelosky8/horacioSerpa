@@ -14,6 +14,7 @@ import Gallery from "@/components/sections/gallery";
 import EventsCalendar from "@/components/sections/events-calendar";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent } from "@/components/ui/card";
 
 function NewsLoadingSkeleton() {
   return (
