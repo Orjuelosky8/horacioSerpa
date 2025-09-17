@@ -7,60 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CalendarDays, Clock, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Papa from 'papaparse';
-
-type NewsItem = {
-  title: string;
-  category: string;
-  excerpt: string;
-  imageUrl: string;
-  aiHint?: string;
-  date?: string;
-  link?: string;
-  readingTime?: number;
-};
-
-async function getNewsFromSheet(): Promise<NewsItem[]> {
-    const sheetId = "16C0Pa1Pjgrjne-jeZIxscFu34jqe2F217ZPanVwsYJs";
-    const sheetGid = "0";
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${sheetGid}`;
-
-    try {
-        const response = await fetch(csvUrl);
-        const csvText = await response.text();
-        
-        return new Promise((resolve, reject) => {
-            Papa.parse(csvText, {
-                header: true,
-                complete: (results) => {
-                    const newsData = results.data as any[];
-                    const formattedNews: NewsItem[] = newsData.slice(0, 6).map((row, index) => {
-                      const content = row.Contenido || "Contenido no disponible.";
-                      const excerpt = content.length > 100 ? content.substring(0, 100) + '...' : content;
-                      
-                      return {
-                        title: row.Titulo || "Título no disponible",
-                        date: row.Fecha_Publicacion || new Date().toLocaleDateString(),
-                        excerpt: excerpt,
-                        link: row.Link,
-                        category: "Noticia",
-                        imageUrl: `https://placehold.co/800x600?text=Noticia+${index + 1}`,
-                        aiHint: "news article",
-                        readingTime: Math.floor(Math.random() * 4) + 2, // Random number between 2 and 5
-                    }});
-                    resolve(formattedNews);
-                },
-                error: (error: any) => {
-                    console.error("Error parsing CSV:", error);
-                    reject(error);
-                },
-            });
-        });
-    } catch (error) {
-        console.error("Error fetching Google Sheet:", error);
-        return [];
-    }
-}
+import type { NewsItem } from "@/lib/news";
 
 
 function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
@@ -197,9 +144,7 @@ function FlipCard({ item, className }: { item: NewsItem; className?: string }) {
   );
 }
 
-export default async function DepthMasonry() {
-  const newsItems = await getNewsFromSheet();
-
+export default function DepthMasonry({ newsItems }: { newsItems: NewsItem[] }) {
   return (
     <section id="noticias" className="w-full py-20 md:py-32">
       <div className="container mx-auto px-6">

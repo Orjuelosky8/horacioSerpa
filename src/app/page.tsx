@@ -15,6 +15,7 @@ import EventsCalendar from "@/components/sections/events-calendar";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
+import { getNewsFromSheet } from "@/lib/news";
 
 function NewsLoadingSkeleton() {
   return (
@@ -50,6 +51,11 @@ function NewsLoadingSkeleton() {
   )
 }
 
+async function NewsSection() {
+  const newsItems = await getNewsFromSheet();
+  return <DepthMasonry newsItems={newsItems} />;
+}
+
 
 export default function Home() {
   return (
@@ -59,7 +65,7 @@ export default function Home() {
       <InteractiveTimeline />
       <ThematicDomes />
       <Suspense fallback={<NewsLoadingSkeleton />}>
-        <DepthMasonry />
+        <NewsSection />
       </Suspense>
       <EventsCalendar />
       <Gallery />
