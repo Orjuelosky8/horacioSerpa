@@ -129,12 +129,9 @@ https://www.ambienteysociedad.org.co/defender-los-derechos-humanos-en-colombia-u
 https://www.wwf.org.co/?389691/Deforestacion-Colombia-2023-informe-cifras-y-causas
 [52] [53] [54] [55] [56] [57] [58] Colombia puede alcanzar sus ambiciosas metas climáticas y aumentar su crecimiento económico
 https://www.bancomundial.org/es/news/press-release/2023/07/24/colombia-puede-alcanzar-sus-ambiciosas-metas-climaticas-y-aumentar-su-crecimiento-economico
-
 **Inicia la conversación:**
-
 Historial de la conversación:
 {{{history}}}
-
 Pregunta del usuario:
 {{query}}
       `,
@@ -145,3 +142,5 @@ Pregunta del usuario:
     return output!;
   }
 );
+
+    
