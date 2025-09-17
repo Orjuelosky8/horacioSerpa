@@ -1,4 +1,5 @@
 import Papa from 'papaparse';
+import { summarizeText } from '@/ai/flows/summarize-text';
 
 export type NewsItem = {
   title: string;
@@ -23,28 +24,35 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
         }
         const csvText = await response.text();
         
-        return new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             Papa.parse(csvText, {
                 header: true,
-                complete: (results) => {
-                    const newsData = results.data as any[];
-                    const formattedNews: NewsItem[] = newsData.slice(0, 6).map((row, index) => {
-                      if (!row.Titulo) return null; // Skip empty rows
-                      
-                      const content = row.Contenido || "Contenido no disponible.";
-                      const excerpt = content.length > 100 ? content.substring(0, 100) + '...' : content;
-                      
-                      return {
-                        title: row.Titulo || "Título no disponible",
-                        date: row.Fecha_Publicacion || new Date().toLocaleDateString(),
-                        excerpt: excerpt,
-                        link: row.Link,
-                        category: "Noticia",
-                        imageUrl: `https://placehold.co/800x600?text=Noticia+${index + 1}`,
-                        aiHint: "news article",
-                        readingTime: Math.floor(content.split(" ").length / 200) || 2, // Estimate reading time
-                    }});
-                    resolve(formattedNews.filter(Boolean) as NewsItem[]);
+                complete: async (results) => {
+                    try {
+                        const newsData = results.data as any[];
+                        const formattedNewsPromises: Promise<NewsItem | null>[] = newsData.slice(0, 6).map(async (row, index) => {
+                          if (!row.Titulo) return null;
+                          
+                          const content = row.Contenido || "Contenido no disponible.";
+                          
+                          const summary = await summarizeText({ text: content, maxLength: 100 });
+                          const excerpt = summary.summary;
+                          
+                          return {
+                            title: row.Titulo || "Título no disponible",
+                            date: row.Fecha_Publicacion || new Date().toLocaleDateString(),
+                            excerpt: excerpt,
+                            link: row.Link,
+                            category: "Noticia",
+                            imageUrl: `https://placehold.co/800x600?text=Noticia+${index + 1}`,
+                            aiHint: "news article",
+                            readingTime: Math.floor(Math.random() * (5 - 2 + 1)) + 2,
+                        }});
+                        const formattedNews = await Promise.all(formattedNewsPromises);
+                        resolve(formattedNews.filter(Boolean) as NewsItem[]);
+                    } catch(e) {
+                      reject(e);
+                    }
                 },
                 error: (error: any) => {
                     console.error("Error parsing CSV:", error);
