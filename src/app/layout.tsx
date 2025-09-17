@@ -8,8 +8,8 @@ import SceneLoader from "@/components/scene-loader";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Serpa Inmersivo",
-  description: "Campaña inmersiva de Horacio Serpa.",
+  title: "Horacio Jose Serpa",
+  description: "Conoce más acerca de quien es Horacio José serpa.",
 };
 
 export default function RootLayout({
