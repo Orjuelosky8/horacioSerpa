@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState, useRef } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useEffect, useMemo, useState, useRef, useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import Image from 'next/image';
 import {
   Card,
@@ -66,7 +66,7 @@ const initialState = {
 
 export default function ParticipationForm() {
   const { toast } = useToast();
-  const [state, formAction] = useFormState(submitForm, initialState);
+  const [state, formAction] = useActionState(submitForm, initialState);
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const municipalities = useMemo(
     () => getMunicipalitiesByDepartment(selectedDepartment),
