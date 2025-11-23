@@ -119,27 +119,30 @@ export default function ParticipationForm() {
     <section id="unete" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <Card className="max-w-4xl mx-auto shadow-2xl bg-background/80 backdrop-blur-sm overflow-hidden border-2 border-primary/20">
-          <div className="relative w-full h-48 md:h-64">
-            <Image
-              src="/FondoHoracioSerpa.jpeg"
-              alt="Banner de participación"
-              fill
-              objectFit="cover"
-              className="opacity-100"
-              data-ai-hint="political campaign banner"
-            />
-            <div className="mt-[20px] absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
-          </div>
-          <div className="relative -mt-16">
-            <CardHeader className="text-center">
-              <CardTitle className="font-headline text-4xl md:text-5xl text-primary">
-                Formulario de Participación
-              </CardTitle>
-              <CardDescription className="text-lg max-w-2xl mx-auto">
-                Tu voz es clave para construir el futuro. Registra tus datos para
-                unirte a nuestro equipo.
-              </CardDescription>
-            </CardHeader>
+        <div className="relative w-full h-64 md:h-80">
+          <Image
+            src="/FondoHoracioSerpa.jpeg"
+            alt="Banner de participación"
+            fill
+            className="object-cover object-top opacity-100"
+            data-ai-hint="political campaign banner"
+          />
+
+          {/* Degradado SOLO en la mitad inferior */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-background via-background/70 to-transparent" />
+        </div>
+
+        {/* Si quieres que el formulario no monte tanto sobre la imagen, baja un poco este -mt */}
+        <div className="relative -mt-10 md:-mt-12">
+          <CardHeader className="text-center">
+            <CardTitle className="font-headline text-4xl md:text-5xl text-primary">
+              Formulario de Participación
+            </CardTitle>
+            <CardDescription className="text-lg max-w-2xl mx-auto">
+              Tu voz es clave para construir el futuro. Registra tus datos para
+              unirte a nuestro equipo.
+            </CardDescription>
+          </CardHeader>
             <CardContent className="px-4 md:px-8 pb-8">
               <form ref={formRef} action={formAction} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

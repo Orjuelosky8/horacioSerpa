@@ -53,11 +53,13 @@ export async function submitForm(
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
+  console.log("DEBUG: Iniciando la acción 'submitForm'.");
   const rawData = Object.fromEntries(formData.entries());
 
   const validatedFields = formSchema.safeParse(rawData);
-
+  
   if (!validatedFields.success) {
+    console.log("DEBUG: Falló la validación del formulario.", validatedFields.error.issues);
     return {
       success: false,
       message: 'Por favor, corrige los errores en el formulario.',
@@ -65,7 +67,8 @@ export async function submitForm(
       values: rawData as any,
     };
   }
-
+  
+  console.log("DEBUG: Validación del formulario exitosa.");
   const {
     fullName,
     email,
@@ -78,13 +81,19 @@ export async function submitForm(
   } = validatedFields.data;
 
   try {
+    console.log("DEBUG: Conectando a Google Sheets...");
     await doc.loadInfo();
+    console.log("DEBUG: ¡Conexión exitosa! Título del documento:", doc.title);
+    
     const sheet = doc.sheetsByIndex[0]; // Usar la primera hoja del documento
-
+    
     if (!sheet) {
+      console.error("DEBUG: ERROR - No se encontró ninguna hoja en el documento.");
       throw new Error('No se encontró ninguna hoja en el documento de Google Sheets.');
     }
-
+    console.log("DEBUG: Hoja encontrada:", sheet.title);
+    
+    console.log("DEBUG: Agregando fila a la hoja...");
     await sheet.addRow({
       'Marca temporal': new Date().toLocaleString('es-CO', {
         timeZone: 'America/Bogota',
@@ -99,6 +108,7 @@ export async function submitForm(
       '¿Autoriza el tratamiento de sus datos?': 'Sí',
       'Dinos tu propuesta': proposal || '',
     });
+    console.log("DEBUG: ¡Fila agregada exitosamente!");
 
     return {
       success: true,
@@ -117,7 +127,7 @@ export async function submitForm(
       },
     };
   } catch (error) {
-    console.error('Error al enviar a Google Sheets:', error);
+    console.error('DEBUG: ERROR al enviar a Google Sheets:', error);
     const errorMessage =
       error instanceof Error ? error.message : 'Un error desconocido ocurrió.';
     return {
