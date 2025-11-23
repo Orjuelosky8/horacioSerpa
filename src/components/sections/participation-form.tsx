@@ -1,10 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import Image from 'next/image';
 import {
   Card,
@@ -30,24 +27,6 @@ import { submitForm } from '@/app/actions/submit-form';
 import { Loader2, Send, CheckCircle, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-
-const formSchema = z.object({
-  fullName: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
-  email: z.string().email('Correo electrónico no válido'),
-  phone: z.string().min(7, 'El teléfono debe tener al menos 7 dígitos'),
-  idCard: z.string().min(5, 'La cédula debe tener al menos 5 dígitos'),
-  department: z.string().min(1, 'Debes seleccionar un departamento'),
-  city: z.string().min(1, 'Debes seleccionar un municipio'),
-  referrer: z
-    .string()
-    .min(3, 'El nombre del referido debe tener al menos 3 caracteres'),
-  dataAuthorization: z.literal(true, {
-    errorMap: () => ({ message: 'Debes autorizar el tratamiento de datos' }),
-  }),
-  proposal: z.string().optional(),
-});
-
-type FormData = z.infer<typeof formSchema>;
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -79,37 +58,23 @@ function SubmitButton() {
   );
 }
 
+const initialState = {
+  success: false,
+  message: '',
+  errors: [],
+};
+
 export default function ParticipationForm() {
   const { toast } = useToast();
+  const [state, formAction] = useFormState(submitForm, initialState);
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const municipalities = useMemo(
     () => getMunicipalitiesByDepartment(selectedDepartment),
     [selectedDepartment]
   );
   
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-    watch,
-  } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-  });
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const watchedDepartment = watch('department');
-
-  // Reset city when department changes
-  useEffect(() => {
-    setValue('city', '');
-  }, [watchedDepartment, setValue]);
-
-  const [state, formAction] = useFormState(submitForm, {
-    success: false,
-    message: '',
-  });
-  
   useEffect(() => {
     if (state.message) {
       if (state.success) {
@@ -119,7 +84,7 @@ export default function ParticipationForm() {
           variant: 'default',
           action: <CheckCircle className="text-green-500" />,
         });
-        reset();
+        formRef.current?.reset();
         setSelectedDepartment('');
       } else {
         toast({
@@ -130,8 +95,10 @@ export default function ParticipationForm() {
         });
       }
     }
-  }, [state, toast, reset]);
-  
+  }, [state, toast]);
+
+  const getError = (fieldName: string) => state.errors?.find(e => e.path.includes(fieldName))?.message;
+
   return (
     <section id="unete" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
@@ -158,40 +125,37 @@ export default function ParticipationForm() {
               </CardDescription>
             </CardHeader>
             <CardContent className="px-4 md:px-8 pb-8">
-              <form action={formAction} className="space-y-6">
+              <form ref={formRef} action={formAction} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Nombres y apellidos completos *</Label>
-                    <Input id="fullName" {...register('fullName')} />
-                    {errors.fullName && <p className="text-sm text-destructive">{errors.fullName.message}</p>}
+                    <Input id="fullName" name="fullName" />
+                    {getError('fullName') && <p className="text-sm text-destructive">{getError('fullName')}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Correo electrónico *</Label>
-                    <Input id="email" type="email" {...register('email')} />
-                    {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+                    <Input id="email" type="email" name="email" />
+                    {getError('email') && <p className="text-sm text-destructive">{getError('email')}</p>}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="phone">Teléfono celular / WhatsApp *</Label>
-                    <Input id="phone" type="tel" {...register('phone')} />
-                    {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
+                    <Input id="phone" type="tel" name="phone" />
+                    {getError('phone') && <p className="text-sm text-destructive">{getError('phone')}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="idCard">Cédula de ciudadanía *</Label>
-                    <Input id="idCard" {...register('idCard')} />
-                    {errors.idCard && <p className="text-sm text-destructive">{errors.idCard.message}</p>}
+                    <Input id="idCard" name="idCard" />
+                    {getError('idCard') && <p className="text-sm text-destructive">{getError('idCard')}</p>}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="department">Departamento *</Label>
-                    <Select onValueChange={(value) => {
-                      setValue('department', value);
-                      setSelectedDepartment(value);
-                    }} value={watchedDepartment}>
+                    <Select name="department" onValueChange={setSelectedDepartment} >
                       <SelectTrigger id="department">
                         <SelectValue placeholder="Seleccione un departamento" />
                       </SelectTrigger>
@@ -203,11 +167,11 @@ export default function ParticipationForm() {
                         ))}
                       </SelectContent>
                     </Select>
-                     {errors.department && <p className="text-sm text-destructive">{errors.department.message}</p>}
+                     {getError('department') && <p className="text-sm text-destructive">{getError('department')}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="city">Municipio - Ciudad *</Label>
-                    <Select onValueChange={(value) => setValue('city', value)} value={watch('city')} disabled={!selectedDepartment}>
+                    <Select name="city" disabled={!selectedDepartment}>
                       <SelectTrigger id="city">
                         <SelectValue placeholder={selectedDepartment ? "Seleccione un municipio" : "Seleccione primero un departamento"} />
                       </SelectTrigger>
@@ -219,7 +183,7 @@ export default function ParticipationForm() {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.city && <p className="text-sm text-destructive">{errors.city.message}</p>}
+                    {getError('city') && <p className="text-sm text-destructive">{getError('city')}</p>}
                   </div>
                 </div>
 
@@ -227,24 +191,23 @@ export default function ParticipationForm() {
                   <Label htmlFor="referrer">
                     ¿Quién te contó de mí? Escribe su Nombre completo. *
                   </Label>
-                  <Input id="referrer" {...register('referrer')} />
-                   {errors.referrer && <p className="text-sm text-destructive">{errors.referrer.message}</p>}
+                  <Input id="referrer" name="referrer" />
+                   {getError('referrer') && <p className="text-sm text-destructive">{getError('referrer')}</p>}
                 </div>
                 
                 <div className="space-y-2">
                   <Label htmlFor="proposal">Dinos tu propuesta (Opcional)</Label>
                   <Textarea
                     id="proposal"
+                    name="proposal"
                     placeholder="Describe aquí tu idea o propuesta para mejorar nuestra comunidad..."
                     rows={4}
-                    {...register('proposal')}
                   />
-                  {errors.proposal && <p className="text-sm text-destructive">{errors.proposal.message}</p>}
                 </div>
 
                 <div className="space-y-3">
                    <div className="flex items-start space-x-3">
-                    <Checkbox id="dataAuthorization" {...register('dataAuthorization')} />
+                    <Checkbox id="dataAuthorization" name="dataAuthorization" />
                     <div className="grid gap-1.5 leading-none">
                        <Label htmlFor="dataAuthorization" className="cursor-pointer">
                         ¿Autoriza el tratamiento de sus datos? *
@@ -254,7 +217,7 @@ export default function ParticipationForm() {
                        </p>
                     </div>
                   </div>
-                  {errors.dataAuthorization && <p className="text-sm text-destructive">{errors.dataAuthorization.message}</p>}
+                  {getError('dataAuthorization') && <p className="text-sm text-destructive">{getError('dataAuthorization')}</p>}
                 </div>
 
                 <SubmitButton />

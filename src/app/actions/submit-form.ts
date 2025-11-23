@@ -4,14 +4,16 @@ import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  fullName: z.string().min(1, 'El nombre es requerido'),
+  fullName: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
   email: z.string().email('Correo electrónico no válido'),
-  phone: z.string().min(1, 'El teléfono es requerido'),
-  idCard: z.string().min(1, 'La cédula es requerida'),
-  department: z.string().min(1, 'El departamento es requerido'),
-  city: z.string().min(1, 'El municipio es requerido'),
-  referrer: z.string().min(1, 'El nombre de quien te contó es requerido'),
-  dataAuthorization: z.enum(['Sí'], {
+  phone: z.string().min(7, 'El teléfono debe tener al menos 7 dígitos'),
+  idCard: z.string().min(5, 'La cédula debe tener al menos 5 dígitos'),
+  department: z.string().min(1, 'Debes seleccionar un departamento'),
+  city: z.string().min(1, 'Debes seleccionar un municipio'),
+  referrer: z
+    .string()
+    .min(3, 'El nombre del referido debe tener al menos 3 caracteres'),
+  dataAuthorization: z.literal('on', {
     errorMap: () => ({ message: 'Debes autorizar el tratamiento de datos' }),
   }),
   proposal: z.string().optional(),
@@ -20,25 +22,19 @@ const formSchema = z.object({
 type FormState = {
   success: boolean;
   message: string;
-  errors?: {
-    [key in keyof z.infer<typeof formSchema>]?: string[];
-  };
+  errors?: z.ZodIssue[];
 };
 
 export async function submitForm(prevState: FormState, formData: FormData): Promise<FormState> {
   const rawData = Object.fromEntries(formData.entries());
 
-  // Special handling for checkbox/boolean
-  rawData.dataAuthorization = rawData.dataAuthorization ? 'Sí' : undefined;
-
   const validatedFields = formSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors);
     return {
       success: false,
       message: 'Por favor, corrige los errores en el formulario.',
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: validatedFields.error.issues,
     };
   }
 
@@ -50,7 +46,6 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
     department,
     city,
     referrer,
-    dataAuthorization,
     proposal,
   } = validatedFields.data;
 
@@ -63,7 +58,7 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID!, serviceAccountAuth);
 
     await doc.loadInfo();
-    const sheet = doc.sheetsById[1238300168]; // Use GID
+    const sheet = doc.sheetsById[1238300168]; 
 
     if (!sheet) {
       throw new Error('Google Sheet no encontrada (GID: 1238300168).');
@@ -78,7 +73,7 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
       'Departamento': department,
       'Municipio - Ciudad': city,
       '¿Quién te contó de mí? Escribe su Nombre completo.': referrer,
-      '¿Autoriza el tratamiento de sus datos?': dataAuthorization,
+      '¿Autoriza el tratamiento de sus datos?': 'Sí',
       'Dinos tu propuesta': proposal || '',
     });
 
@@ -88,10 +83,11 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
     };
   } catch (error) {
     console.error('Error al enviar a Google Sheets:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Un error desconocido ocurrió.';
     return {
       success: false,
       message:
-        'Ocurrió un error al enviar tu información. Por favor, inténtalo de nuevo más tarde.',
+        `Ocurrió un error al enviar tu información. Detalles: ${errorMessage}`,
     };
   }
 }
