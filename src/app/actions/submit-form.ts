@@ -29,7 +29,7 @@ type FormState = {
 
 const serviceAccountAuth = new JWT({
     email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL!,
-    key: process.env.GOOGLE_SHEETS_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+    key: (process.env.GOOGLE_SHEETS_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
@@ -85,6 +85,17 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
     return {
       success: true,
       message: '¡Gracias por registrarte! Tu participación ha sido registrada con éxito.',
+      values: {
+        fullName: '',
+        email: '',
+        phone: '',
+        idCard: '',
+        department: '',
+        city: '',
+        referrer: '',
+        proposal: '',
+        dataAuthorization: ''
+      }
     };
   } catch (error) {
     console.error('Error al enviar a Google Sheets:', error);
