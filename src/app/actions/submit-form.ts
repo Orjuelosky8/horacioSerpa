@@ -1,6 +1,7 @@
 'use server';
 
 import { GoogleSpreadsheet } from 'google-spreadsheet';
+import { JWT } from 'google-auth-library';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -23,7 +24,14 @@ type FormState = {
   success: boolean;
   message: string;
   errors?: z.ZodIssue[];
+  values?: z.infer<typeof formSchema>;
 };
+
+const serviceAccountAuth = new JWT({
+    email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL!,
+    key: process.env.GOOGLE_SHEETS_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+});
 
 export async function submitForm(prevState: FormState, formData: FormData): Promise<FormState> {
   const rawData = Object.fromEntries(formData.entries());
@@ -35,9 +43,10 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
       success: false,
       message: 'Por favor, corrige los errores en el formulario.',
       errors: validatedFields.error.issues,
+      values: rawData as any, // Return the raw data so the form can be repopulated
     };
   }
-
+  
   const {
     fullName,
     email,
@@ -49,12 +58,8 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
     proposal,
   } = validatedFields.data;
 
-  try {
-    const serviceAccountAuth = {
-      client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL!,
-      private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY!.replace(/\\n/g, '\n'),
-    };
 
+  try {
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID!, serviceAccountAuth);
 
     await doc.loadInfo();
@@ -88,6 +93,7 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
       success: false,
       message:
         `Ocurrió un error al enviar tu información. Detalles: ${errorMessage}`,
+      values: validatedFields.data,
     };
   }
 }

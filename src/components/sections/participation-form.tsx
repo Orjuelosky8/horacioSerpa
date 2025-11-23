@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState, useRef, useActionState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
+import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import Image from 'next/image';
 import {
@@ -62,12 +63,24 @@ const initialState = {
   success: false,
   message: '',
   errors: [],
+  values: {
+    fullName: '',
+    email: '',
+    phone: '',
+    idCard: '',
+    department: '',
+    city: '',
+    referrer: '',
+    proposal: '',
+    dataAuthorization: ''
+  }
 };
 
 export default function ParticipationForm() {
   const { toast } = useToast();
   const [state, formAction] = useActionState(submitForm, initialState);
-  const [selectedDepartment, setSelectedDepartment] = useState('');
+  
+  const [selectedDepartment, setSelectedDepartment] = useState(state.values?.department || '');
   const municipalities = useMemo(
     () => getMunicipalitiesByDepartment(selectedDepartment),
     [selectedDepartment]
@@ -93,6 +106,9 @@ export default function ParticipationForm() {
           variant: 'destructive',
           action: <AlertTriangle className="text-white" />,
         });
+         if (state.values?.department) {
+          setSelectedDepartment(state.values.department);
+        }
       }
     }
   }, [state, toast]);
@@ -129,12 +145,12 @@ export default function ParticipationForm() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Nombres y apellidos completos *</Label>
-                    <Input id="fullName" name="fullName" />
+                    <Input id="fullName" name="fullName" defaultValue={state.values?.fullName} />
                     {getError('fullName') && <p className="text-sm text-destructive">{getError('fullName')}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Correo electrónico *</Label>
-                    <Input id="email" type="email" name="email" />
+                    <Input id="email" type="email" name="email" defaultValue={state.values?.email} />
                     {getError('email') && <p className="text-sm text-destructive">{getError('email')}</p>}
                   </div>
                 </div>
@@ -142,12 +158,12 @@ export default function ParticipationForm() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="phone">Teléfono celular / WhatsApp *</Label>
-                    <Input id="phone" type="tel" name="phone" />
+                    <Input id="phone" type="tel" name="phone" defaultValue={state.values?.phone} />
                     {getError('phone') && <p className="text-sm text-destructive">{getError('phone')}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="idCard">Cédula de ciudadanía *</Label>
-                    <Input id="idCard" name="idCard" />
+                    <Input id="idCard" name="idCard" defaultValue={state.values?.idCard} />
                     {getError('idCard') && <p className="text-sm text-destructive">{getError('idCard')}</p>}
                   </div>
                 </div>
@@ -155,7 +171,7 @@ export default function ParticipationForm() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="department">Departamento *</Label>
-                    <Select name="department" onValueChange={setSelectedDepartment} >
+                    <Select name="department" onValueChange={setSelectedDepartment} defaultValue={state.values?.department}>
                       <SelectTrigger id="department">
                         <SelectValue placeholder="Seleccione un departamento" />
                       </SelectTrigger>
@@ -171,7 +187,7 @@ export default function ParticipationForm() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="city">Municipio - Ciudad *</Label>
-                    <Select name="city" disabled={!selectedDepartment}>
+                    <Select name="city" disabled={!selectedDepartment} defaultValue={state.values?.city}>
                       <SelectTrigger id="city">
                         <SelectValue placeholder={selectedDepartment ? "Seleccione un municipio" : "Seleccione primero un departamento"} />
                       </SelectTrigger>
@@ -191,7 +207,7 @@ export default function ParticipationForm() {
                   <Label htmlFor="referrer">
                     ¿Quién te contó de mí? Escribe su Nombre completo. *
                   </Label>
-                  <Input id="referrer" name="referrer" />
+                  <Input id="referrer" name="referrer" defaultValue={state.values?.referrer} />
                    {getError('referrer') && <p className="text-sm text-destructive">{getError('referrer')}</p>}
                 </div>
                 
@@ -202,12 +218,13 @@ export default function ParticipationForm() {
                     name="proposal"
                     placeholder="Describe aquí tu idea o propuesta para mejorar nuestra comunidad..."
                     rows={4}
+                    defaultValue={state.values?.proposal}
                   />
                 </div>
 
                 <div className="space-y-3">
                    <div className="flex items-start space-x-3">
-                    <Checkbox id="dataAuthorization" name="dataAuthorization" />
+                    <Checkbox id="dataAuthorization" name="dataAuthorization" defaultChecked={state.values?.dataAuthorization === 'on'} />
                     <div className="grid gap-1.5 leading-none">
                        <Label htmlFor="dataAuthorization" className="cursor-pointer">
                         ¿Autoriza el tratamiento de sus datos? *

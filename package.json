@@ -50,6 +50,7 @@
     "firebase": "^11.9.1",
     "framer-motion": "^12.23.12",
     "genkit": "^1.14.1",
+    "google-auth-library": "^9.11.0",
     "google-spreadsheet": "^4.1.2",
     "gsap": "^3.12.5",
     "lucide-react": "^0.475.0",
