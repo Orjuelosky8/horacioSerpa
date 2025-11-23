@@ -29,7 +29,7 @@ type FormState = {
 
 const serviceAccountAuth = new JWT({
     email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL!,
-    key: (process.env.GOOGLE_SHEETS_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+    key: (process.env.GOOGLE_SHEETS_PRIVATE_KEY || '').replace(/\\n/g, "\n"),
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
@@ -43,7 +43,7 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
       success: false,
       message: 'Por favor, corrige los errores en el formulario.',
       errors: validatedFields.error.issues,
-      values: rawData as any, // Return the raw data so the form can be repopulated
+      values: rawData as any,
     };
   }
   
