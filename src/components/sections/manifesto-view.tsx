@@ -39,13 +39,20 @@ export default function ManifestoView() {
                 inquebrantable con el futuro de nuestra nación.
               </p>
               <div className="mt-8 flex items-center gap-4">
-                <Button 
-                  size="lg" 
-                  className="px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/40"
+                <a 
+                  href="https://chat.whatsapp.com/Kr6uQato4GN6GrmSZwxQ1H?mode=ems_copy_t" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
                 >
-                  Únete a la Campaña
-                </Button>
+                  <Button 
+                    size="lg" 
+                    className="px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/40"
+                  >
+                    Únete a la Campaña
+                  </Button>
+                </a>
               </div>
+
             </div>
           </div>
           

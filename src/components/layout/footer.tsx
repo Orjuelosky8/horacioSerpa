@@ -46,31 +46,31 @@ export default function Footer() {
           {/* Redes */}
           <div className="mt-2 flex justify-center gap-5">
             <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
-              <Link href="https://facebook.com" aria-label="Facebook">
+              <Link href="https://www.facebook.com/horaciojserpa/?locale=es_LA" aria-label="Facebook">
                 <Facebook className="h-9 w-9" />
               </Link>
             </Button>
 
             <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
-              <Link href="https://instagram.com" aria-label="Instagram">
+              <Link href="https://www.instagram.com/horaciojserpa/?hl=es" aria-label="Instagram">
                 <Instagram className="h-9 w-9" />
               </Link>
             </Button>
 
             <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
-              <Link href="https://youtube.com" aria-label="YouTube">
+              <Link href="https://www.youtube.com/channel/UChc4BmK9Rd0tA-yg8knPaDA" aria-label="YouTube">
                 <Youtube className="h-9 w-9" />
               </Link>
             </Button>
 
             <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
-              <Link href="https://tiktok.com" aria-label="TikTok">
+              <Link href="https://www.tiktok.com/@horaciojserpa?lang=es" aria-label="TikTok">
                 <FaTiktok className="h-9 w-9" />
               </Link>
             </Button>
 
             <Button variant="ghost" size="icon" className={btnBase} asChild style={{ transitionDuration: "1500ms" }}>
-              <Link href="https://wa.me/57XXXXXXXXXX" aria-label="WhatsApp">
+              <Link href="https://chat.whatsapp.com/Kr6uQato4GN6GrmSZwxQ1H?mode=ems_copy_t" aria-label="WhatsApp">
                 <FaWhatsapp className="h-9 w-9" />
               </Link>
             </Button>

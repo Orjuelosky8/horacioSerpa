@@ -6,9 +6,6 @@ import ThematicDomes from "@/components/sections/thematic-domes";
 import DepthMasonry from "@/components/sections/depth-masonry";
 import LiveCubesphere from "@/components/sections/live-cubesphere";
 import TestimonialReel from "@/components/sections/testimonial-reel";
-import JoinCampaign from "@/components/sections/join-campaign";
-import ContactForm from "@/components/sections/contact-form";
-import { Button } from "@/components/ui/button";
 import AiChatVideo from "@/components/sections/ai-chat-video";
 import Gallery from "@/components/sections/gallery";
 import EventsCalendar from "@/components/sections/events-calendar";
@@ -16,6 +13,7 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { getNewsFromSheet } from "@/lib/news";
+import ParticipationForm from "@/components/sections/participation-form";
 
 function NewsLoadingSkeleton() {
   return (
@@ -72,8 +70,7 @@ export default function Home() {
       {/* <LiveCubesphere /> // REDES SOCCIALES */}
       <TestimonialReel />
       <AiChatVideo />
-      <JoinCampaign />
-      <ContactForm />
+      <ParticipationForm />
       <Footer />
     </>
   );
