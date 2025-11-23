@@ -27,13 +27,32 @@ type FormState = {
   values?: z.infer<typeof formSchema>;
 };
 
+// 🔐 Validación de envs antes de crear el JWT
+if (!process.env.GOOGLE_SHEETS_CLIENT_EMAIL) {
+  throw new Error('La variable de entorno GOOGLE_SHEETS_CLIENT_EMAIL no está definida.');
+}
+if (!process.env.GOOGLE_SHEETS_PRIVATE_KEY) {
+  throw new Error('La variable de entorno GOOGLE_SHEETS_PRIVATE_KEY no está definida.');
+}
+if (!process.env.GOOGLE_SHEET_ID) {
+  throw new Error('La variable de entorno GOOGLE_SHEET_ID no está definida.');
+}
+
 const serviceAccountAuth = new JWT({
-    email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL!,
-    key: (process.env.GOOGLE_SHEETS_PRIVATE_KEY || '').replace(/\\n/g, "\n"),
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+  // La clave privada de Google viene con saltos de línea \n.
+  // Las variables de entorno los escapan como \\n.
+  // Este reemplazo es crucial para que la clave sea válida.
+  key: process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-export async function submitForm(prevState: FormState, formData: FormData): Promise<FormState> {
+const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID!, serviceAccountAuth);
+
+export async function submitForm(
+  prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
   const rawData = Object.fromEntries(formData.entries());
 
   const validatedFields = formSchema.safeParse(rawData);
@@ -46,7 +65,7 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
       values: rawData as any,
     };
   }
-  
+
   const {
     fullName,
     email,
@@ -58,19 +77,18 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
     proposal,
   } = validatedFields.data;
 
-
   try {
-    const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID!, serviceAccountAuth);
-
     await doc.loadInfo();
-    const sheet = doc.sheetsById[1238300168]; 
+    const sheet = doc.sheetsByIndex[0]; // Usar la primera hoja del documento
 
     if (!sheet) {
-      throw new Error('Google Sheet no encontrada (GID: 1238300168).');
+      throw new Error('No se encontró ninguna hoja en el documento de Google Sheets.');
     }
 
     await sheet.addRow({
-      'Marca temporal': new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' }),
+      'Marca temporal': new Date().toLocaleString('es-CO', {
+        timeZone: 'America/Bogota',
+      }),
       'Nombres y apellidos completos': fullName,
       'Correo electrónico': email,
       'Teléfono celular / WhatsApp': phone,
@@ -84,7 +102,8 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
 
     return {
       success: true,
-      message: '¡Gracias por registrarte! Tu participación ha sido registrada con éxito.',
+      message:
+        '¡Gracias por registrarte! Tu participación ha sido registrada con éxito.',
       values: {
         fullName: '',
         email: '',
@@ -94,17 +113,17 @@ export async function submitForm(prevState: FormState, formData: FormData): Prom
         city: '',
         referrer: '',
         proposal: '',
-        dataAuthorization: ''
-      }
+        dataAuthorization: '',
+      },
     };
   } catch (error) {
     console.error('Error al enviar a Google Sheets:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Un error desconocido ocurrió.';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Un error desconocido ocurrió.';
     return {
       success: false,
-      message:
-        `Ocurrió un error al enviar tu información. Detalles: ${errorMessage}`,
-      values: validatedFields.data,
+      message: `Ocurrió un error al enviar tu información. Detalles: ${errorMessage}`,
+      values: validatedFields.data, // Devuelve los datos para repoblar el formulario
     };
   }
 }

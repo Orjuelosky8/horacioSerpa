@@ -121,14 +121,14 @@ export default function ParticipationForm() {
         <Card className="max-w-4xl mx-auto shadow-2xl bg-background/80 backdrop-blur-sm overflow-hidden border-2 border-primary/20">
           <div className="relative w-full h-48 md:h-64">
             <Image
-              src="https://picsum.photos/seed/campaign-banner/1200/400"
+              src="/FondoHoracioSerpa.jpeg"
               alt="Banner de participación"
               fill
               objectFit="cover"
-              className="opacity-90"
+              className="opacity-100"
               data-ai-hint="political campaign banner"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+            <div className="mt-[20px] absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
           </div>
           <div className="relative -mt-16">
             <CardHeader className="text-center">
