@@ -107,7 +107,7 @@ export default function ParticipationForm() {
             <Image
               src="https://picsum.photos/seed/campaign-banner/1200/400"
               alt="Banner de participación"
-              layout="fill"
+              fill
               objectFit="cover"
               className="opacity-90"
               data-ai-hint="political campaign banner"
@@ -223,8 +223,9 @@ export default function ParticipationForm() {
                 <SubmitButton />
               </form>
             </CardContent>
-          </Card>
-        </div>
+          </div>
+        </Card>
+      </div>
     </section>
   );
 }
