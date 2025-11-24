@@ -55,8 +55,8 @@ async function NewsSection() {
 }
 
 async function ParticipationSection() {
-  const referrers = await getRegisteredReferrers();
-  return <ParticipationForm referrersList={referrers} />;
+  const { referrers, debug } = await getRegisteredReferrers();
+  return <ParticipationForm referrersList={referrers} referrersDebug={debug} />;
 }
 
 

@@ -1,5 +1,6 @@
-// lib/news.ts
-import { GoogleSpreadsheet } from 'google-spreadsheet';
+
+// src/lib/news.ts
+import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from 'google-spreadsheet';
 import { JWT } from 'google-auth-library';
 
 function getSheetsAuth() {
@@ -23,65 +24,115 @@ function getSheetsAuth() {
   return doc;
 }
 
+export type NewsItem = {
+    id: number;
+    title: string;
+    excerpt: string;
+    date: string;
+    category: string;
+    imageUrl: string;
+    link: string;
+    readingTime: number;
+    aiHint: string;
+};
+
+
 /**
- * Noticias para el masonry.
- * Ajusta los nombres de columnas a tu hoja de noticias más adelante si quieres.
- * Por ahora, si algo falla, devuelve [] para no romper la app.
+ * 🔹 Stub de noticias para DepthMasonry
+ * Por ahora devuelve un array mapeado simple desde la hoja.
+ * Si la hoja 0 no son las noticias reales, igual no rompe, solo mandará data genérica.
  */
-export async function getNewsFromSheet(): Promise<any[]> {
-  try {
+export async function getNewsFromSheet(): Promise<NewsItem[]> {
     const doc = getSheetsAuth();
     await doc.loadInfo();
 
-    // si tus noticias están en otra pestaña, cambia el índice
-    const sheet = doc.sheetsByIndex[0];
-
+    const sheet = doc.sheetsByTitle['Noticias'];
+    if (!sheet) {
+        console.warn("ADVERTENCIA: No se encontró la hoja de cálculo 'Noticias'. Se devolverán datos de ejemplo.");
+        return [];
+    }
     const rows = await sheet.getRows();
 
-    const newsItems = rows.map((row: any, idx: number) => ({
-      // AJUSTA ESTOS CAMPOS SI LUEGO LO NECESITAS
-      id: idx,
-      title:
-        row['Título'] ??
-        row['Titulo'] ??
-        row['title'] ??
-        `Noticia ${idx + 1}`,
-      summary:
-        row['Resumen'] ??
-        row['Descripción'] ??
-        row['description'] ??
-        '',
-      date: row['Fecha'] ?? '',
-      category: row['Categoría'] ?? row['Categoria'] ?? '',
-      imageUrl: row['Imagen'] ?? '',
-      ctaLabel: row['Texto botón'] ?? row['CTA Label'] ?? '',
-      ctaUrl: row['Enlace'] ?? row['URL'] ?? '',
+    return rows.map((row: any, idx: number): NewsItem => ({
+        id: idx,
+        title: row.get('Título') || `Noticia de ejemplo ${idx + 1}`,
+        excerpt: row.get('Resumen') || 'Este es un resumen de ejemplo para la noticia. Haz clic para leer más.',
+        date: row.get('Fecha') || new Date().toLocaleDateString('es-CO'),
+        category: row.get('Categoría') || 'General',
+        imageUrl: row.get('URL de la Imagen') || `https://picsum.photos/seed/${idx + 1}/800/600`,
+        link: row.get('Enlace') || '#',
+        readingTime: parseInt(row.get('Tiempo de Lectura (min)')) || 5,
+        aiHint: row.get('AI Hint') || 'article'
     }));
-
-    return newsItems;
-  } catch (e) {
-    console.error('Error en getNewsFromSheet:', e);
-    return [];
-  }
 }
 
+// 🔹 Tipo para mandar info de debug al front
+export type ReferrersDebugInfo = {
+  sheetTitle: string;
+  rowCount: number;
+  dataRowCount: number;
+  headers: string[];
+  targetIndex: number;
+  firstRowsSample: any[]; // primeras filas de _rawData
+};
+
 /**
- * Lee la primera hoja y devuelve la lista de nombres únicos
- * de la columna "Nombre completo".
+ * Lee la primera hoja y devuelve:
+ * - referrers: lista de nombres únicos
+ * - debug: info detallada para mostrar en el front
  */
-export async function getRegisteredReferrers(): Promise<string[]> {
+export async function getRegisteredReferrers(): Promise<{
+  referrers: string[];
+  debug: ReferrersDebugInfo;
+}> {
   const doc = getSheetsAuth();
   await doc.loadInfo();
-  const sheet = doc.sheetsByIndex[0];
+
+  // Cambiado a sheetsByIndex[0] para más robustez.
+  const sheet = doc.sheetsByIndex[0]; 
+  if (!sheet) {
+    throw new Error('No se encontró ninguna hoja en el documento de Google Sheets.');
+  }
+
+  await sheet.loadHeaderRow();
+  const headers = sheet.headerValues || [];
 
   const rows = await sheet.getRows();
 
-  const names = rows
-    .map((row: any) => row['Nombre completo'] as string | undefined)
-    .filter((name): name is string => !!name && name.trim().length > 0);
+  // Buscar columna cuyo header empiece por "nombre completo"
+  const targetIndex = headers.findIndex((h) =>
+    h &&
+    h.toString().toLowerCase().trim().startsWith('nombre completo')
+  );
 
-  const unique = Array.from(new Set(names));
-  unique.sort((a, b) => a.localeCompare(b, 'es'));
+  // Tomamos primeras 5 filas crudas para debug
+  const firstRowsSample = rows.slice(0, 5).map((row: any) => row._rawData);
 
-  return unique;
+  let referrers: string[] = [];
+
+  if (targetIndex !== -1) {
+    const namesRaw = rows.map(
+      (row: any) => row._rawData?.[targetIndex] as string | undefined
+    );
+
+    const namesClean = namesRaw
+      .map((n) => (n || '').toString().trim())
+      .filter((n) => n.length > 0);
+
+    const unique = Array.from(new Set(namesClean));
+    unique.sort((a, b) => a.localeCompare(b, 'es'));
+
+    referrers = unique;
+  }
+
+  const debug: ReferrersDebugInfo = {
+    sheetTitle: sheet.title,
+    rowCount: sheet.rowCount,
+    dataRowCount: rows.length,
+    headers: headers.map((h) => h?.toString() ?? ''),
+    targetIndex,
+    firstRowsSample,
+  };
+
+  return { referrers, debug };
 }

@@ -25,6 +25,7 @@ import { submitForm } from '@/app/actions/submit-form';
 import { Loader2, Send, CheckCircle, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import type { ReferrersDebugInfo } from '@/lib/news';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -76,9 +77,11 @@ const initialState = {
 
 type ParticipationFormProps = {
   referrersList: string[];
+  referrersDebug?: ReferrersDebugInfo;
 };
 
-export default function ParticipationForm({ referrersList }: ParticipationFormProps) {
+export default function ParticipationForm({ referrersList, referrersDebug }: ParticipationFormProps) {
+
   const { toast } = useToast();
   const [state, formAction] = useActionState(submitForm as any, initialState);
 
@@ -240,12 +243,20 @@ export default function ParticipationForm({ referrersList }: ParticipationFormPr
                     <Label htmlFor="referrer">
                       ¿Quién te contó de mí? Escribe su Nombre completo. *
                     </Label>
+
                     <Select
                       name="referrer"
                       defaultValue={state.values?.referrer || undefined}
+                      disabled={referrersList.length === 0}
                     >
                       <SelectTrigger id="referrer">
-                        <SelectValue placeholder="Selecciona la persona que te contó" />
+                        <SelectValue
+                          placeholder={
+                            referrersList.length === 0
+                              ? 'No hay personas registradas aún'
+                              : 'Selecciona la persona que te contó'
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         {referrersList.map((name) => (
@@ -255,12 +266,20 @@ export default function ParticipationForm({ referrersList }: ParticipationFormPr
                         ))}
                       </SelectContent>
                     </Select>
-                    {getError('referrer') && (
-                      <p className="text-sm text-destructive">
-                        {getError('referrer')}
+
+                    {referrersList.length === 0 && (
+                      <p className="text-xs text-muted-foreground">
+                        (Debug) La lista de referenciadores llegó vacía desde el servidor.
                       </p>
                     )}
+
+                    {getError('referrer') && (
+                      <p className="text-sm text-destructive">{getError('referrer')}</p>
+                    )}
                   </div>
+
+
+
                 </div>
 
                 {/* DEPTO + CIUDAD */}
@@ -365,6 +384,27 @@ export default function ParticipationForm({ referrersList }: ParticipationFormPr
                     </p>
                   )}
                 </div>
+
+                {referrersDebug && (
+  <div className="mt-6 text-xs text-muted-foreground border rounded-md p-3 bg-muted/40">
+    <p className="font-semibold mb-1">DEBUG Google Sheets (solo temporal)</p>
+    <p><strong>Hoja:</strong> {referrersDebug.sheetTitle}</p>
+    <p><strong>Headers:</strong> {referrersDebug.headers.join(' | ')}</p>
+    <p><strong>Filas totales (rowCount):</strong> {referrersDebug.rowCount}</p>
+    <p><strong>Filas de datos (rows.length):</strong> {referrersDebug.dataRowCount}</p>
+    <p><strong>Índice "Nombre completo":</strong> {referrersDebug.targetIndex}</p>
+
+    <details className="mt-2">
+      <summary className="cursor-pointer underline">
+        Ver primeras filas crudas (_rawData)
+      </summary>
+      <pre className="mt-2 whitespace-pre-wrap break-all text-[10px]">
+        {JSON.stringify(referrersDebug.firstRowsSample, null, 2)}
+      </pre>
+    </details>
+  </div>
+)}
+
 
                 <SubmitButton />
               </form>
