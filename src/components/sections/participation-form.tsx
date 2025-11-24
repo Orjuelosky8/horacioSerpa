@@ -259,7 +259,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   {getError('dataAuthorization') && (<p className="text-sm text-destructive">{getError('dataAuthorization')}</p>)}
                 </div>
 
-                {referrersDebug && (
+                {/* {referrersDebug && (
                   <div className="mt-6 text-xs text-muted-foreground border rounded-md p-3 bg-muted/40">
                     <p className="font-semibold mb-1">DEBUG Google Sheets (solo temporal)</p>
                     <p><strong>Hoja:</strong> {referrersDebug.sheetTitle}</p>
@@ -274,7 +274,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                       </pre>
                     </details>
                   </div>
-                )}
+                )} */}
                 <SubmitButton />
               </form>
             </CardContent>

@@ -18,7 +18,7 @@ function NewsCard({ item }: { item: NewsItem }) {
       <CardHeader className="p-0 relative">
         <div className="relative aspect-[4/3]">
           <Image
-            src={item.imageUrl}
+            src="/News/ImagenHoracioVanguardia.jpg"
             alt={item.title}
             width={800}
             height={600}
@@ -63,7 +63,7 @@ function NewsCard({ item }: { item: NewsItem }) {
 
 export default function DepthMasonry({ newsItems }: { newsItems: NewsItem[] }) {
   const options: EmblaOptionsType = { loop: true, align: 'start' };
-  const autoplay = useRef(Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true }));
+  const autoplay = useRef(Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true }));
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [autoplay.current]);
   
   useEffect(() => {
