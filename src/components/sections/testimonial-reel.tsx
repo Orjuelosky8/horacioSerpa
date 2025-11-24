@@ -106,14 +106,15 @@ export default function TestimonialReel() {
                     {testimonial.quote}
                   </blockquote>
                   <div className="mt-6 flex items-center gap-4">
-                    <Avatar className="h-14 w-14 border-2 border-primary/50">
-                      <AvatarImage
-                        src={testimonial.avatar}
-                        data-ai-hint={testimonial.aiHint}
-                        alt={testimonial.name}
-                      />
-                      <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
+                  <Avatar className="h-14 w-14 border-2 border-primary/50">
+                    <AvatarFallback className="text-lg font-semibold">
+                      {testimonial.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
                     <div>
                       <p className="font-semibold text-foreground">{testimonial.name}</p>
                       <p className="text-sm text-muted-foreground">{testimonial.role}</p>
