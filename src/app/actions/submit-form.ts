@@ -12,10 +12,7 @@ const formSchema = z.object({
     .min(7, 'El teléfono debe tener al menos 7 dígitos')
     .regex(/^\d+$/, 'El teléfono solo debe contener números'),
   documentType: z.string().min(1, 'Debes seleccionar un tipo de documento'),
-  idCard: z
-    .string()
-    .min(5, 'La cédula debe tener al menos 5 dígitos')
-    .regex(/^\d+$/, 'El número de documento solo debe contener números'),
+  idCard: z.string().min(5, 'El número de documento debe tener al menos 5 dígitos'),
   department: z.string().min(1, 'Debes seleccionar un departamento'),
   city: z.string().min(1, 'Debes seleccionar un municipio'),
   referrer: z
@@ -25,7 +22,16 @@ const formSchema = z.object({
     errorMap: () => ({ message: 'Debes autorizar el tratamiento de datos' }),
   }),
   proposal: z.string().optional(),
+}).refine(data => {
+  if (data.documentType === 'Pasaporte') {
+    return true; // Si es pasaporte, no se aplica la validación de solo números
+  }
+  return /^\d+$/.test(data.idCard);
+}, {
+  message: 'La cédula de ciudadanía o extranjería solo debe contener números',
+  path: ['idCard'],
 });
+
 
 type FormState = {
   success: boolean;
@@ -180,7 +186,7 @@ export async function submitForm(
 
     return {
       success: false,
-      message: `Ocurrió un error al enviar tu información. Detalles: ${fullMessage}`,
+      message: `Ocurrió un error en el servidor. Por favor, inténtalo más tarde.`,
       values: validatedFields.success ? validatedFields.data : (rawData as any),
     };
   }

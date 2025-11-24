@@ -1,7 +1,9 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import SocialSidebar from "../layout/social-sidebar";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function ManifestoView() {
   return (
@@ -39,23 +41,19 @@ export default function ManifestoView() {
                 inquebrantable con el futuro de nuestra nación.
               </p>
               <div className="mt-8 flex items-center gap-4">
-                <a 
-                  href="https://chat.whatsapp.com/Kr6uQato4GN6GrmSZwxQ1H?mode=ems_copy_t" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  <Button 
-                    size="lg" 
+                <Link href="#unete">
+                  <Button
+                    size="lg"
                     className="px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/40"
                   >
                     Únete a la Campaña
                   </Button>
-                </a>
+                </Link>
               </div>
 
             </div>
           </div>
-          
+
           {/* Desktop Image */}
           <div className="absolute bottom-0 h-[85%] w-1/2 right-0 opacity-90">
             <Image
@@ -92,15 +90,17 @@ export default function ManifestoView() {
                     priority
                 />
             </div>
-            
+
             {/* Bottom Content: Button */}
             <div className="flex-shrink-0 z-10">
-                <Button 
-                    size="lg" 
+              <Link href="#unete">
+                <Button
+                    size="lg"
                     className="w-full max-w-xs mx-auto px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 shadow-2xl shadow-black/40"
                 >
                     Únete a la Campaña
                 </Button>
+              </Link>
             </div>
         </div>
       </div>

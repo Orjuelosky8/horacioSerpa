@@ -108,7 +108,7 @@ export default function AiAssistant() {
       label: "WhatsApp",
       action: () => { },
       isLink: true,
-      href: "https://wa.me/NUMERO_DE_TELEFONO",
+      href: "https://chat.whatsapp.com/Kr6uQato4GN6GrmSZwxQ1H?mode=ems_copy_t",
     },
     {
       id: "instagram",
