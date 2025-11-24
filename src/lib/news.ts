@@ -1,89 +1,87 @@
-import Papa from 'papaparse';
+// lib/news.ts
+import { GoogleSpreadsheet } from 'google-spreadsheet';
+import { JWT } from 'google-auth-library';
 
-export type NewsItem = {
-  title: string;
-  category: string;
-  excerpt: string;
-  imageUrl: string;
-  aiHint?: string;
-  date?: string;
-  link?: string;
-  readingTime?: number;
-};
+function getSheetsAuth() {
+  if (
+    !process.env.GOOGLE_SHEETS_CLIENT_EMAIL ||
+    !process.env.GOOGLE_SHEETS_PRIVATE_KEY ||
+    !process.env.GOOGLE_SHEET_ID
+  ) {
+    throw new Error(
+      'Faltan variables de entorno de Google Sheets (GOOGLE_SHEETS_CLIENT_EMAIL, GOOGLE_SHEETS_PRIVATE_KEY, GOOGLE_SHEET_ID)'
+    );
+  }
 
-const SHEET_ID = "16C0Pa1Pjgrjne-jeZIxscFu34jqe2F217ZPanVwsYJs";
+  const jwt = new JWT({
+    email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+    key: process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
 
-async function fetchSheetData(gid: string): Promise<any[]> {
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
-
-    try {
-        const response = await fetch(csvUrl, { next: { revalidate: 3600 } }); // Revalidate every hour
-        if (!response.ok) {
-          throw new Error(`Failed to fetch Google Sheet (gid: ${gid}): ${response.statusText}`);
-        }
-        const csvText = await response.text();
-        
-        return new Promise((resolve, reject) => {
-            Papa.parse(csvText, {
-                header: true,
-                complete: (results) => {
-                    resolve(results.data as any[]);
-                },
-                error: (error: any) => {
-                    console.error("Error parsing CSV:", error);
-                    reject(error);
-                },
-            });
-        });
-    } catch (error) {
-        console.error(`Error fetching Google Sheet (gid: ${gid}):`, error);
-        return [];
-    }
+  const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, jwt);
+  return doc;
 }
 
-
-export async function getNewsFromSheet(): Promise<NewsItem[]> {
-    const newsData = await fetchSheetData("0");
-    
-    try {
-      const formattedNews = newsData.slice(0, 6).map((row, index) => {
-        if (!row.Titulo) return null;
-        
-        const content = row.Contenido || "Contenido no disponible.";
-        const sentences = content.split('.').filter((s: string) => s.trim().length > 0);
-        const excerpt = sentences.slice(0, 2).join('. ') + (sentences.length > 2 ? '.' : '');
-        
-        return {
-          title: row.Titulo || "Título no disponible",
-          date: row.Fecha_Publicacion || new Date().toLocaleDateString(),
-          excerpt: excerpt,
-          link: row.Link,
-          category: "Noticia",
-          imageUrl: `https://placehold.co/800x600?text=Noticia+${index + 1}`,
-          aiHint: "news article",
-          readingTime: Math.floor(Math.random() * (5 - 2 + 1)) + 2,
-      }});
-      return formattedNews.filter(Boolean) as NewsItem[];
-    } catch (e) {
-      console.error("Error formatting news data:", e);
-      return [];
-    }
-}
-
-
-export async function getRegisteredReferrers(): Promise<string[]> {
-  // GID de la hoja donde se guardan los datos del formulario.
-  const participantsData = await fetchSheetData("1238300168");
-
+/**
+ * Noticias para el masonry.
+ * Ajusta los nombres de columnas a tu hoja de noticias más adelante si quieres.
+ * Por ahora, si algo falla, devuelve [] para no romper la app.
+ */
+export async function getNewsFromSheet(): Promise<any[]> {
   try {
-    const referrers = participantsData
-      .map(row => row['Nombre completo']?.trim())
-      .filter(name => name); // Filtra nombres vacíos o nulos
-    
-    // Elimina duplicados
-    return [...new Set(referrers)];
-  } catch (error) {
-    console.error("Error processing referrers:", error);
+    const doc = getSheetsAuth();
+    await doc.loadInfo();
+
+    // si tus noticias están en otra pestaña, cambia el índice
+    const sheet = doc.sheetsByIndex[0];
+
+    const rows = await sheet.getRows();
+
+    const newsItems = rows.map((row: any, idx: number) => ({
+      // AJUSTA ESTOS CAMPOS SI LUEGO LO NECESITAS
+      id: idx,
+      title:
+        row['Título'] ??
+        row['Titulo'] ??
+        row['title'] ??
+        `Noticia ${idx + 1}`,
+      summary:
+        row['Resumen'] ??
+        row['Descripción'] ??
+        row['description'] ??
+        '',
+      date: row['Fecha'] ?? '',
+      category: row['Categoría'] ?? row['Categoria'] ?? '',
+      imageUrl: row['Imagen'] ?? '',
+      ctaLabel: row['Texto botón'] ?? row['CTA Label'] ?? '',
+      ctaUrl: row['Enlace'] ?? row['URL'] ?? '',
+    }));
+
+    return newsItems;
+  } catch (e) {
+    console.error('Error en getNewsFromSheet:', e);
     return [];
   }
+}
+
+/**
+ * Lee la primera hoja y devuelve la lista de nombres únicos
+ * de la columna "Nombre completo".
+ */
+export async function getRegisteredReferrers(): Promise<string[]> {
+  const doc = getSheetsAuth();
+  await doc.loadInfo();
+  const sheet = doc.sheetsByIndex[0];
+
+  const rows = await sheet.getRows();
+
+  const names = rows
+    .map((row: any) => row['Nombre completo'] as string | undefined)
+    .filter((name): name is string => !!name && name.trim().length > 0);
+
+  const unique = Array.from(new Set(names));
+  unique.sort((a, b) => a.localeCompare(b, 'es'));
+
+  return unique;
 }

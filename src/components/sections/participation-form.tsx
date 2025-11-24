@@ -7,9 +7,6 @@ import Image from 'next/image';
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -28,7 +25,6 @@ import { submitForm } from '@/app/actions/submit-form';
 import { Loader2, Send, CheckCircle, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { getRegisteredReferrers } from '@/lib/news';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -63,7 +59,7 @@ function SubmitButton() {
 const initialState = {
   success: false,
   message: '',
-  errors: [],
+  errors: [] as any[],
   values: {
     fullName: '',
     email: '',
@@ -74,20 +70,26 @@ const initialState = {
     city: '',
     referrer: '',
     proposal: '',
-    dataAuthorization: ''
-  }
+    dataAuthorization: '',
+  },
 };
 
-export default function ParticipationForm({ referrersList }: { referrersList: string[] }) {
+type ParticipationFormProps = {
+  referrersList: string[];
+};
+
+export default function ParticipationForm({ referrersList }: ParticipationFormProps) {
   const { toast } = useToast();
-  const [state, formAction] = useActionState(submitForm, initialState);
-  
-  const [selectedDepartment, setSelectedDepartment] = useState(state.values?.department || '');
+  const [state, formAction] = useActionState(submitForm as any, initialState);
+
+  const [selectedDepartment, setSelectedDepartment] = useState(
+    state.values?.department || ''
+  );
   const municipalities = useMemo(
     () => getMunicipalitiesByDepartment(selectedDepartment),
     [selectedDepartment]
   );
-  
+
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -108,98 +110,168 @@ export default function ParticipationForm({ referrersList }: { referrersList: st
           variant: 'destructive',
           action: <AlertTriangle className="text-white" />,
         });
-         if (state.values?.department) {
+        if (state.values?.department) {
           setSelectedDepartment(state.values.department);
         }
       }
     }
   }, [state, toast]);
 
-  const getError = (fieldName: string) => state.errors?.find(e => e.path.includes(fieldName))?.message;
+  const getError = (fieldName: string) =>
+    state.errors?.find((e: any) => e.path.includes(fieldName))?.message;
 
   return (
     <section id="unete" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <Card className="max-w-4xl mx-auto shadow-2xl bg-background/80 backdrop-blur-sm overflow-hidden border-2 border-primary/20">
-        <div className="relative w-full h-80 md:h-96">
-          <Image
-            src="/FondoHoracioSerpa.jpeg"
-            alt="Banner de participación"
-            fill
-            className="object-cover object-top opacity-100"
-            data-ai-hint="political campaign banner"
-          />
+          <div className="relative w-full h-80 md:h-96">
+            <Image
+              src="/FondoHoracioSerpa.jpeg"
+              alt="Banner de participación"
+              fill
+              className="object-cover object-top opacity-100"
+              data-ai-hint="political campaign banner"
+            />
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/70 to-transparent" />
-        </div>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/70 to-transparent" />
+          </div>
 
-        <div className="relative -mt-20 md:-mt-24">
+          <div className="relative -mt-20 md:-mt-24">
             <CardContent className="px-4 md:px-8 pb-8 pt-12">
               <form ref={formRef} action={formAction} className="space-y-6">
+                {/* NOMBRE + EMAIL */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Nombres y apellidos completos *</Label>
-                    <Input id="fullName" name="fullName" defaultValue={state.values?.fullName} />
-                    {getError('fullName') && <p className="text-sm text-destructive">{getError('fullName')}</p>}
+                    <Label htmlFor="fullName">
+                      Nombres y apellidos completos *
+                    </Label>
+                    <Input
+                      id="fullName"
+                      name="fullName"
+                      defaultValue={state.values?.fullName}
+                    />
+                    {getError('fullName') && (
+                      <p className="text-sm text-destructive">
+                        {getError('fullName')}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Correo electrónico *</Label>
-                    <Input id="email" type="email" name="email" defaultValue={state.values?.email} />
-                    {getError('email') && <p className="text-sm text-destructive">{getError('email')}</p>}
+                    <Input
+                      id="email"
+                      type="email"
+                      name="email"
+                      defaultValue={state.values?.email}
+                    />
+                    {getError('email') && (
+                      <p className="text-sm text-destructive">
+                        {getError('email')}
+                      </p>
+                    )}
                   </div>
                 </div>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* TIPO DOC + NÚMERO DOC */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="documentType">Tipo de Documento *</Label>
-                    <Select name="documentType" defaultValue={state.values?.documentType}>
+                    <Select
+                      name="documentType"
+                      defaultValue={state.values?.documentType}
+                    >
                       <SelectTrigger id="documentType">
                         <SelectValue placeholder="Seleccione un tipo" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Cédula de ciudadanía">Cédula de ciudadanía</SelectItem>
-                        <SelectItem value="Cédula de extranjería">Cédula de extranjería</SelectItem>
+                        <SelectItem value="Cédula de ciudadanía">
+                          Cédula de ciudadanía
+                        </SelectItem>
+                        <SelectItem value="Cédula de extranjería">
+                          Cédula de extranjería
+                        </SelectItem>
                         <SelectItem value="Pasaporte">Pasaporte</SelectItem>
                       </SelectContent>
                     </Select>
-                     {getError('documentType') && <p className="text-sm text-destructive">{getError('documentType')}</p>}
+                    {getError('documentType') && (
+                      <p className="text-sm text-destructive">
+                        {getError('documentType')}
+                      </p>
+                    )}
                   </div>
-                   <div className="space-y-2">
+                  <div className="space-y-2">
                     <Label htmlFor="idCard">Número de documento *</Label>
-                    <Input id="idCard" type="numeric" name="idCard" defaultValue={state.values?.idCard} />
-                    {getError('idCard') && <p className="text-sm text-destructive">{getError('idCard')}</p>}
+                    <Input
+                      id="idCard"
+                      name="idCard"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      defaultValue={state.values?.idCard}
+                    />
+                    {getError('idCard') && (
+                      <p className="text-sm text-destructive">
+                        {getError('idCard')}
+                      </p>
+                    )}
                   </div>
                 </div>
 
+                {/* TELÉFONO + REFERRER */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Teléfono celular / WhatsApp *</Label>
-                    <Input id="phone" type="tel" name="phone" defaultValue={state.values?.phone} />
-                    {getError('phone') && <p className="text-sm text-destructive">{getError('phone')}</p>}
+                    <Label htmlFor="phone">
+                      Teléfono celular / WhatsApp *
+                    </Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      name="phone"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      defaultValue={state.values?.phone}
+                    />
+                    {getError('phone') && (
+                      <p className="text-sm text-destructive">
+                        {getError('phone')}
+                      </p>
+                    )}
                   </div>
-                   <div className="space-y-2">
-                     <Label htmlFor="referrer">
+                  <div className="space-y-2">
+                    <Label htmlFor="referrer">
                       ¿Quién te contó de mí? Escribe su Nombre completo. *
                     </Label>
-                     <Select name="referrer" defaultValue={state.values?.referrer}>
+                    <Select
+                      name="referrer"
+                      defaultValue={state.values?.referrer || undefined}
+                    >
                       <SelectTrigger id="referrer">
-                        <SelectValue placeholder="Selecciona quién te refirió" />
+                        <SelectValue placeholder="Selecciona la persona que te contó" />
                       </SelectTrigger>
                       <SelectContent>
-                         {referrersList.map((name) => (
+                        {referrersList.map((name) => (
                           <SelectItem key={name} value={name}>
                             {name}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    {getError('referrer') && <p className="text-sm text-destructive">{getError('referrer')}</p>}
+                    {getError('referrer') && (
+                      <p className="text-sm text-destructive">
+                        {getError('referrer')}
+                      </p>
+                    )}
                   </div>
                 </div>
 
+                {/* DEPTO + CIUDAD */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="department">Departamento *</Label>
-                    <Select name="department" onValueChange={setSelectedDepartment} defaultValue={state.values?.department}>
+                    <Select
+                      name="department"
+                      onValueChange={setSelectedDepartment}
+                      defaultValue={state.values?.department}
+                    >
                       <SelectTrigger id="department">
                         <SelectValue placeholder="Seleccione un departamento" />
                       </SelectTrigger>
@@ -211,13 +283,27 @@ export default function ParticipationForm({ referrersList }: { referrersList: st
                         ))}
                       </SelectContent>
                     </Select>
-                     {getError('department') && <p className="text-sm text-destructive">{getError('department')}</p>}
+                    {getError('department') && (
+                      <p className="text-sm text-destructive">
+                        {getError('department')}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="city">Municipio - Ciudad *</Label>
-                    <Select name="city" disabled={!selectedDepartment} defaultValue={state.values?.city}>
+                    <Select
+                      name="city"
+                      disabled={!selectedDepartment}
+                      defaultValue={state.values?.city}
+                    >
                       <SelectTrigger id="city">
-                        <SelectValue placeholder={selectedDepartment ? "Seleccione un municipio" : "Seleccione primero un departamento"} />
+                        <SelectValue
+                          placeholder={
+                            selectedDepartment
+                              ? 'Seleccione un municipio'
+                              : 'Seleccione primero un departamento'
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         {municipalities.map((city) => (
@@ -227,12 +313,19 @@ export default function ParticipationForm({ referrersList }: { referrersList: st
                         ))}
                       </SelectContent>
                     </Select>
-                    {getError('city') && <p className="text-sm text-destructive">{getError('city')}</p>}
+                    {getError('city') && (
+                      <p className="text-sm text-destructive">
+                        {getError('city')}
+                      </p>
+                    )}
                   </div>
                 </div>
-                
+
+                {/* PROPUESTA */}
                 <div className="space-y-2">
-                  <Label htmlFor="proposal">Dinos tu propuesta (Opcional)</Label>
+                  <Label htmlFor="proposal">
+                    Dinos tu propuesta (Opcional)
+                  </Label>
                   <Textarea
                     id="proposal"
                     name="proposal"
@@ -242,19 +335,35 @@ export default function ParticipationForm({ referrersList }: { referrersList: st
                   />
                 </div>
 
+                {/* HABEAS DATA */}
                 <div className="space-y-3">
-                   <div className="flex items-start space-x-3">
-                    <Checkbox id="dataAuthorization" name="dataAuthorization" defaultChecked={state.values?.dataAuthorization === 'on'} />
+                  <div className="flex items-start space-x-3">
+                    <Checkbox
+                      id="dataAuthorization"
+                      name="dataAuthorization"
+                      defaultChecked={state.values?.dataAuthorization === 'on'}
+                    />
                     <div className="grid gap-1.5 leading-none">
-                       <Label htmlFor="dataAuthorization" className="cursor-pointer">
+                      <Label
+                        htmlFor="dataAuthorization"
+                        className="cursor-pointer"
+                      >
                         ¿Autoriza el tratamiento de sus datos? *
-                       </Label>
-                       <p className="text-xs text-muted-foreground">
-                        Al marcar esta casilla, aceptas nuestra <a href="#" className="underline">política de tratamiento de datos</a>.
-                       </p>
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Al marcar esta casilla, aceptas nuestra{' '}
+                        <a href="#" className="underline">
+                          política de tratamiento de datos
+                        </a>
+                        .
+                      </p>
                     </div>
                   </div>
-                  {getError('dataAuthorization') && <p className="text-sm text-destructive">{getError('dataAuthorization')}</p>}
+                  {getError('dataAuthorization') && (
+                    <p className="text-sm text-destructive">
+                      {getError('dataAuthorization')}
+                    </p>
+                  )}
                 </div>
 
                 <SubmitButton />
