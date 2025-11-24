@@ -20,7 +20,7 @@ const formSchema = z.object({
   city: z.string().min(1, 'Debes seleccionar un municipio'),
   referrer: z
     .string()
-    .min(3, 'El nombre del referido debe tener al menos 3 caracteres'),
+    .min(1, 'Debes seleccionar un referente de la lista'),
   dataAuthorization: z.literal('on', {
     errorMap: () => ({ message: 'Debes autorizar el tratamiento de datos' }),
   }),
@@ -81,7 +81,7 @@ export async function submitForm(
 
     const serviceAccountAuth = new JWT({
       email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-      key: process.env.GOOGLE_SHEETS_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+      key: process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
 

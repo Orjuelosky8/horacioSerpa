@@ -165,7 +165,7 @@ export default function ParticipationForm({ referrersList }: { referrersList: st
                   </div>
                    <div className="space-y-2">
                     <Label htmlFor="idCard">Número de documento *</Label>
-                    <Input id="idCard" name="idCard" defaultValue={state.values?.idCard} />
+                    <Input id="idCard" type="numeric" name="idCard" defaultValue={state.values?.idCard} />
                     {getError('idCard') && <p className="text-sm text-destructive">{getError('idCard')}</p>}
                   </div>
                 </div>
@@ -180,12 +180,18 @@ export default function ParticipationForm({ referrersList }: { referrersList: st
                      <Label htmlFor="referrer">
                       ¿Quién te contó de mí? Escribe su Nombre completo. *
                     </Label>
-                    <Input id="referrer" name="referrer" list="referrers-list" defaultValue={state.values?.referrer} />
-                    <datalist id="referrers-list">
-                      {referrersList.map((name) => (
-                        <option key={name} value={name} />
-                      ))}
-                    </datalist>
+                     <Select name="referrer" defaultValue={state.values?.referrer}>
+                      <SelectTrigger id="referrer">
+                        <SelectValue placeholder="Selecciona quién te refirió" />
+                      </SelectTrigger>
+                      <SelectContent>
+                         {referrersList.map((name) => (
+                          <SelectItem key={name} value={name}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     {getError('referrer') && <p className="text-sm text-destructive">{getError('referrer')}</p>}
                   </div>
                 </div>
