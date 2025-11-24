@@ -90,7 +90,7 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
           };
       });
     } catch (error) {
-      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets.", error);
+      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets. Causa probable: El ID de la hoja es incorrecto o la cuenta de servicio no tiene permisos de 'Lector'.", error);
       console.warn("Se devolverán datos de ejemplo debido al error anterior.");
       return placeholderNews;
     }
