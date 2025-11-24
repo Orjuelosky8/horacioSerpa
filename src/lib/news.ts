@@ -1,16 +1,15 @@
 
 // src/lib/news.ts
-import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from 'google-spreadsheet';
+import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { JWT } from 'google-auth-library';
 
-function getSheetsAuth() {
+function getSheetsAuth(sheetId: string) {
   if (
     !process.env.GOOGLE_SHEETS_CLIENT_EMAIL ||
-    !process.env.GOOGLE_SHEETS_PRIVATE_KEY ||
-    !process.env.GOOGLE_SHEET_ID
+    !process.env.GOOGLE_SHEETS_PRIVATE_KEY
   ) {
     throw new Error(
-      'Faltan variables de entorno de Google Sheets (GOOGLE_SHEETS_CLIENT_EMAIL, GOOGLE_SHEETS_PRIVATE_KEY, GOOGLE_SHEET_ID)'
+      'Faltan variables de entorno de Google Sheets (GOOGLE_SHEETS_CLIENT_EMAIL, GOOGLE_SHEETS_PRIVATE_KEY)'
     );
   }
 
@@ -20,7 +19,7 @@ function getSheetsAuth() {
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
 
-  const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, jwt);
+  const doc = new GoogleSpreadsheet(sheetId, jwt);
   return doc;
 }
 
@@ -51,13 +50,20 @@ const placeholderNews: NewsItem[] = [
  * Lee la hoja "Noticias". Si no la encuentra o hay un error, devuelve datos de ejemplo.
  */
 export async function getNewsFromSheet(): Promise<NewsItem[]> {
+    const newsSheetId = process.env.GOOGLE_SHEET_ID_NEWS;
+    
+    if (!newsSheetId) {
+        console.warn("ADVERTENCIA: La variable de entorno 'GOOGLE_SHEET_ID_NEWS' no está definida. Se devolverán datos de ejemplo para las noticias.");
+        return placeholderNews;
+    }
+
     try {
-      const doc = getSheetsAuth();
+      const doc = getSheetsAuth(newsSheetId);
       await doc.loadInfo();
 
       const sheet = doc.sheetsByTitle['Noticias'];
       if (!sheet) {
-          console.warn("ADVERTENCIA: No se encontró la hoja de cálculo 'Noticias'. Se devolverán datos de ejemplo.");
+          console.warn("ADVERTENCIA: No se encontró la hoja de cálculo 'Noticias' en el documento especificado. Se devolverán datos de ejemplo.");
           return placeholderNews;
       }
       const rows = await sheet.getRows();
@@ -77,7 +83,7 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
             excerpt: excerpt || 'Este es un resumen de ejemplo para la noticia. Haz clic para leer más.',
             date: row.get('Fecha') || new Date().toLocaleDateString('es-CO'),
             category: row.get('Categoría') || 'General',
-            imageUrl: row.get('URL de la Imagen') || `https://picsum.photos/seed/${idx + 1}/800/600`,
+            imageUrl: row.get('URL de la Imagen') || `https://picsum.photos/seed/news${idx + 1}/800/600`,
             link: row.get('Enlace') || '#',
             readingTime: parseInt(row.get('Tiempo de Lectura (min)')) || 5,
             aiHint: row.get('AI Hint') || 'article'
@@ -101,7 +107,7 @@ export type ReferrersDebugInfo = {
 };
 
 /**
- * Lee la primera hoja y devuelve:
+ * Lee la primera hoja del documento de FORMULARIO y devuelve:
  * - referrers: lista de nombres únicos
  * - debug: info detallada para mostrar en el front
  */
@@ -109,12 +115,17 @@ export async function getRegisteredReferrers(): Promise<{
   referrers: string[];
   debug: ReferrersDebugInfo;
 }> {
-  const doc = getSheetsAuth();
+  const formSheetId = process.env.GOOGLE_SHEET_ID;
+  if (!formSheetId) {
+    throw new Error('La variable de entorno principal GOOGLE_SHEET_ID para el formulario no está definida.');
+  }
+
+  const doc = getSheetsAuth(formSheetId);
   await doc.loadInfo();
   
   const sheet = doc.sheetsByIndex[0];
   if (!sheet) {
-    throw new Error('No se encontró ninguna hoja en el documento de Google Sheets.');
+    throw new Error('No se encontró ninguna hoja en el documento de Google Sheets para el formulario.');
   }
 
   await sheet.loadHeaderRow();
