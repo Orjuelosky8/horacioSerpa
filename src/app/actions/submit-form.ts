@@ -7,9 +7,15 @@ import { z } from 'zod';
 const formSchema = z.object({
   fullName: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
   email: z.string().email('Correo electrónico no válido'),
-  phone: z.string().min(7, 'El teléfono debe tener al menos 7 dígitos'),
+  phone: z
+    .string()
+    .min(7, 'El teléfono debe tener al menos 7 dígitos')
+    .regex(/^\d+$/, 'El teléfono solo debe contener números'),
   documentType: z.string().min(1, 'Debes seleccionar un tipo de documento'),
-  idCard: z.string().min(5, 'La cédula debe tener al menos 5 dígitos'),
+  idCard: z
+    .string()
+    .min(5, 'La cédula debe tener al menos 5 dígitos')
+    .regex(/^\d+$/, 'El número de documento solo debe contener números'),
   department: z.string().min(1, 'Debes seleccionar un departamento'),
   city: z.string().min(1, 'Debes seleccionar un municipio'),
   referrer: z
@@ -158,7 +164,7 @@ export async function submitForm(
       error?.response?.data ||
       null;
 
-    const baseMsg =
+    const baseMsg = 
       error instanceof Error
         ? error.message
         : typeof error === 'string'
