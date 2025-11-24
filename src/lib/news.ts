@@ -72,10 +72,8 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
 
 
 export async function getRegisteredReferrers(): Promise<string[]> {
-  // Asumiendo que los participantes están en la misma hoja que las noticias (gid=0)
-  // o en otra. Si es otra hoja, cambia el GID aquí.
-  // La columna en el sheet debe llamarse 'Nombre completo'
-  const participantsData = await fetchSheetData("0");
+  // GID de la hoja donde se guardan los datos del formulario.
+  const participantsData = await fetchSheetData("1238300168");
 
   try {
     const referrers = participantsData
