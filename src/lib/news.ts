@@ -47,8 +47,8 @@ const placeholderNews: NewsItem[] = [
 
 
 /**
- * 🔹 Stub de noticias para DepthMasonry
- * Lee la hoja "Noticias". Si no la encuentra, devuelve datos de ejemplo para que la UI no quede vacía.
+ * 🔹 Lee noticias desde Google Sheets
+ * Lee la hoja "Noticias". Si no la encuentra o hay un error, devuelve datos de ejemplo.
  */
 export async function getNewsFromSheet(): Promise<NewsItem[]> {
     try {
@@ -67,17 +67,22 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
         return placeholderNews;
       }
 
-      return rows.map((row: any, idx: number): NewsItem => ({
-          id: idx,
-          title: row.get('Título') || `Noticia de ejemplo ${idx + 1}`,
-          excerpt: row.get('Resumen') || 'Este es un resumen de ejemplo para la noticia. Haz clic para leer más.',
-          date: row.get('Fecha') || new Date().toLocaleDateString('es-CO'),
-          category: row.get('Categoría') || 'General',
-          imageUrl: row.get('URL de la Imagen') || `https://picsum.photos/seed/${idx + 1}/800/600`,
-          link: row.get('Enlace') || '#',
-          readingTime: parseInt(row.get('Tiempo de Lectura (min)')) || 5,
-          aiHint: row.get('AI Hint') || 'article'
-      }));
+      return rows.map((row: any, idx: number): NewsItem => {
+          const content = row.get('Contenido') || '';
+          const excerpt = content.split(' ').slice(0, 25).join(' ') + (content.split(' ').length > 25 ? '...' : '');
+
+          return {
+            id: idx,
+            title: row.get('Título') || `Noticia de ejemplo ${idx + 1}`,
+            excerpt: excerpt || 'Este es un resumen de ejemplo para la noticia. Haz clic para leer más.',
+            date: row.get('Fecha') || new Date().toLocaleDateString('es-CO'),
+            category: row.get('Categoría') || 'General',
+            imageUrl: row.get('URL de la Imagen') || `https://picsum.photos/seed/${idx + 1}/800/600`,
+            link: row.get('Enlace') || '#',
+            readingTime: parseInt(row.get('Tiempo de Lectura (min)')) || 5,
+            aiHint: row.get('AI Hint') || 'article'
+          };
+      });
     } catch (error) {
       console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets.", error);
       console.warn("Se devolverán datos de ejemplo debido al error anterior.");
@@ -106,9 +111,8 @@ export async function getRegisteredReferrers(): Promise<{
 }> {
   const doc = getSheetsAuth();
   await doc.loadInfo();
-
-  // Cambiado a sheetsByIndex[0] para más robustez.
-  const sheet = doc.sheetsByIndex[0]; 
+  
+  const sheet = doc.sheetsByIndex[0];
   if (!sheet) {
     throw new Error('No se encontró ninguna hoja en el documento de Google Sheets.');
   }
