@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useState, useMemo, useTransition } from 'react';
+import { useState, useMemo, useTransition, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, Ticket, Calendar as CalendarIcon, ArrowRight, Search, CheckCircle } from 'lucide-react';
+import { MapPin, Clock, Ticket, Calendar as CalendarIcon, ArrowRight, Search, CheckCircle, Loader2 } from 'lucide-react';
 import { addDays, format, isSameDay, startOfToday } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Badge } from '../ui/badge';
@@ -26,7 +26,8 @@ type Event = {
   googleMapsUrl?: string;
 };
 
-const events: Event[] = [
+// Se mueve la definición de eventos fuera para que no se recree, pero se inicializará en el cliente
+const getEvents = (): Event[] => [
   {
     date: new Date(),
     title: 'Encuentro ciudadano en Bogotá',
@@ -199,12 +200,21 @@ const RegistrationModal = ({
 
 
 export default function EventsCalendar() {
+  const [isClient, setIsClient] = useState(false);
+  const [events, setEvents] = useState<Event[]>([]);
+  
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
 
   const [selectedEventForRegistration, setSelectedEventForRegistration] = useState<Event | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Se ejecuta solo en el cliente
+    setIsClient(true);
+    setEvents(getEvents());
+  }, []);
 
   const handleRegisterClick = (event: Event) => {
     setSelectedEventForRegistration(event);
@@ -229,10 +239,10 @@ export default function EventsCalendar() {
     }
     
     return upcoming.sort((a, b) => a.date.getTime() - b.date.getTime());
-  }, [date, searchQuery, typeFilter]);
+  }, [date, searchQuery, typeFilter, events]);
 
 
-  const eventDates = useMemo(() => events.map(event => event.date), []);
+  const eventDates = useMemo(() => events.map(event => event.date), [events]);
 
   return (
     <>
@@ -306,7 +316,12 @@ export default function EventsCalendar() {
                 </div>
                 <div className="space-y-6">
                     <AnimatePresence>
-                        {filteredEvents.length > 0 ? (
+                        {!isClient ? (
+                            <Card className="flex flex-col items-center justify-center p-8 text-center h-64 border-dashed bg-background/30">
+                                <Loader2 className="h-12 w-12 text-muted-foreground mb-4 animate-spin" />
+                                <h4 className="font-semibold text-lg">Cargando eventos...</h4>
+                            </Card>
+                        ) : filteredEvents.length > 0 ? (
                             filteredEvents.map((event, index) => (
                                 <EventCard key={index} event={event} onRegister={handleRegisterClick}/>
                             ))
@@ -331,3 +346,4 @@ export default function EventsCalendar() {
     </>
   );
 }
+

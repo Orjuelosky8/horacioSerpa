@@ -27,39 +27,20 @@ type FormState = {
   values?: z.infer<typeof formSchema>;
 };
 
-// 🔐 Validación de envs antes de crear el JWT
-if (!process.env.GOOGLE_SHEETS_CLIENT_EMAIL) {
-  throw new Error('La variable de entorno GOOGLE_SHEETS_CLIENT_EMAIL no está definida.');
-}
-if (!process.env.GOOGLE_SHEETS_PRIVATE_KEY) {
-  throw new Error('La variable de entorno GOOGLE_SHEETS_PRIVATE_KEY no está definida.');
-}
-if (!process.env.GOOGLE_SHEET_ID) {
-  throw new Error('La variable de entorno GOOGLE_SHEET_ID no está definida.');
-}
-
-const serviceAccountAuth = new JWT({
-  email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-  // La clave privada de Google viene con saltos de línea \n.
-  // Las variables de entorno los escapan como \\n.
-  // Este reemplazo es crucial para que la clave sea válida.
-  key: process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-});
-
-const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID!, serviceAccountAuth);
-
 export async function submitForm(
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
-  console.log("DEBUG: Iniciando la acción 'submitForm'.");
-  const rawData = Object.fromEntries(formData.entries());
+  console.log('DEBUG: La función submitForm se ha iniciado.');
 
+  const rawData = Object.fromEntries(formData.entries());
   const validatedFields = formSchema.safeParse(rawData);
-  
+
   if (!validatedFields.success) {
-    console.log("DEBUG: Falló la validación del formulario.", validatedFields.error.issues);
+    console.log(
+      'DEBUG: La validación del formulario falló.',
+      validatedFields.error.flatten().fieldErrors
+    );
     return {
       success: false,
       message: 'Por favor, corrige los errores en el formulario.',
@@ -67,48 +48,117 @@ export async function submitForm(
       values: rawData as any,
     };
   }
-  
-  console.log("DEBUG: Validación del formulario exitosa.");
-  const {
-    fullName,
-    email,
-    phone,
-    idCard,
-    department,
-    city,
-    referrer,
-    proposal,
-  } = validatedFields.data;
+
+  console.log('DEBUG: La validación del formulario fue exitosa.');
 
   try {
-    console.log("DEBUG: Conectando a Google Sheets...");
-    await doc.loadInfo();
-    console.log("DEBUG: ¡Conexión exitosa! Título del documento:", doc.title);
-    
-    const sheet = doc.sheetsByIndex[0]; // Usar la primera hoja del documento
-    
-    if (!sheet) {
-      console.error("DEBUG: ERROR - No se encontró ninguna hoja en el documento.");
-      throw new Error('No se encontró ninguna hoja en el documento de Google Sheets.');
+    const missingEnvVars: string[] = [];
+
+    if (!process.env.GOOGLE_SHEETS_CLIENT_EMAIL) {
+      missingEnvVars.push('GOOGLE_SHEETS_CLIENT_EMAIL');
     }
-    console.log("DEBUG: Hoja encontrada:", sheet.title);
-    
-    console.log("DEBUG: Agregando fila a la hoja...");
+    if (!process.env.GOOGLE_SHEETS_PRIVATE_KEY) {
+      missingEnvVars.push('GOOGLE_SHEETS_PRIVATE_KEY');
+    }
+    if (!process.env.GOOGLE_SHEET_ID) {
+      missingEnvVars.push('GOOGLE_SHEET_ID');
+    }
+
+    if (missingEnvVars.length > 0) {
+      throw new Error(
+        `Error de configuración del servidor: faltan las siguientes variables de entorno: ${missingEnvVars.join(
+          ', '
+        )}.`
+      );
+    }
+
+    // === AUTENTICACIÓN CORRECTA PARA google-spreadsheet v5 ===
+    const serviceAccountAuth = new JWT({
+      email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+      // reemplazamos los "\n" por saltos de línea reales
+      key: process.env.GOOGLE_SHEETS_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    });
+
+    // Inyectamos el auth en el constructor
+    const doc = new GoogleSpreadsheet(
+      process.env.GOOGLE_SHEET_ID!,
+      serviceAccountAuth
+    );
+
+    console.log(
+      'DEBUG EMAIL:',
+      process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+      '| SHEET_ID:',
+      process.env.GOOGLE_SHEET_ID
+    );
+
+    console.log('DEBUG: Conectando a Google Sheets...');
+    await doc.loadInfo();
+    console.log('DEBUG: ¡Conexión exitosa! Título del documento:', doc.title);
+
+    const sheet = doc.sheetsByIndex[0];
+    console.log('DEBUG: Hoja seleccionada:', sheet?.title);
+
+    if (!sheet) {
+      throw new Error(
+        'No se encontró ninguna hoja en el documento de Google Sheets.'
+      );
+    }
+
+    const {
+      fullName,
+      email,
+      phone,
+      idCard,
+      department,
+      city,
+      referrer,
+      proposal,
+    } = validatedFields.data;
+
+    console.log('DEBUG: Añadiendo fila a la hoja...');
     await sheet.addRow({
-      'Marca temporal': new Date().toLocaleString('es-CO', {
+      // 1. Fecha y Hora
+      'Fecha y Hora': new Date().toLocaleString('es-CO', {
         timeZone: 'America/Bogota',
       }),
-      'Nombres y apellidos completos': fullName,
+    
+      // 2. Nombre completo
+      'Nombre completo': fullName,
+    
+      // 3. Tipo de Documento
+      // Como en el formulario hoy solo pides cédula, podemos dejarlo fijo
+      // o luego agregar un select en el form.
+      'Tipo de Documento': 'Cédula de ciudadanía',
+    
+      // 4. Número de documento
+      'Número de documento': idCard,
+    
+      // 5. WhatsApp / Celular
+      'WhatsApp / Celular': phone,
+    
+      // 6. Correo electrónico
       'Correo electrónico': email,
-      'Teléfono celular / WhatsApp': phone,
-      'Cédula de ciudadanía': idCard,
+    
+      // 7. Departamento
       'Departamento': department,
-      'Municipio - Ciudad': city,
-      '¿Quién te contó de mí? Escribe su Nombre completo.': referrer,
-      '¿Autoriza el tratamiento de sus datos?': 'Sí',
-      'Dinos tu propuesta': proposal || '',
+    
+      // 8. Ciudad / Municipio
+      'Ciudad / Municipio': city,
+    
+      // 9. Acepta la política de tratamiento de datos personales
+      // Como el zod exige que el checkbox esté en 'on', si llega acá es porque aceptó.
+      'Acepta la política de tratamiento de datos personales': 'Sí',
+    
+      // 10. Referenciado por
+      'Referenciado por': referrer,
+    
+      // 11. Déjanos tu Propuesta
+      'Déjanos tu Propuesta': proposal || '',
     });
-    console.log("DEBUG: ¡Fila agregada exitosamente!");
+    
+    console.log('DEBUG: ¡Fila añadida con éxito!');
 
     return {
       success: true,
@@ -123,17 +173,37 @@ export async function submitForm(
         city: '',
         referrer: '',
         proposal: '',
-        dataAuthorization: '',
+        dataAuthorization: 'on' as any,
       },
     };
-  } catch (error) {
-    console.error('DEBUG: ERROR al enviar a Google Sheets:', error);
-    const errorMessage =
-      error instanceof Error ? error.message : 'Un error desconocido ocurrió.';
+  } catch (error: any) {
+    // Mejor logging para que tú lo veas en el toast
+    const apiDetails =
+      error?.response?.data?.error?.message ||
+      error?.response?.data ||
+      null;
+
+    const baseMsg =
+      error instanceof Error
+        ? error.message
+        : typeof error === 'string'
+        ? error
+        : JSON.stringify(error);
+
+    const fullMessage =
+      apiDetails && apiDetails !== baseMsg
+        ? `${baseMsg} | API_DETAILS: ${JSON.stringify(apiDetails)}`
+        : baseMsg;
+
+    console.error('DEBUG: ERROR al procesar el formulario:', fullMessage);
+
     return {
       success: false,
-      message: `Ocurrió un error al enviar tu información. Detalles: ${errorMessage}`,
-      values: validatedFields.data, // Devuelve los datos para repoblar el formulario
+      message: `Ocurrió un error al enviar tu información. Detalles: ${fullMessage} | DEBUG EMAIL: *${
+        process.env.GOOGLE_SHEETS_CLIENT_EMAIL
+      }* | SHEET_ID: ${process.env.GOOGLE_SHEET_ID}`,
+      values: validatedFields.success ? validatedFields.data : (rawData as any),
     };
   }
+
 }

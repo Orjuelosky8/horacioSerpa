@@ -10,10 +10,17 @@
 !.yarn/releases
 !.yarn/versions
 
+# Firebase (cache / build local)
+.firebase/
+
+# Por si acaso: carpeta de hosting generada dentro de .firebase
+.firebase/**/hosting/
+
 # testing
 /coverage
 
 # next.js
+.next/
 /.next/
 /out/
 
