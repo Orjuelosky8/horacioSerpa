@@ -12,7 +12,7 @@ import EventsCalendar from "@/components/sections/events-calendar";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
-import { getNewsFromSheet } from "@/lib/news";
+import { getNewsFromSheet, getRegisteredReferrers } from "@/lib/news";
 import ParticipationForm from "@/components/sections/participation-form";
 
 function NewsLoadingSkeleton() {
@@ -54,6 +54,11 @@ async function NewsSection() {
   return <DepthMasonry newsItems={newsItems} />;
 }
 
+async function ParticipationSection() {
+  const referrers = await getRegisteredReferrers();
+  return <ParticipationForm referrersList={referrers} />;
+}
+
 
 export default function Home() {
   return (
@@ -70,7 +75,9 @@ export default function Home() {
       {/* <LiveCubesphere /> // REDES SOCCIALES */}
       <TestimonialReel />
       <AiChatVideo />
-      <ParticipationForm />
+      <Suspense fallback={<div>Cargando formulario...</div>}>
+        <ParticipationSection />
+      </Suspense>
       <Footer />
     </>
   );

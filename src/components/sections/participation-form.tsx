@@ -28,6 +28,7 @@ import { submitForm } from '@/app/actions/submit-form';
 import { Loader2, Send, CheckCircle, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { getRegisteredReferrers } from '@/lib/news';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -67,6 +68,7 @@ const initialState = {
     fullName: '',
     email: '',
     phone: '',
+    documentType: '',
     idCard: '',
     department: '',
     city: '',
@@ -76,7 +78,7 @@ const initialState = {
   }
 };
 
-export default function ParticipationForm() {
+export default function ParticipationForm({ referrersList }: { referrersList: string[] }) {
   const { toast } = useToast();
   const [state, formAction] = useActionState(submitForm, initialState);
   
@@ -119,7 +121,7 @@ export default function ParticipationForm() {
     <section id="unete" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <Card className="max-w-4xl mx-auto shadow-2xl bg-background/80 backdrop-blur-sm overflow-hidden border-2 border-primary/20">
-        <div className="relative w-full h-64 md:h-80">
+        <div className="relative w-full h-80 md:h-96">
           <Image
             src="/FondoHoracioSerpa.jpeg"
             alt="Banner de participación"
@@ -128,22 +130,11 @@ export default function ParticipationForm() {
             data-ai-hint="political campaign banner"
           />
 
-          {/* Degradado SOLO en la mitad inferior */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-background via-background/70 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/70 to-transparent" />
         </div>
 
-        {/* Si quieres que el formulario no monte tanto sobre la imagen, baja un poco este -mt */}
-        <div className="relative -mt-10 md:-mt-12">
-          <CardHeader className="text-center">
-            <CardTitle className="font-headline text-4xl md:text-5xl text-primary">
-              Formulario de Participación
-            </CardTitle>
-            <CardDescription className="text-lg max-w-2xl mx-auto">
-              Tu voz es clave para construir el futuro. Registra tus datos para
-              unirte a nuestro equipo.
-            </CardDescription>
-          </CardHeader>
-            <CardContent className="px-4 md:px-8 pb-8">
+        <div className="relative -mt-20 md:-mt-24">
+            <CardContent className="px-4 md:px-8 pb-8 pt-12">
               <form ref={formRef} action={formAction} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -157,6 +148,27 @@ export default function ParticipationForm() {
                     {getError('email') && <p className="text-sm text-destructive">{getError('email')}</p>}
                   </div>
                 </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="documentType">Tipo de Documento *</Label>
+                    <Select name="documentType" defaultValue={state.values?.documentType}>
+                      <SelectTrigger id="documentType">
+                        <SelectValue placeholder="Seleccione un tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Cédula de ciudadanía">Cédula de ciudadanía</SelectItem>
+                        <SelectItem value="Cédula de extranjería">Cédula de extranjería</SelectItem>
+                        <SelectItem value="Pasaporte">Pasaporte</SelectItem>
+                      </SelectContent>
+                    </Select>
+                     {getError('documentType') && <p className="text-sm text-destructive">{getError('documentType')}</p>}
+                  </div>
+                   <div className="space-y-2">
+                    <Label htmlFor="idCard">Número de documento *</Label>
+                    <Input id="idCard" name="idCard" defaultValue={state.values?.idCard} />
+                    {getError('idCard') && <p className="text-sm text-destructive">{getError('idCard')}</p>}
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -164,10 +176,17 @@ export default function ParticipationForm() {
                     <Input id="phone" type="tel" name="phone" defaultValue={state.values?.phone} />
                     {getError('phone') && <p className="text-sm text-destructive">{getError('phone')}</p>}
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="idCard">Cédula de ciudadanía *</Label>
-                    <Input id="idCard" name="idCard" defaultValue={state.values?.idCard} />
-                    {getError('idCard') && <p className="text-sm text-destructive">{getError('idCard')}</p>}
+                   <div className="space-y-2">
+                     <Label htmlFor="referrer">
+                      ¿Quién te contó de mí? Escribe su Nombre completo. *
+                    </Label>
+                    <Input id="referrer" name="referrer" list="referrers-list" defaultValue={state.values?.referrer} />
+                    <datalist id="referrers-list">
+                      {referrersList.map((name) => (
+                        <option key={name} value={name} />
+                      ))}
+                    </datalist>
+                    {getError('referrer') && <p className="text-sm text-destructive">{getError('referrer')}</p>}
                   </div>
                 </div>
 
@@ -204,14 +223,6 @@ export default function ParticipationForm() {
                     </Select>
                     {getError('city') && <p className="text-sm text-destructive">{getError('city')}</p>}
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="referrer">
-                    ¿Quién te contó de mí? Escribe su Nombre completo. *
-                  </Label>
-                  <Input id="referrer" name="referrer" defaultValue={state.values?.referrer} />
-                   {getError('referrer') && <p className="text-sm text-destructive">{getError('referrer')}</p>}
                 </div>
                 
                 <div className="space-y-2">
