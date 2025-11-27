@@ -57,12 +57,12 @@ export default function Header() {
   return (
     <header className={cn(
       "sticky top-0 z-40 w-full transition-all duration-300",
-      isScrolled ? "border-border/50 bg-[#bd9b53]/80 backdrop-blur-xl" : "bg-transparent border-transparent"
+      isScrolled ? "border-border/50 bg-background/80 backdrop-blur-xl" : "bg-transparent border-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2 md:pl-0">
           <Image
-            src="/Landpage/HoracioSerpa_logo.png"
+            src="/Landpage/logoSerpaRojo.png"
             alt="Logo Horacio Serpa"
             width={140}
             height={30}
@@ -89,7 +89,6 @@ export default function Header() {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{link.description}</p>
-                  <Tooltip.Arrow />
                 </TooltipContent>
               </Tooltip>
             ))}
@@ -98,7 +97,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn("md:hidden", !isScrolled && "text-white hover:text-white hover:bg-white/10")}>
+              <Button variant="ghost" size="icon" className={cn("md:hidden", isScrolled ? "text-foreground" : "text-white hover:text-white hover:bg-white/10")}>
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Abrir menú</span>
               </Button>

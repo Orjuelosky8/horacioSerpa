@@ -23,15 +23,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=PT+Sans:wght@400;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;700&display=swap"
           rel="stylesheet"
         />
       </head>
       <body className={cn("font-body antialiased", "bg-background text-foreground")}>
         <SmoothScroller>
-          <div className="fixed inset-0 -z-10 h-full w-full">
-            <SceneLoader />
-          </div>
+          {/* El fondo animado se aplica via globals.css al body, no es necesario un div aquí */}
           <div className="relative">
             <main className="relative z-10 flex min-h-screen flex-col">
               {children}

@@ -83,6 +83,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
 
   const [selectedDepartment, setSelectedDepartment] = useState(state.values?.department || '');
   const [selectedDocType, setSelectedDocType] = useState(state.values?.documentType || '');
+  const [cityValue, setCityValue] = useState(state.values?.city || '');
 
   const municipalities = useMemo(() => {
     if (!selectedDepartment) return [];
@@ -90,9 +91,8 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
   }, [selectedDepartment]);
 
   const formRef = useRef<HTMLFormElement>(null);
-  const citySelectRef = useRef<HTMLButtonElement>(null); // Ref for SelectTrigger
-  const cityHiddenInputRef = useRef<HTMLInputElement>(null); // Ref for hidden input
-
+  
+  // Effect to handle form state changes after submission
   useEffect(() => {
     if (state.success) {
       toast({
@@ -104,6 +104,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
       formRef.current?.reset();
       setSelectedDepartment('');
       setSelectedDocType('');
+      setCityValue('');
     } else if (state.message) {
       toast({
         title: 'Error en el envío',
@@ -111,36 +112,37 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
         variant: 'destructive',
         action: <AlertTriangle className="text-white" />,
       });
-      if (state.values?.department) {
-        setSelectedDepartment(state.values.department);
-      } else {
-        setSelectedDepartment(''); 
-      }
-      if (state.values?.documentType) {
-        setSelectedDocType(state.values.documentType);
-      }
+      setSelectedDepartment(state.values?.department || '');
+      setSelectedDocType(state.values?.documentType || '');
+      setCityValue(state.values?.city || '');
     }
   }, [state, toast]);
+
+  // Effect to reset city when department changes
+  useEffect(() => {
+    // Only reset if it's a manual change, not from form state restoration
+    if (state.message === '') { 
+      setCityValue('');
+    }
+  }, [selectedDepartment, state.message]);
+
 
   const getError = (fieldName: string) =>
     state.errors?.find((e: any) => e.path.includes(fieldName))?.message;
     
   return (
-    <section id="unete" className="w-full py-20 md:py-32 bg-secondary/30">
+    <section id="unete" className="w-full py-20 md:py-32 bg-background/10">
       <div className="container mx-auto px-6">
-        <Card className="max-w-4xl mx-auto shadow-2xl bg-background/80 backdrop-blur-sm overflow-hidden border-2 border-primary/20">
-          <div className="relative w-full h-80 md:h-96">
-            <Image
-              src="/FondoHoracioSerpa.jpeg"
-              alt="Banner de participación"
-              fill
-              className="object-cover object-top opacity-100"
-              data-ai-hint="political campaign banner"
-            />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/70 to-transparent" />
-          </div>
-          <div className="relative -mt-20 md:-mt-24">
-            <CardContent className="px-4 md:px-8 pb-8 pt-12">
+        <div className="mb-12 text-center">
+            <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
+                Únete a la Campaña
+            </h2>
+            <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+                Tu apoyo es fundamental. Registra tus datos y sé parte del cambio que nos une.
+            </p>
+        </div>
+        <Card className="max-w-4xl mx-auto shadow-2xl bg-card/80 backdrop-blur-sm overflow-hidden border-2 border-primary/20">
+            <CardContent className="px-4 md:px-8 pb-8 pt-8">
               <form ref={formRef} action={formAction} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -175,8 +177,8 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                     <Input
                       id="idCard"
                       name="idCard"
-                      inputMode={selectedDocType === 'Pasaporte' ? 'text' : 'numeric'}
-                      pattern={selectedDocType === 'Pasaporte' ? undefined : '[0-9]*'}
+                      inputMode={selectedDocType !== 'Pasaporte' ? 'numeric' : 'text'}
+                      pattern={selectedDocType !== 'Pasaporte' ? '[0-9]*' : undefined}
                       defaultValue={state.values?.idCard}
                     />
                     {getError('idCard') && (<p className="text-sm text-destructive">{getError('idCard')}</p>)}
@@ -225,8 +227,8 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="city">Municipio - Ciudad *</Label>
-                    <Select name="city" disabled={!selectedDepartment} defaultValue={state.values?.city}>
-                      <SelectTrigger id="city" ref={citySelectRef} >
+                    <Select name="city" value={cityValue} onValueChange={setCityValue} disabled={!selectedDepartment}>
+                      <SelectTrigger id="city">
                         <SelectValue placeholder={selectedDepartment ? "Seleccione un municipio" : "Seleccione primero un departamento"} />
                       </SelectTrigger>
                       <SelectContent>
@@ -259,26 +261,9 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   {getError('dataAuthorization') && (<p className="text-sm text-destructive">{getError('dataAuthorization')}</p>)}
                 </div>
 
-                {/* {referrersDebug && (
-                  <div className="mt-6 text-xs text-muted-foreground border rounded-md p-3 bg-muted/40">
-                    <p className="font-semibold mb-1">DEBUG Google Sheets (solo temporal)</p>
-                    <p><strong>Hoja:</strong> {referrersDebug.sheetTitle}</p>
-                    <p><strong>Headers:</strong> {referrersDebug.headers.join(' | ')}</p>
-                    <p><strong>Filas totales (rowCount):</strong> {referrersDebug.rowCount}</p>
-                    <p><strong>Filas de datos (rows.length):</strong> {referrersDebug.dataRowCount}</p>
-                    <p><strong>Índice "Nombre completo":</strong> {referrersDebug.targetIndex}</p>
-                    <details className="mt-2">
-                      <summary className="cursor-pointer underline">Ver primeras filas crudas (_rawData)</summary>
-                      <pre className="mt-2 whitespace-pre-wrap break-all text-[10px]">
-                        {JSON.stringify(referrersDebug.firstRowsSample, null, 2)}
-                      </pre>
-                    </details>
-                  </div>
-                )} */}
                 <SubmitButton />
               </form>
             </CardContent>
-          </div>
         </Card>
       </div>
     </section>

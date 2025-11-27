@@ -7,18 +7,17 @@ import { FaWhatsapp } from "react-icons/fa";
 
 export default function Footer() {
   const btnBase =
-    "rounded-2xl h-14 w-14 border border-foreground/20 border-b-2 border-r-2 " +
-    "text-muted-foreground shadow-sm shadow-black/10 mr-1 mb-1 " + // margen más pronunciado a la derecha/abajo
+    "rounded-2xl h-14 w-14 border border-white/20 border-b-2 border-r-2 " +
+    "text-white/80 shadow-sm shadow-black/10 mr-1 mb-1 " +
     "transition-all ease-out hover:rotate-[-360deg] " +
-    "hover:bg-primary/10 hover:text-primary hover:border-primary/30";
+    "hover:bg-white/10 hover:text-white hover:border-white/30";
 
   return (
-    <footer className=" rounded-t-[25%] bg-[#d8b15d] backdrop-blur-lg mt-[-70px] pt-6 pb-2"> 
-    {/* ffd16f es el anterior fondo (mas encendido) */}
+    <footer className="rounded-t-[25%] bg-primary backdrop-blur-lg mt-[-70px] pt-6 pb-2 text-primary-foreground"> 
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center">
           <Image
-            src="/Landpage/HoracioSerpa_logo.png"
+            src="/Landpage/logoSerpaBlanco.png"
             alt="Logo Horacio Serpa"
             width={160}
             height={45}
@@ -27,20 +26,20 @@ export default function Footer() {
           />
 
           {/* Frase con typewriter loop infinito (5s) y colores alternados */}
-          <p className="mt-6 font-headline text-xl sm:text-2xl tracking-tight text-foreground text-center user-select-none">
+          <p className="mt-6 font-headline text-xl sm:text-2xl tracking-tight text-white text-center user-select-none">
             <span
               className="inline-block overflow-hidden align-bottom border-r border-current pr-1
               [animation:typeLoop_5s_steps(22,end)infinite,blink.9s_steps(1,end)_infinite]"
               style={{ whiteSpace: "nowrap", width: "0ch" }}
             >
-              <span className="text-primary font-semibold">El cambio</span>{" "}
-              <span className="text-foreground">que nos</span>{" "}
-              <span className="text-primary font-semibold">une.</span>
+              <span className="font-semibold">El cambio</span>{" "}
+              que nos{" "}
+              <span className="font-semibold">une.</span>
             </span>
           </p>
 
-          <p className="mt-0 font-headline text-2xl sm:text-3xl tracking-tight text-foreground text-center user-select-none">
-            <span className="text-foreground italic text-sm">'Hagamos Historia(s)'</span>{" "}
+          <p className="mt-0 font-headline text-2xl sm:text-3xl tracking-tight text-white text-center user-select-none">
+            <span className="italic text-sm">'Hagamos Historia(s)'</span>{" "}
           </p>
 
           {/* Redes */}
@@ -77,8 +76,8 @@ export default function Footer() {
           </div>
 
           {/* Divisor y derechos pegados abajo */}
-          <div className="mt-8 w-full border-t border-border" />
-          <p className="mt-4 text-xs text-muted-foreground">
+          <div className="mt-8 w-full border-t border-white/20" />
+          <p className="mt-4 text-xs text-white/70">
             © {new Date().getFullYear()} Horacio Jose Serpa. Todos los derechos reservados. - Diseño de Página web por Politech IA.
           </p>
         </div>

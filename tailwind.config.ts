@@ -20,7 +20,7 @@ export default {
         'lg2': '1400px', // breakpoint personalizado para 1400px
       },
       fontFamily: {
-        body: ['"PT Sans"', 'sans-serif'],
+        body: ['"Poppins"', 'sans-serif'],
         headline: ['"Playfair Display"', 'serif'],
       },
       colors: {
@@ -89,22 +89,16 @@ export default {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-        // Agregar keyframes para el deslizamiento
-        slideInLeft: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(0)' },
-        },
-        slideInRight: {
-          '0%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(0)' },
+        scroll: { // Animación para el carrusel de testimonios
+          to: {
+            transform: 'translate(calc(-50% - 1rem))',
+          },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        // Agregar animaciones de deslizamiento
-        slideInLeft: 'slideInLeft 0.9s ease-out',
-        slideInRight: 'slideInRight 0.9s ease-out',
+        scroll: 'scroll 40s linear infinite',
       },
     },
   },

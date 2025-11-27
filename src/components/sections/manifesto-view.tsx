@@ -21,7 +21,6 @@ export default function ManifestoView() {
         </video>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 bg-background/30 backdrop-blur-sm"></div>
-        <div className="absolute inset-0 bg-beige-200/10 backdrop-filter backdrop-blur-sm"></div>
       </div>
 
       {/* Main Container */}
@@ -41,14 +40,13 @@ export default function ManifestoView() {
                 inquebrantable con el futuro de nuestra nación.
               </p>
               <div className="mt-8 flex items-center gap-4">
-                <Link href="#unete">
-                  <Button
-                    size="lg"
-                    className="px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/40"
-                  >
-                    Únete a la Campaña
-                  </Button>
-                </Link>
+                <Button
+                  asChild
+                  size="lg"
+                  className="px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/40"
+                >
+                  <Link href="#unete">Únete a la Campaña</Link>
+                </Button>
               </div>
 
             </div>
@@ -57,7 +55,7 @@ export default function ManifestoView() {
           {/* Desktop Image */}
           <div className="absolute bottom-0 h-[85%] w-1/2 right-0 opacity-90">
             <Image
-              src="/Landpage/Horacio Jose 02 - Editado.png"
+              src="/Landpage/PortadaHoracio.png"
               alt="Horacio Serpa"
               fill
               className="object-contain object-right-bottom"
@@ -83,7 +81,7 @@ export default function ManifestoView() {
             {/* Middle Content: Image */}
             <div className="relative w-full flex-grow h-[50%] -mb-10">
                  <Image
-                    src="/Landpage/Horacio Jose 02 - Editado.png"
+                    src="/Landpage/PortadaHoracio.png"
                     alt="Horacio Serpa"
                     fill
                     className="object-contain object-bottom"
@@ -93,14 +91,13 @@ export default function ManifestoView() {
 
             {/* Bottom Content: Button */}
             <div className="flex-shrink-0 z-10">
-              <Link href="#unete">
-                <Button
-                    size="lg"
-                    className="w-full max-w-xs mx-auto px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 shadow-2xl shadow-black/40"
-                >
-                    Únete a la Campaña
-                </Button>
-              </Link>
+              <Button
+                  asChild
+                  size="lg"
+                  className="w-full max-w-xs mx-auto px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 shadow-2xl shadow-black/40"
+              >
+                  <Link href="#unete">Únete a la Campaña</Link>
+              </Button>
             </div>
         </div>
       </div>
