@@ -4,7 +4,6 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import AiAssistant from "@/components/ai-assistant";
 import SmoothScroller from "@/components/smooth-scroller";
-import SceneLoader from "@/components/scene-loader";
 import Script from "next/script";
 
 export const metadata: Metadata = {
@@ -27,9 +26,8 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={cn("font-body antialiased", "bg-background text-foreground")}>
+      <body className={cn("font-body antialiased", "bg-transparent text-foreground relative z-0")}>
         <SmoothScroller>
-          {/* El fondo animado se aplica via globals.css al body, no es necesario un div aquí */}
           <div className="relative">
             <main className="relative z-10 flex min-h-screen flex-col">
               {children}
