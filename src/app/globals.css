@@ -76,7 +76,7 @@
 
     background-image: url("/FondoAnimadoWebSerpa.jpg");
     background-color: #ededed;
-    background-repeat: repeat-y;  /* Se repite solo de arriba a abajo */
+    background-repeat: repeat;  /* Se repite en ambas direcciones */
     background-size: auto;        /* O ajusta: auto 400px; si quieres más repeticiones visibles */
     background-position: 0 0;     /* Fijamos X en 0 y empezamos en la parte superior */
 
@@ -97,7 +97,7 @@
 
 @media (prefers-reduced-motion) {
   body::before {
-    animation: scroll 800s linear infinite;
+    animation: none;
   }
 }
 
