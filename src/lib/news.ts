@@ -36,127 +36,140 @@ export type NewsItem = {
 };
 
 const placeholderNews: NewsItem[] = [
-  {
-    id: 1,
-    title: 'Bucaramanga necesita unidad',
-    excerpt: 'Bucaramanga atraviesa un momento difícil. La anulación de la elección obliga a la ciudad a entrar en interinidad y a prepararse para nuevas elecciones. No...',
-    date: '23 de Agosto, 2025',
-    category: 'Opinión',
-    imageUrl: '/News/ImagenHoracioVanguardia.jpg',
-    link: 'https://www.vanguardia.com/opinion/columnistas/2025/08/23/bucaramanga-necesita-unidad/',
-    readingTime: 3,
-    aiHint: 'city politics'
-  },
-  {
-    id: 2,
-    title: 'La política después de Miguel',
-    excerpt: 'Hacer política en Colombia hoy es caminar por un campo minado. No solo por las balas, sino por el odio, la mentira y la estigmatización que se han...',
-    date: '16 de Agosto, 2025',
-    category: 'Opinión',
-    imageUrl: '/News/ImagenHoracioVanguardia.jpg',
-    link: 'https://www.vanguardia.com/opinion/columnistas/2025/08/16/la-politica-despues-de-miguel/',
-    readingTime: 3,
-    aiHint: 'colombian politics'
-  },
-  {
-    id: 3,
-    title: 'La deuda centenaria con García Rovira',
-    excerpt: 'El reciente especial publicado por Vanguardia volvió a poner sobre la mesa una verdad incómoda: la Vía Curos–Málaga sigue siendo la ruta de la muerte....',
-    date: '09 de Agosto, 2025',
-    category: 'Opinión',
-    imageUrl: '/News/ImagenHoracioVanguardia.jpg',
-    link: 'https://www.vanguardia.com/opinion/columnistas/2025/08/09/la-deuda-centenaria-con-garcia-rovira/',
-    readingTime: 2,
-    aiHint: 'infrastructure development'
-  },
-  {
-    id: 4,
-    title: 'Barrancabermeja no está sola',
-    excerpt: 'Yo nací hace 43 años en Barrancabermeja. En una ciudad de obreros, comerciantes, pescadores y soñadores. Un puerto que nunca se detuvo, ni...',
-    date: '02 de Agosto, 2025',
-    category: 'Opinión',
-    imageUrl: '/News/ImagenHoracioVanguardia.jpg',
-    link: 'https://www.vanguardia.com/opinion/columnistas/2025/08/02/barrancabermeja-no-esta-sola/',
-    readingTime: 3,
-    aiHint: 'city pride'
-  },
-  {
-    id: 5,
-    title: 'El cuarto poder',
-    excerpt: 'No hay poder más valioso para una democracia que una prensa libre, crítica e independiente. En Colombia, ha sido la prensa —no los gobiernos, ni...',
-    date: '26 de Julio, 2025',
-    category: 'Opinión',
-    imageUrl: '/News/ImagenHoracioVanguardia.jpg',
-    link: 'https://www.vanguardia.com/opinion/columnistas/horacio-jose-serpa/2025/07/26/el-cuarto-poder/',
-    readingTime: 3,
-    aiHint: 'freedom press'
-  },
-  {
-    id: 6,
-    title: 'La valla de David Luna',
-    excerpt: 'En tiempos de polarización, insulto fácil y trincheras ideológicas, apareció una valla política que no impone un nombre, no muestra una cara ni busca...',
-    date: '19 de Julio, 2025',
-    category: 'Opinión',
-    imageUrl: '/News/ImagenHoracioVanguardia.jpg',
-    link: 'https://www.vanguardia.com/opinion/columnistas/2025/07/19/la-valla-de-david-luna/',
-    readingTime: 3,
-    aiHint: 'political unity'
-  },
-];
+    {
+      id: 1,
+      title: 'Bucaramanga necesita unidad',
+      excerpt: 'Bucaramanga atraviesa un momento difícil. La anulación de la elección obliga a la ciudad a entrar en interinidad y a prepararse para nuevas elecciones. No...',
+      date: '23 de Agosto, 2025',
+      category: 'Opinión',
+      imageUrl: '/News/ImagenHoracioVanguardia.jpg',
+      link: 'https://www.vanguardia.com/opinion/columnistas/2025/08/23/bucaramanga-necesita-unidad/',
+      readingTime: 3,
+      aiHint: 'city politics'
+    },
+    {
+      id: 2,
+      title: 'La política después de Miguel',
+      excerpt: 'Hacer política en Colombia hoy es caminar por un campo minado. No solo por las balas, sino por el odio, la mentira y la estigmatización que se han...',
+      date: '16 de Agosto, 2025',
+      category: 'Opinión',
+      imageUrl: '/News/ImagenHoracioVanguardia.jpg',
+      link: 'https://www.vanguardia.com/opinion/columnistas/2025/08/16/la-politica-despues-de-miguel/',
+      readingTime: 3,
+      aiHint: 'colombian politics'
+    },
+    {
+      id: 3,
+      title: 'La deuda centenaria con García Rovira',
+      excerpt: 'El reciente especial publicado por Vanguardia volvió a poner sobre la mesa una verdad incómoda: la Vía Curos–Málaga sigue siendo la ruta de la muerte....',
+      date: '09 de Agosto, 2025',
+      category: 'Opinión',
+      imageUrl: '/News/ImagenHoracioVanguardia.jpg',
+      link: 'https://www.vanguardia.com/opinion/columnistas/2025/08/09/la-deuda-centenaria-con-garcia-rovira/',
+      readingTime: 2,
+      aiHint: 'infrastructure development'
+    },
+    {
+      id: 4,
+      title: 'Barrancabermeja no está sola',
+      excerpt: 'Yo nací hace 43 años en Barrancabermeja. En una ciudad de obreros, comerciantes, pescadores y soñadores. Un puerto que nunca se detuvo, ni...',
+      date: '02 de Agosto, 2025',
+      category: 'Opinión',
+      imageUrl: '/News/ImagenHoracioVanguardia.jpg',
+      link: 'https://www.vanguardia.com/opinion/columnistas/2025/08/02/barrancabermeja-no-esta-sola/',
+      readingTime: 3,
+      aiHint: 'city pride'
+    },
+    {
+      id: 5,
+      title: 'El cuarto poder',
+      excerpt: 'No hay poder más valioso para una democracia que una prensa libre, crítica e independiente. En Colombia, ha sido la prensa —no los gobiernos, ni...',
+      date: '26 de Julio, 2025',
+      category: 'Opinión',
+      imageUrl: '/News/ImagenHoracioVanguardia.jpg',
+      link: 'https://www.vanguardia.com/opinion/columnistas/horacio-jose-serpa/2025/07/26/el-cuarto-poder/',
+      readingTime: 3,
+      aiHint: 'freedom press'
+    },
+    {
+      id: 6,
+      title: 'La valla de David Luna',
+      excerpt: 'En tiempos de polarización, insulto fácil y trincheras ideológicas, apareció una valla política que no impone un nombre, no muestra una cara ni busca...',
+      date: '19 de Julio, 2025',
+      category: 'Opinión',
+      imageUrl: '/News/ImagenHoracioVanguardia.jpg',
+      link: 'https://www.vanguardia.com/opinion/columnistas/2025/07/19/la-valla-de-david-luna/',
+      readingTime: 3,
+      aiHint: 'political unity'
+    },
+  ];
 
 
 /**
  * 🔹 Lee noticias desde Google Sheets
- * Lee la primera hoja del documento. Si no la encuentra o hay un error, devuelve datos de ejemplo.
+ * Intenta leer la primera hoja del documento. Si no la encuentra o hay un error, devuelve `placeholderNews`.
  */
 export async function getNewsFromSheet(): Promise<NewsItem[]> {
-    const newsSheetId = process.env.GOOGLE_SHEET_ID_NEWS;
-    
-    if (!newsSheetId) {
-        console.warn("ADVERTENCIA: La variable de entorno 'GOOGLE_SHEET_ID_NEWS' no está definida. Se devolverán datos de ejemplo para las noticias.");
-        return placeholderNews;
-    }
+  const newsSheetId = process.env.GOOGLE_SHEET_ID_NEWS;
+  if (!newsSheetId) {
+    console.warn(
+      "ADVERTENCIA: La variable de entorno 'GOOGLE_SHEET_ID_NEWS' no está definida. Se usarán las noticias de 'placeholderNews'."
+    );
+    return placeholderNews;
+  }
 
-    try {
-      const doc = getSheetsAuth(newsSheetId);
-      await doc.loadInfo();
+  try {
+    const doc = getSheetsAuth(newsSheetId);
+    await doc.loadInfo();
 
-      const sheet = doc.sheetsByIndex[0];
-      if (!sheet) {
-          console.warn("ADVERTENCIA: No se encontró la primera hoja de cálculo en el documento. Se devolverán datos de ejemplo.");
-          return placeholderNews;
-      }
-      const rows = await sheet.getRows();
-
-      if (rows.length === 0) {
-        console.warn("ADVERTENCIA: La hoja de cálculo de noticias está vacía. Se devolverán datos de ejemplo.");
-        return placeholderNews;
-      }
-
-      return rows.map((row: any, idx: number): NewsItem => {
-          const content = row.get('Contenido') || '';
-          const excerpt = content.split(' ').slice(0, 25).join(' ') + (content.split(' ').length > 25 ? '...' : '');
-
-          const wordCount = content.split(/\s+/).length;
-          const readingTime = Math.ceil(wordCount / 200); // Promedio de 200 palabras por minuto
-
-          return {
-            id: idx,
-            title: row.get('Título') || `Noticia de ejemplo ${idx + 1}`,
-            excerpt: excerpt || 'Este es un resumen de ejemplo para la noticia. Haz clic para leer más.',
-            date: row.get('Fecha') || new Date().toLocaleDateString('es-CO'),
-            category: row.get('Categoría') || 'General',
-            imageUrl: '/News/ImagenHoracioVanguardia.jpg', // Imagen estática
-            link: row.get('Enlace') , // Enlace dinámico desde el Sheet
-            readingTime: readingTime || 1,
-            aiHint: row.get('AI Hint') || 'article'
-          };
-      });
-    } catch (error) {
-      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets. Causa probable: El ID de la hoja es incorrecto, no se ha compartido con la cuenta de servicio, o las columnas no tienen los nombres esperados.", error);
-      console.warn("Se devolverán datos de ejemplo debido al error anterior.");
+    const sheet = doc.sheetsByIndex[0];
+    if (!sheet) {
+      console.warn(
+        "ADVERTENCIA: No se encontró la primera hoja en el documento. Se usarán las noticias de 'placeholderNews'."
+      );
       return placeholderNews;
     }
+
+    const rows = await sheet.getRows();
+    if (rows.length === 0) {
+      console.warn(
+        "ADVERTENCIA: La hoja de cálculo de noticias está vacía. Se usarán las noticias de 'placeholderNews'."
+      );
+      return placeholderNews;
+    }
+
+    const sheetNews: NewsItem[] = rows.map((row: any, idx: number): NewsItem => {
+      const content = row.get('Contenido') || '';
+      const words = content.split(/\s+/).filter(Boolean);
+      const excerpt =
+        words.slice(0, 25).join(' ') + (words.length > 25 ? '...' : '');
+
+      const wordCount = words.length;
+      const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+      return {
+        id: idx,
+        title: row.get('Título') || `Noticia ${idx + 1}`,
+        excerpt:
+          excerpt ||
+          'Este es un resumen de ejemplo para la noticia. Haz clic para leer más.',
+        date: row.get('Fecha_Publicacion') || new Date().toLocaleDateString('es-CO'),
+        category: row.get('Categoría') || 'Opinión',
+        imageUrl: '/News/ImagenHoracioVanguardia.jpg',
+        link: row.get('Link') || '#',
+        readingTime,
+        aiHint: row.get('AI Hint') || 'article',
+      };
+    });
+
+    return sheetNews;
+  } catch (error) {
+    console.error(
+      "ERROR: No se pudieron obtener las noticias desde Google Sheets. Se usarán las noticias de 'placeholderNews'.",
+      error
+    );
+    return placeholderNews;
+  }
 }
 
 // 🔹 Tipo para mandar info de debug al front
