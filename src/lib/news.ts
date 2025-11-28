@@ -36,12 +36,72 @@ export type NewsItem = {
 };
 
 const placeholderNews: NewsItem[] = [
-  { id: 1, title: 'Gran Encuentro Ciudadano en Bogotá', excerpt: 'Miles de personas se reunieron para escuchar las propuestas de Horacio Serpa sobre seguridad y empleo en la capital.', date: 'Hace 2 días', category: 'Encuentros', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 4, aiHint: 'political rally crowd' },
-  { id: 2, title: 'Debate Clave sobre el Futuro de la Educación', excerpt: 'Horacio Serpa participó en un debate nacional, presentando su visión para una educación superior gratuita y de calidad.', date: 'Hace 1 día', category: 'Debates', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 6, aiHint: 'political debate stage' },
-  { id: 3, title: 'Nuevas Propuestas para el Medio Ambiente', excerpt: 'Se anunció un ambicioso plan para la transición energética y la protección de los páramos colombianos.', date: 'Hace 5 horas', category: 'Propuestas', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 5, aiHint: 'colombian mountains landscape' },
-  { id: 4, title: 'Reunión Estratégica con Empresarios', excerpt: 'En un encuentro con el sector privado, se discutieron incentivos para la generación de empleo y la inversión.', date: 'Hace 3 días', category: 'Economía', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 3, aiHint: 'business meeting handshake' },
-  { id: 5, title: 'Jóvenes se Suman a la Campaña "Ser Pa la Gente"', excerpt: 'El voluntariado juvenil crece, impulsado por las propuestas de cambio y oportunidades para las nuevas generaciones.', date: 'Hace 8 horas', category: 'Campaña', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 2, aiHint: 'young people volunteering' },
-  { id: 6, title: 'Diálogo con Comunidades Indígenas en el Cauca', excerpt: 'Horacio Serpa se comprometió a garantizar la protección de los territorios y a promover el desarrollo con enfoque diferencial.', date: 'Hace 4 días', category: 'Derechos Humanos', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 5, aiHint: 'indigenous community' },
+  {
+    id: 1,
+    title: "Bucaramanga necesita unidad",
+    excerpt: "Bucaramanga atraviesa un momento difícil. La anulación de la elección obliga a la ciudad a entrar en interinidad y a prepararse para nuevas elecciones. No...",
+    date: "23 de Agosto, 2025",
+    category: "Opinión",
+    imageUrl: "/News/ImagenHoracioVanguardia.jpg",
+    link: "https://www.vanguardia.com/opinion/columnistas/2025/08/23/bucaramanga-necesita-unidad/",
+    readingTime: 2,
+    aiHint: "city politics"
+  },
+  {
+    id: 2,
+    title: "La política después de Miguel",
+    excerpt: "Hacer política en Colombia hoy es caminar por un campo minado. No solo por las balas, sino por el odio, la mentira y la estigmatización...",
+    date: "16 de Agosto, 2025",
+    category: "Opinión",
+    imageUrl: "/News/ImagenHoracioVanguardia.jpg",
+    link: "https://www.vanguardia.com/opinion/columnistas/2025/08/16/la-politica-despues-de-miguel/",
+    readingTime: 2,
+    aiHint: "colombian politics"
+  },
+  {
+    id: 3,
+    title: "La deuda centenaria con García Rovira",
+    excerpt: "El reciente especial publicado por Vanguardia volvió a poner sobre la mesa una verdad incómoda: la Vía Curos–Málaga sigue siendo la ruta de la muerte....",
+    date: "09 de Agosto, 2025",
+    category: "Opinión",
+    imageUrl: "/News/ImagenHoracioVanguardia.jpg",
+    link: "https://www.vanguardia.com/opinion/columnistas/2025/08/09/la-deuda-centenaria-con-garcia-rovira/",
+    readingTime: 2,
+    aiHint: "infrastructure development"
+  },
+  {
+    id: 4,
+    title: "Barrancabermeja no está sola",
+    excerpt: "Yo nací hace 43 años en Barrancabermeja. En una ciudad de obreros, comerciantes, pescadores y soñadores. Un puerto que nunca se detuvo, ni...",
+    date: "02 de Agosto, 2025",
+    category: "Opinión",
+    imageUrl: "/News/ImagenHoracioVanguardia.jpg",
+    link: "https://www.vanguardia.com/opinion/columnistas/2025/08/02/barrancabermeja-no-esta-sola/",
+    readingTime: 2,
+    aiHint: "city pride"
+  },
+  {
+    id: 5,
+    title: "El cuarto poder",
+    excerpt: "No hay poder más valioso para una democracia que una prensa libre, crítica e independiente. En Colombia, ha sido la prensa —no los gobiernos, ni...",
+    date: "26 de Julio, 2025",
+    category: "Opinión",
+    imageUrl: "/News/ImagenHoracioVanguardia.jpg",
+    link: "https://www.vanguardia.com/opinion/columnistas/horacio-jose-serpa/2025/07/26/el-cuarto-poder/",
+    readingTime: 2,
+    aiHint: "freedom press"
+  },
+  {
+    id: 6,
+    title: "La valla de David Luna",
+    excerpt: "En tiempos de polarización, insulto fácil y trincheras ideológicas, apareció una valla política que no impone un nombre, no muestra una cara ni busca...",
+    date: "19 de Julio, 2025",
+    category: "Opinión",
+    imageUrl: "/News/ImagenHoracioVanguardia.jpg",
+    link: "https://www.vanguardia.com/opinion/columnistas/2025/07/19/la-valla-de-david-luna/",
+    readingTime: 2,
+    aiHint: "political unity"
+  },
 ];
 
 
@@ -61,9 +121,9 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
       const doc = getSheetsAuth(newsSheetId);
       await doc.loadInfo();
 
-      const sheet = doc.sheetsByIndex[0]; // Cargar la primera hoja directamente
+      const sheet = doc.sheetsByIndex[0];
       if (!sheet) {
-          console.warn("ADVERTENCIA: No se encontró ninguna hoja en el documento de noticias especificado. Se devolverán datos de ejemplo.");
+          console.warn("ADVERTENCIA: No se encontró la primera hoja de cálculo en el documento. Se devolverán datos de ejemplo.");
           return placeholderNews;
       }
       const rows = await sheet.getRows();
@@ -77,6 +137,9 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
           const content = row.get('Contenido') || '';
           const excerpt = content.split(' ').slice(0, 25).join(' ') + (content.split(' ').length > 25 ? '...' : '');
 
+          const wordCount = content.split(/\s+/).length;
+          const readingTime = Math.ceil(wordCount / 200); // Promedio de 200 palabras por minuto
+
           return {
             id: idx,
             title: row.get('Título') || `Noticia de ejemplo ${idx + 1}`,
@@ -84,13 +147,13 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
             date: row.get('Fecha') || new Date().toLocaleDateString('es-CO'),
             category: row.get('Categoría') || 'General',
             imageUrl: '/News/ImagenHoracioVanguardia.jpg', // Imagen estática
-            link: row.get('Enlace') || '#', // Enlace dinámico desde el Sheet
-            readingTime: parseInt(row.get('Tiempo de Lectura (min)')) || 5,
+            link: row.get('Enlace') , // Enlace dinámico desde el Sheet
+            readingTime: readingTime || 1,
             aiHint: row.get('AI Hint') || 'article'
           };
       });
     } catch (error) {
-      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets. Causa probable: El ID de la hoja es incorrecto o no se ha compartido con la cuenta de servicio.", error);
+      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets. Causa probable: El ID de la hoja es incorrecto, no se ha compartido con la cuenta de servicio, o las columnas no tienen los nombres esperados.", error);
       console.warn("Se devolverán datos de ejemplo debido al error anterior.");
       return placeholderNews;
     }
