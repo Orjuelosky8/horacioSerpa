@@ -20,10 +20,21 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { departments, getMunicipalitiesByDepartment } from '@/lib/colombia-geo';
 import { submitForm } from '@/app/actions/submit-form';
-import { Loader2, Send, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, Send, CheckCircle, AlertTriangle, Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import type { ReferrersDebugInfo } from '@/lib/news';
+
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -77,6 +88,61 @@ type ParticipationFormProps = {
   referrersList: string[];
   referrersDebug?: ReferrersDebugInfo;
 };
+
+function ReferrerCombobox({ referrersList, defaultValue }: { referrersList: string[], defaultValue?: string }) {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(defaultValue || "");
+
+  return (
+    <>
+      <input type="hidden" name="referrer" value={value} />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between"
+          >
+            {value
+              ? referrersList.find((referrer) => referrer.toLowerCase() === value.toLowerCase())
+              : referrersList.length > 0 ? "Selecciona la persona que te contó..." : "Cargando..."}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+          <Command>
+            <CommandInput placeholder="Buscar referente..." />
+            <CommandList>
+              <CommandEmpty>No se encontró ningún referente.</CommandEmpty>
+              <CommandGroup>
+                {referrersList.map((referrer) => (
+                  <CommandItem
+                    key={referrer}
+                    value={referrer}
+                    onSelect={(currentValue) => {
+                      setValue(currentValue.toLowerCase() === value.toLowerCase() ? "" : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value.toLowerCase() === referrer.toLowerCase() ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {referrer}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </>
+  );
+}
+
 
 export default function ParticipationForm({ referrersList, referrersDebug }: ParticipationFormProps) {
   const { toast } = useToast();
@@ -215,15 +281,8 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                     {getError('phone') && (<p className="text-sm text-destructive">{getError('phone')}</p>)}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="referrer">¿Quién te contó de mí? Escribe su Nombre completo. *</Label>
-                    <Select name="referrer" defaultValue={state.values?.referrer || undefined}>
-                      <SelectTrigger id="referrer">
-                        <SelectValue placeholder={referrersList.length > 0 ? "Selecciona la persona que te contó" : "Cargando..."} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {referrersList.map((name) => (<SelectItem key={name} value={name}>{name}</SelectItem>))}
-                      </SelectContent>
-                    </Select>
+                    <Label>¿Quién te contó de mí? Escribe su Nombre completo. *</Label>
+                     <ReferrerCombobox referrersList={referrersList} defaultValue={state.values?.referrer} />
                     {getError('referrer') && (<p className="text-sm text-destructive">{getError('referrer')}</p>)}
                   </div>
                 
@@ -253,7 +312,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   </div>
                 </div>
 
-                <div className="space-y-2 pt-2">
+                <div className="space-y-2 pt-2 md:col-span-2">
                   <Label htmlFor="proposal">Dinos tu propuesta (Opcional)</Label>
                   <Textarea
                     id="proposal"
@@ -264,7 +323,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   />
                 </div>
 
-                <div className="space-y-3 pt-2">
+                <div className="space-y-3 pt-2 md:col-span-2">
                   <div className="flex items-start space-x-3">
                     <Checkbox id="dataAuthorization" name="dataAuthorization" defaultChecked={!!state.values?.dataAuthorization} />
                     <div className="grid gap-1.5 leading-none">
@@ -275,7 +334,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   {getError('dataAuthorization') && (<p className="text-sm text-destructive">{getError('dataAuthorization')}</p>)}
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-4 md:col-span-2">
                     <SubmitButton />
                 </div>
               </form>
