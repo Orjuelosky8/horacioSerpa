@@ -93,7 +93,6 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
 
   const formRef = useRef<HTMLFormElement>(null);
   
-  // Effect to handle form state changes after submission
   useEffect(() => {
     if (state.success) {
       toast({
@@ -106,7 +105,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
       setSelectedDepartment('');
       setSelectedDocType('');
       setCityValue('');
-    } else if (state.message && !state.success && state.errors?.length) { // Check for errors to distinguish from initial state
+    } else if (state.message && !state.success && state.errors?.length) { 
       toast({
         title: 'Error en el envío',
         description: state.message,
@@ -116,7 +115,6 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
       setSelectedDepartment(state.values?.department || '');
       setSelectedDocType(state.values?.documentType || '');
       
-      // If the department from the failed state is valid, set the city. Otherwise, don't.
       const prevDepartmentIsValid = departments.includes(state.values?.department || '');
       if (prevDepartmentIsValid) {
         setCityValue(state.values?.city || '');
@@ -127,9 +125,8 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
   }, [state, toast]);
 
 
-  // Effect to reset city when department changes manually
   useEffect(() => {
-    if(formRef.current){ // Only run on manual changes, not on initial render or state recovery
+    if(formRef.current){
       const isInitialRenderOrStateRecovery = (state.errors && state.errors.length > 0);
       if(!isInitialRenderOrStateRecovery) {
          setCityValue('');
@@ -154,10 +151,19 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
             </p>
           </div>
         </div>
-        <Card className="max-w-4xl mx-auto shadow-2xl bg-card/80 backdrop-blur-sm overflow-hidden border-2 border-primary/20">
-            <CardContent className="px-4 md:px-8 pb-8 pt-8">
+        <Card className="max-w-4xl mx-auto shadow-2xl bg-card overflow-hidden border-2 border-primary/10">
+            <div className="relative w-full">
+                <Image 
+                    src="/FondoHoracioSerpa.jpeg"
+                    alt="Campaña Horacio Serpa"
+                    width={1200}
+                    height={400}
+                    className="w-full h-auto object-cover"
+                />
+            </div>
+            <CardContent className="px-6 md:px-10 pb-10 pt-8">
               <form ref={formRef} action={formAction} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Nombres y apellidos completos *</Label>
                     <Input id="fullName" name="fullName" defaultValue={state.values?.fullName} />
@@ -168,9 +174,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                     <Input id="email" type="email" name="email" defaultValue={state.values?.email} />
                     {getError('email') && (<p className="text-sm text-destructive">{getError('email')}</p>)}
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="documentType">Tipo de Documento *</Label>
                     <Select name="documentType" value={selectedDocType} onValueChange={setSelectedDocType}>
@@ -196,9 +200,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                     />
                     {getError('idCard') && (<p className="text-sm text-destructive">{getError('idCard')}</p>)}
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
                    <div className="space-y-2">
                     <Label htmlFor="phone">Teléfono celular / WhatsApp *</Label>
                     <Input
@@ -223,9 +225,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                     </Select>
                     {getError('referrer') && (<p className="text-sm text-destructive">{getError('referrer')}</p>)}
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
                   <div className="space-y-2">
                     <Label htmlFor="department">Departamento *</Label>
                     <Select name="department" value={selectedDepartment} onValueChange={setSelectedDepartment}>
@@ -252,7 +252,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 pt-2">
                   <Label htmlFor="proposal">Dinos tu propuesta (Opcional)</Label>
                   <Textarea
                     id="proposal"
@@ -263,7 +263,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   />
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3 pt-2">
                   <div className="flex items-start space-x-3">
                     <Checkbox id="dataAuthorization" name="dataAuthorization" defaultChecked={!!state.values?.dataAuthorization} />
                     <div className="grid gap-1.5 leading-none">
@@ -274,7 +274,9 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                   {getError('dataAuthorization') && (<p className="text-sm text-destructive">{getError('dataAuthorization')}</p>)}
                 </div>
 
-                <SubmitButton />
+                <div className="pt-4">
+                    <SubmitButton />
+                </div>
               </form>
             </CardContent>
         </Card>
@@ -282,3 +284,5 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
     </section>
   );
 }
+
+    
