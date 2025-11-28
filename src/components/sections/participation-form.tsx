@@ -160,6 +160,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                     height={400}
                     className="w-full h-auto object-cover"
                 />
+                <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-card to-transparent" />
             </div>
             <CardContent className="px-6 md:px-10 pb-10 pt-8">
               <form ref={formRef} action={formAction} className="space-y-6">
@@ -284,5 +285,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
     </section>
   );
 }
+
+    
 
     
