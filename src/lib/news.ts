@@ -47,7 +47,7 @@ const placeholderNews: NewsItem[] = [
 
 /**
  * 🔹 Lee noticias desde Google Sheets
- * Lee la hoja "Noticias". Si no la encuentra o hay un error, devuelve datos de ejemplo.
+ * Lee la primera hoja del documento. Si no la encuentra o hay un error, devuelve datos de ejemplo.
  */
 export async function getNewsFromSheet(): Promise<NewsItem[]> {
     const newsSheetId = process.env.GOOGLE_SHEET_ID_NEWS;
@@ -61,15 +61,15 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
       const doc = getSheetsAuth(newsSheetId);
       await doc.loadInfo();
 
-      const sheet = doc.sheetsByTitle['Noticias'];
+      const sheet = doc.sheetsByIndex[0]; // Cargar la primera hoja directamente
       if (!sheet) {
-          console.warn("ADVERTENCIA: No se encontró la hoja de cálculo 'Noticias' en el documento especificado. Se devolverán datos de ejemplo.");
+          console.warn("ADVERTENCIA: No se encontró ninguna hoja en el documento de noticias especificado. Se devolverán datos de ejemplo.");
           return placeholderNews;
       }
       const rows = await sheet.getRows();
 
       if (rows.length === 0) {
-        console.warn("ADVERTENCIA: La hoja de cálculo 'Noticias' está vacía. Se devolverán datos de ejemplo.");
+        console.warn("ADVERTENCIA: La hoja de cálculo de noticias está vacía. Se devolverán datos de ejemplo.");
         return placeholderNews;
       }
 
@@ -90,7 +90,7 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
           };
       });
     } catch (error) {
-      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets. Causa probable: El ID de la hoja es incorrecto, no se ha compartido con la cuenta de servicio, o la hoja se llama diferente a 'Noticias'.", error);
+      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets. Causa probable: El ID de la hoja es incorrecto o no se ha compartido con la cuenta de servicio.", error);
       console.warn("Se devolverán datos de ejemplo debido al error anterior.");
       return placeholderNews;
     }
