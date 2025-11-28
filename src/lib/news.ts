@@ -36,12 +36,12 @@ export type NewsItem = {
 };
 
 const placeholderNews: NewsItem[] = [
-  { id: 1, title: 'Gran Encuentro Ciudadano en Bogotá', excerpt: 'Miles de personas se reunieron para escuchar las propuestas de Horacio Serpa sobre seguridad y empleo en la capital.', date: 'Hace 2 días', category: 'Encuentros', imageUrl: 'https://picsum.photos/seed/news1/800/600', link: '#', readingTime: 4, aiHint: 'political rally crowd' },
-  { id: 2, title: 'Debate Clave sobre el Futuro de la Educación', excerpt: 'Horacio Serpa participó en un debate nacional, presentando su visión para una educación superior gratuita y de calidad.', date: 'Hace 1 día', category: 'Debates', imageUrl: 'https://picsum.photos/seed/news2/800/600', link: '#', readingTime: 6, aiHint: 'political debate stage' },
-  { id: 3, title: 'Nuevas Propuestas para el Medio Ambiente', excerpt: 'Se anunció un ambicioso plan para la transición energética y la protección de los páramos colombianos.', date: 'Hace 5 horas', category: 'Propuestas', imageUrl: 'https://picsum.photos/seed/news3/800/600', link: '#', readingTime: 5, aiHint: 'colombian mountains landscape' },
-  { id: 4, title: 'Reunión Estratégica con Empresarios', excerpt: 'En un encuentro con el sector privado, se discutieron incentivos para la generación de empleo y la inversión.', date: 'Hace 3 días', category: 'Economía', imageUrl: 'https://picsum.photos/seed/news4/800/600', link: '#', readingTime: 3, aiHint: 'business meeting handshake' },
-  { id: 5, title: 'Jóvenes se Suman a la Campaña "Ser Pa la Gente"', excerpt: 'El voluntariado juvenil crece, impulsado por las propuestas de cambio y oportunidades para las nuevas generaciones.', date: 'Hace 8 horas', category: 'Campaña', imageUrl: 'https://picsum.photos/seed/news5/800/600', link: '#', readingTime: 2, aiHint: 'young people volunteering' },
-  { id: 6, title: 'Diálogo con Comunidades Indígenas en el Cauca', excerpt: 'Horacio Serpa se comprometió a garantizar la protección de los territorios y a promover el desarrollo con enfoque diferencial.', date: 'Hace 4 días', category: 'Derechos Humanos', imageUrl: 'https://picsum.photos/seed/news6/800/600', link: '#', readingTime: 5, aiHint: 'indigenous community' },
+  { id: 1, title: 'Gran Encuentro Ciudadano en Bogotá', excerpt: 'Miles de personas se reunieron para escuchar las propuestas de Horacio Serpa sobre seguridad y empleo en la capital.', date: 'Hace 2 días', category: 'Encuentros', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 4, aiHint: 'political rally crowd' },
+  { id: 2, title: 'Debate Clave sobre el Futuro de la Educación', excerpt: 'Horacio Serpa participó en un debate nacional, presentando su visión para una educación superior gratuita y de calidad.', date: 'Hace 1 día', category: 'Debates', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 6, aiHint: 'political debate stage' },
+  { id: 3, title: 'Nuevas Propuestas para el Medio Ambiente', excerpt: 'Se anunció un ambicioso plan para la transición energética y la protección de los páramos colombianos.', date: 'Hace 5 horas', category: 'Propuestas', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 5, aiHint: 'colombian mountains landscape' },
+  { id: 4, title: 'Reunión Estratégica con Empresarios', excerpt: 'En un encuentro con el sector privado, se discutieron incentivos para la generación de empleo y la inversión.', date: 'Hace 3 días', category: 'Economía', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 3, aiHint: 'business meeting handshake' },
+  { id: 5, title: 'Jóvenes se Suman a la Campaña "Ser Pa la Gente"', excerpt: 'El voluntariado juvenil crece, impulsado por las propuestas de cambio y oportunidades para las nuevas generaciones.', date: 'Hace 8 horas', category: 'Campaña', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 2, aiHint: 'young people volunteering' },
+  { id: 6, title: 'Diálogo con Comunidades Indígenas en el Cauca', excerpt: 'Horacio Serpa se comprometió a garantizar la protección de los territorios y a promover el desarrollo con enfoque diferencial.', date: 'Hace 4 días', category: 'Derechos Humanos', imageUrl: '/News/ImagenHoracioVanguardia.jpg', link: '#', readingTime: 5, aiHint: 'indigenous community' },
 ];
 
 
@@ -83,14 +83,14 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
             excerpt: excerpt || 'Este es un resumen de ejemplo para la noticia. Haz clic para leer más.',
             date: row.get('Fecha') || new Date().toLocaleDateString('es-CO'),
             category: row.get('Categoría') || 'General',
-            imageUrl: row.get('URL de la Imagen') || `https://picsum.photos/seed/news${idx + 1}/800/600`,
-            link: row.get('Enlace') || '#',
+            imageUrl: '/News/ImagenHoracioVanguardia.jpg', // Imagen estática
+            link: row.get('Enlace') || '#', // Enlace dinámico desde el Sheet
             readingTime: parseInt(row.get('Tiempo de Lectura (min)')) || 5,
             aiHint: row.get('AI Hint') || 'article'
           };
       });
     } catch (error) {
-      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets. Causa probable: El ID de la hoja es incorrecto o la cuenta de servicio no tiene permisos de 'Lector'.", error);
+      console.error("ERROR: No se pudieron obtener las noticias desde Google Sheets. Causa probable: El ID de la hoja es incorrecto, no se ha compartido con la cuenta de servicio, o la hoja se llama diferente a 'Noticias'.", error);
       console.warn("Se devolverán datos de ejemplo debido al error anterior.");
       return placeholderNews;
     }
