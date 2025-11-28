@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -82,12 +83,14 @@ export default function TestimonialReel() {
     <section id="testimonios" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
-          <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
-            Voces que nos Inspiran
-          </h2>
-          <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
-            Testimonios de ciudadanos que, como tú, creen en un futuro mejor para Colombia.
-          </p>
+          <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+            <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
+              Voces que nos Inspiran
+            </h2>
+            <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
+              Testimonios de ciudadanos que, como tú, creen en un futuro mejor para Colombia.
+            </p>
+          </div>
         </div>
 
         <div

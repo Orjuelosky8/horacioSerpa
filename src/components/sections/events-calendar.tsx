@@ -249,10 +249,12 @@ export default function EventsCalendar() {
     <section id="agenda" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
-            <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">Agenda de Campaña</h2>
-            <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
-                Encuentra, filtra y participa en nuestros próximos eventos. ¡Tu presencia es importante!
-            </p>
+            <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+              <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">Agenda de Campaña</h2>
+              <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
+                  Encuentra, filtra y participa en nuestros próximos eventos. ¡Tu presencia es importante!
+              </p>
+            </div>
         </div>
 
         <div className="grid grid-cols-1 lg2:grid-cols-3 gap-12">
@@ -346,4 +348,3 @@ export default function EventsCalendar() {
     </>
   );
 }
-

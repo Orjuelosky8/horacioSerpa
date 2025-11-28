@@ -63,6 +63,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -70,25 +71,29 @@
   body::before {
     content: '';
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url("/FondoAnimadoWebSerpa.jpg") #ededed;
-    background-repeat: repeat;
-    background-position: 0 0;
-    animation: scroll 100s linear infinite;
+    inset: 0;              /* top:0; right:0; bottom:0; left:0; */
     z-index: -1;
+
+    background-image: url("/FondoAnimadoWebSerpa.jpg");
+    background-color: #ededed;
+    background-repeat: repeat-y;  /* Se repite solo de arriba a abajo */
+    background-size: auto;        /* O ajusta: auto 400px; si quieres más repeticiones visibles */
+    background-position: 0 0;     /* Fijamos X en 0 y empezamos en la parte superior */
+
+    animation: scroll-bg 40s linear infinite;
   }
-  
-  
-  @keyframes scroll {
+
+  @keyframes scroll-bg {
+    0% {
+      background-position: 0 0;        /* X = 0, Y = 0 */
+    }
     100% {
-      background-position: 0px -4000px;
+      background-position: 0 400px;    /* X = 0, Y se desplaza hacia abajo */
+      /* Si quieres que suba en lugar de bajar, usa 0 -400px */
     }
   }
-  
 }
+
 
 @media (prefers-reduced-motion) {
   body::before {

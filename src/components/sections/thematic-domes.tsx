@@ -233,12 +233,14 @@ export default function ThematicDomes() {
     <section id="propuestas" className="w-full py-20 md:py-32">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
-          <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
-            Nuestras Propuestas
-          </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Pilares para construir la Colombia que soñamos: un país con justicia, oportunidades y bienestar para todos.
-          </p>
+          <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+            <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
+              Nuestras Propuestas
+            </h2>
+            <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+              Pilares para construir la Colombia que soñamos: un país con justicia, oportunidades y bienestar para todos.
+            </p>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {proposals.map((proposal) => (

@@ -198,12 +198,14 @@ export default function InteractiveTimeline() {
     <section id="biografia" className="relative w-full overflow-hidden py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
-          <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
-            Quién Soy
-          </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Un recorrido por una vida dedicada al servicio público y a la construcción de una Colombia más justa.
-          </p>
+          <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+            <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
+              Quién Soy
+            </h2>
+            <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+              Un recorrido por una vida dedicada al servicio público y a la construcción de una Colombia más justa.
+            </p>
+          </div>
         </div>
 
         <div className="relative max-w-5xl mx-auto">

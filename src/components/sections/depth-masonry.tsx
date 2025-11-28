@@ -18,7 +18,7 @@ function NewsCard({ item }: { item: NewsItem }) {
       <CardHeader className="p-0 relative">
         <div className="relative aspect-[4/3]">
           <Image
-            src="/News/ImagenHoracioVanguardia.jpg"
+            src={item.imageUrl}
             alt={item.title}
             width={800}
             height={600}
@@ -76,12 +76,14 @@ export default function DepthMasonry({ newsItems }: { newsItems: NewsItem[] }) {
     <section id="noticias" className="w-full py-20 md:py-32">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
-          <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
-            Noticias y Actividades
-          </h2>
-          <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
-            Mantente al día con las últimas noticias, eventos y comunicados de la campaña.
-          </p>
+          <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+            <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
+              Noticias y Actividades
+            </h2>
+            <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
+              Mantente al día con las últimas noticias, eventos y comunicados de la campaña.
+            </p>
+          </div>
         </div>
 
         {newsItems.length > 0 ? (

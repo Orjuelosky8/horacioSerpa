@@ -255,12 +255,14 @@ export default function Gallery() {
     <section id="galeria" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-0">
         <div className="mb-12 text-center px-6">
-          <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
-            Galería de Momentos
-          </h2>
-          <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
-            Un recorrido visual por los momentos, las personas y las historias que construyen esta campaña.
-          </p>
+          <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+            <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
+              Galería de Momentos
+            </h2>
+            <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
+              Un recorrido visual por los momentos, las personas y las historias que construyen esta campaña.
+            </p>
+          </div>
         </div>
 
         <Tabs defaultValue="photos" className="w-full">

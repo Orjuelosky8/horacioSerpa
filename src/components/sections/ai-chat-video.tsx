@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect, useTransition } from "react";
@@ -73,12 +74,14 @@ export default function AiChatVideo() {
     <section id="habla-con-ia" className="w-full py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
-          <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
-            Habla con mi Clon Digital
-          </h2>
-          <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
-            Pregúntale directamente a mi asistente de IA sobre mi trayectoria y propuestas. Además, conoce mi visión en el siguiente video.
-          </p>
+          <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+            <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
+              Habla con mi Clon Digital
+            </h2>
+            <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
+              Pregúntale directamente a mi asistente de IA sobre mi trayectoria y propuestas. Además, conoce mi visión en el siguiente video.
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

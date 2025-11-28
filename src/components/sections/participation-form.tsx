@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useMemo, useState, useRef } from 'react';
@@ -105,7 +106,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
       setSelectedDepartment('');
       setSelectedDocType('');
       setCityValue('');
-    } else if (state.message) {
+    } else if (state.message && !state.success && state.errors?.length) { // Check for errors to distinguish from initial state
       toast({
         title: 'Error en el envío',
         description: state.message,
@@ -114,17 +115,27 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
       });
       setSelectedDepartment(state.values?.department || '');
       setSelectedDocType(state.values?.documentType || '');
-      setCityValue(state.values?.city || '');
+      
+      // If the department from the failed state is valid, set the city. Otherwise, don't.
+      const prevDepartmentIsValid = departments.includes(state.values?.department || '');
+      if (prevDepartmentIsValid) {
+        setCityValue(state.values?.city || '');
+      } else {
+        setCityValue('');
+      }
     }
   }, [state, toast]);
 
-  // Effect to reset city when department changes
+
+  // Effect to reset city when department changes manually
   useEffect(() => {
-    // Only reset if it's a manual change, not from form state restoration
-    if (state.message === '') { 
-      setCityValue('');
+    if(formRef.current){ // Only run on manual changes, not on initial render or state recovery
+      const isInitialRenderOrStateRecovery = (state.errors && state.errors.length > 0);
+      if(!isInitialRenderOrStateRecovery) {
+         setCityValue('');
+      }
     }
-  }, [selectedDepartment, state.message]);
+  }, [selectedDepartment]);
 
 
   const getError = (fieldName: string) =>
@@ -134,12 +145,14 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
     <section id="unete" className="w-full py-20 md:py-32 bg-background/10">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
+          <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
             <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
                 Únete a la Campaña
             </h2>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
                 Tu apoyo es fundamental. Registra tus datos y sé parte del cambio que nos une.
             </p>
+          </div>
         </div>
         <Card className="max-w-4xl mx-auto shadow-2xl bg-card/80 backdrop-blur-sm overflow-hidden border-2 border-primary/20">
             <CardContent className="px-4 md:px-8 pb-8 pt-8">
@@ -252,7 +265,7 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
 
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
-                    <Checkbox id="dataAuthorization" name="dataAuthorization" defaultChecked={state.values?.dataAuthorization === 'on'} />
+                    <Checkbox id="dataAuthorization" name="dataAuthorization" defaultChecked={!!state.values?.dataAuthorization} />
                     <div className="grid gap-1.5 leading-none">
                       <Label htmlFor="dataAuthorization" className="cursor-pointer">¿Autoriza el tratamiento de sus datos? *</Label>
                       <p className="text-xs text-muted-foreground">Al marcar esta casilla, aceptas nuestra{' '}<a href="#" className="underline">política de tratamiento de datos</a>.</p>
