@@ -21,7 +21,7 @@ export default {
       },
       fontFamily: {
         body: ['"Poppins"', 'sans-serif'],
-        headline: ['"Playfair Display"', 'serif'],
+        headline: ['"Poppins"', 'serif'],
       },
       colors: {
         background: 'hsl(var(--background))',

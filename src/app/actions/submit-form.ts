@@ -130,18 +130,18 @@ export async function submitForm(
 
     console.log('DEBUG: Añadiendo fila a la hoja...');
     await sheet.addRow({
-      'Fecha y Hora': new Date().toLocaleString('es-CO', {
+      'Marca temporal': new Date().toLocaleString('es-CO', {
         timeZone: 'America/Bogota',
       }),
-      'Nombre completo': fullName,
+      'Nombres y apellidos completos': fullName,
       'Tipo de Documento': documentType,
-      'Número de documento': idCard,
-      'WhatsApp / Celular': phone,
+      'Cedula de ciudadanía': idCard,
+      'Teléfono celular / whatsapp': phone,
       'Correo electrónico': email,
       'Departamento': department,
-      'Ciudad / Municipio': city,
-      'Acepta la política de tratamiento de datos personales': 'Sí',
-      'Referenciado por': referrer,
+      'Municipio - Ciudad': city,
+      'Autoriza el tratamiento de sus datos': 'Sí',
+      '¿Quién te contó de mi? Escribe su Nombre completo. ': referrer,
       'Déjanos tu Propuesta': proposal || '',
     });
     
