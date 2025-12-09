@@ -198,10 +198,54 @@ const RegistrationModal = ({
     );
 };
 
+const CalendarLoadingSkeleton = () => (
+  <section id="agenda" className="w-full py-20 md:py-32 bg-secondary/30">
+    <div className="container mx-auto px-6">
+      <div className="mb-12 text-center">
+        <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+          <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">Agenda de Campaña</h2>
+          <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
+            Encuentra, filtra y participa en nuestros próximos eventos. ¡Tu presencia es importante!
+          </p>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg2:grid-cols-3 gap-12">
+        <div className="lg2:col-span-1">
+          <div className="flex flex-col items-center md:items-start md:flex-row md:gap-8 lg2:flex-col lg2:gap-8">
+            <Card className="w-full md:flex-1 lg2:w-auto shadow-2xl bg-background/80 backdrop-blur-sm">
+              <CardHeader><CardTitle className="font-headline">Filtrar Eventos</CardTitle></CardHeader>
+              <CardContent className="space-y-4">
+                <div className="h-10 bg-muted rounded-md animate-pulse" />
+                <div className="h-10 bg-muted rounded-md animate-pulse" />
+              </CardContent>
+            </Card>
+            <div className="w-full flex justify-center md:w-auto mt-8 md:mt-0">
+              <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm self-start inline-block">
+                <div className="p-4 h-[298px] w-[288px] flex items-center justify-center bg-muted rounded-lg animate-pulse">
+                  <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+        <div className="lg2:col-span-2">
+          <h3 className="font-headline text-2xl font-bold mb-6">Próximos Eventos</h3>
+          <div className="space-y-6">
+            <Card className="flex flex-col items-center justify-center p-8 text-center h-64 border-dashed bg-background/30">
+              <Loader2 className="h-12 w-12 text-muted-foreground mb-4 animate-spin" />
+              <h4 className="font-semibold text-lg">Cargando eventos...</h4>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 
 export default function EventsCalendar() {
-  const [isClient, setIsClient] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
   
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
@@ -212,8 +256,8 @@ export default function EventsCalendar() {
 
   useEffect(() => {
     // Se ejecuta solo en el cliente para evitar errores de hidratación.
-    setIsClient(true);
     setEvents(getEvents());
+    setIsMounted(true);
   }, []);
 
   const handleRegisterClick = (event: Event) => {
@@ -222,7 +266,7 @@ export default function EventsCalendar() {
   };
 
   const filteredEvents = useMemo(() => {
-    if (!isClient) return []; // No filtrar en el servidor
+    if (!isMounted) return []; // No filtrar hasta que el componente esté montado.
 
     const today = startOfToday();
     let upcoming = events.filter(event => event.date >= today);
@@ -241,113 +285,110 @@ export default function EventsCalendar() {
     }
     
     return upcoming.sort((a, b) => a.date.getTime() - b.date.getTime());
-  }, [date, searchQuery, typeFilter, events, isClient]);
+  }, [date, searchQuery, typeFilter, events, isMounted]);
 
 
-  const eventDates = useMemo(() => isClient ? events.map(event => event.date) : [], [events, isClient]);
+  const eventDates = useMemo(() => isMounted ? events.map(event => event.date) : [], [events, isMounted]);
+
+  if (!isMounted) {
+    return <CalendarLoadingSkeleton />;
+  }
 
   return (
     <>
-    <section id="agenda" className="w-full py-20 md:py-32 bg-secondary/30">
-      <div className="container mx-auto px-6">
-        <div className="mb-12 text-center">
-            <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
-              <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">Agenda de Campaña</h2>
-              <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
-                  Encuentra, filtra y participa en nuestros próximos eventos. ¡Tu presencia es importante!
-              </p>
-            </div>
-        </div>
+      <section id="agenda" className="w-full py-20 md:py-32 bg-secondary/30">
+        <div className="container mx-auto px-6">
+          <div className="mb-12 text-center">
+              <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
+                <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">Agenda de Campaña</h2>
+                <p className="mt-4 mx-auto max-w-2xl text-lg text-muted-foreground">
+                    Encuentra, filtra y participa en nuestros próximos eventos. ¡Tu presencia es importante!
+                </p>
+              </div>
+          </div>
+          <div className="grid grid-cols-1 lg2:grid-cols-3 gap-12">
+                  <div className="lg2:col-span-1">
+                      <div className="flex flex-col items-center md:items-start md:flex-row md:gap-8 lg2:flex-col lg2:gap-8">
+                          <Card className="w-full md:flex-1 lg2:w-auto shadow-2xl bg-background/80 backdrop-blur-sm">
+                              <CardHeader>
+                                  <CardTitle className="font-headline">Filtrar Eventos</CardTitle>
+                              </CardHeader>
+                              <CardContent className="space-y-4">
+                                  <div className="relative">
+                                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
+                                      <Input 
+                                          placeholder="Buscar por nombre..." 
+                                          className="pl-10"
+                                          value={searchQuery}
+                                          onChange={(e) => setSearchQuery(e.target.value)}
+                                      />
+                                  </div>
+                                  <Select value={typeFilter} onValueChange={setTypeFilter}>
+                                      <SelectTrigger>
+                                          <SelectValue placeholder="Filtrar por tipo" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                          <SelectItem value="all">Todos los tipos</SelectItem>
+                                          <SelectItem value="Debate">Debate</SelectItem>
+                                          <SelectItem value="Encuentro">Encuentro</SelectItem>
+                                          <SelectItem value="Virtual">Virtual</SelectItem>
+                                          <SelectItem value="Foro">Foro</SelectItem>
+                                      </SelectContent>
+                                  </Select>
+                              </CardContent>
+                          </Card>
+                          <div className="w-full flex justify-center md:w-auto mt-8 md:mt-0">
+                               <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm self-start inline-block">
+                                  <Calendar
+                                      mode="single"
+                                      selected={date}
+                                      onSelect={setDate}
+                                      locale={es}
+                                      modifiers={{
+                                      event: eventDates,
+                                      }}
+                                      modifiersClassNames={{
+                                      event: "bg-primary/20 text-primary-foreground rounded-full font-bold",
+                                      selected: "bg-primary text-primary-foreground",
+                                      }}
+                                      className="p-4"
+                                      footer={date ? <Button variant="ghost" size="sm" onClick={() => setDate(undefined)}>Limpiar selección</Button> : undefined}
+                                  />
+                              </Card>
+                          </div>
+                      </div>
+                  </div>
 
-        <div className="grid grid-cols-1 lg2:grid-cols-3 gap-12">
-            <div className="lg2:col-span-1">
-                <div className="flex flex-col items-center md:items-start md:flex-row md:gap-8 lg2:flex-col lg2:gap-8">
-                    <Card className="w-full md:flex-1 lg2:w-auto shadow-2xl bg-background/80 backdrop-blur-sm">
-                        <CardHeader>
-                            <CardTitle className="font-headline">Filtrar Eventos</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"/>
-                                <Input 
-                                    placeholder="Buscar por nombre..." 
-                                    className="pl-10"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                            </div>
-                            <Select value={typeFilter} onValueChange={setTypeFilter}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Filtrar por tipo" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">Todos los tipos</SelectItem>
-                                    <SelectItem value="Debate">Debate</SelectItem>
-                                    <SelectItem value="Encuentro">Encuentro</SelectItem>
-                                    <SelectItem value="Virtual">Virtual</SelectItem>
-                                    <SelectItem value="Foro">Foro</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </CardContent>
-                    </Card>
-                    <div className="w-full flex justify-center md:w-auto mt-8 md:mt-0">
-                         <Card className="p-0 shadow-2xl bg-background/80 backdrop-blur-sm self-start inline-block">
-                            <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={setDate}
-                                locale={es}
-                                modifiers={{
-                                event: eventDates,
-                                }}
-                                modifiersClassNames={{
-                                event: "bg-primary/20 text-primary-foreground rounded-full font-bold",
-                                selected: "bg-primary text-primary-foreground",
-                                }}
-                                className="p-4"
-                                footer={date ? <Button variant="ghost" size="sm" onClick={() => setDate(undefined)}>Limpiar selección</Button> : undefined}
-                            />
-                        </Card>
-                    </div>
-                </div>
-            </div>
-
-            <div className="lg2:col-span-2">
-                <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-headline text-2xl font-bold">
-                        {date ? `Eventos para el ${format(date, 'd \'de\' MMMM', { locale: es })}` : 'Próximos Eventos'}
-                    </h3>
-                </div>
-                <div className="space-y-6">
-                    <AnimatePresence>
-                        {!isClient ? (
-                            <Card className="flex flex-col items-center justify-center p-8 text-center h-64 border-dashed bg-background/30">
-                                <Loader2 className="h-12 w-12 text-muted-foreground mb-4 animate-spin" />
-                                <h4 className="font-semibold text-lg">Cargando eventos...</h4>
-                            </Card>
-                        ) : filteredEvents.length > 0 ? (
-                            filteredEvents.map((event, index) => (
-                                <EventCard key={index} event={event} onRegister={handleRegisterClick}/>
-                            ))
-                        ) : (
-                            <Card className="flex flex-col items-center justify-center p-8 text-center h-64 border-dashed bg-background/30">
-                                <CalendarIcon className="h-12 w-12 text-muted-foreground mb-4" />
-                                <h4 className="font-semibold text-lg">No se encontraron eventos</h4>
-                                <p className="text-muted-foreground text-sm">Intenta ajustar tu búsqueda o selecciona otra fecha.</p>
-                            </Card>
-                        )}
-                    </AnimatePresence>
-                </div>
-            </div>
+                  <div className="lg2:col-span-2">
+                      <div className="flex items-center justify-between mb-6">
+                          <h3 className="font-headline text-2xl font-bold">
+                              {date ? `Eventos para el ${format(date, "d 'de' MMMM", { locale: es })}` : 'Próximos Eventos'}
+                          </h3>
+                      </div>
+                      <div className="space-y-6">
+                          <AnimatePresence>
+                              {filteredEvents.length > 0 ? (
+                                  filteredEvents.map((event, index) => (
+                                      <EventCard key={index} event={event} onRegister={handleRegisterClick}/>
+                                  ))
+                              ) : (
+                                  <Card className="flex flex-col items-center justify-center p-8 text-center h-64 border-dashed bg-background/30">
+                                      <CalendarIcon className="h-12 w-12 text-muted-foreground mb-4" />
+                                      <h4 className="font-semibold text-lg">No se encontraron eventos</h4>
+                                      <p className="text-muted-foreground text-sm">Intenta ajustar tu búsqueda o selecciona otra fecha.</p>
+                                  </Card>
+                              )}
+                          </AnimatePresence>
+                      </div>
+                  </div>
+              </div>
         </div>
-      </div>
-    </section>
-    <RegistrationModal 
-        isOpen={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        event={selectedEventForRegistration}
-    />
+      </section>
+      <RegistrationModal 
+          isOpen={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          event={selectedEventForRegistration}
+      />
     </>
   );
 }
-
