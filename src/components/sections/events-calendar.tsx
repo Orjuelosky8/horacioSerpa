@@ -211,7 +211,7 @@ export default function EventsCalendar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Se ejecuta solo en el cliente
+    // Se ejecuta solo en el cliente para evitar errores de hidratación.
     setIsClient(true);
     setEvents(getEvents());
   }, []);
@@ -222,6 +222,8 @@ export default function EventsCalendar() {
   };
 
   const filteredEvents = useMemo(() => {
+    if (!isClient) return []; // No filtrar en el servidor
+
     const today = startOfToday();
     let upcoming = events.filter(event => event.date >= today);
 
@@ -239,10 +241,10 @@ export default function EventsCalendar() {
     }
     
     return upcoming.sort((a, b) => a.date.getTime() - b.date.getTime());
-  }, [date, searchQuery, typeFilter, events]);
+  }, [date, searchQuery, typeFilter, events, isClient]);
 
 
-  const eventDates = useMemo(() => events.map(event => event.date), [events]);
+  const eventDates = useMemo(() => isClient ? events.map(event => event.date) : [], [events, isClient]);
 
   return (
     <>
@@ -348,3 +350,4 @@ export default function EventsCalendar() {
     </>
   );
 }
+
