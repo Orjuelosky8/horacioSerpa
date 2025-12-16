@@ -1,3 +1,4 @@
+
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import ManifestoView from "@/components/sections/manifesto-view";
