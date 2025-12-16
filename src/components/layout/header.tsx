@@ -19,7 +19,7 @@ const navLinks = [
   { href: "#propuestas", label: "Propuestas", description: "Descubre las ideas y proyectos para construir un futuro mejor." },
   { href: "#biografia", label: "Quién Soy", description: "Aquí conocerás más sobre mi historia, mis raíces y mi trayectoria." },
   { href: "#noticias", label: "Noticias", description: "Mantente al día con las últimas novedades y actividades de la campaña." },
-  { href: "#galeria", label: "Galeria", description: "Conversa con mi asistente virtual para resolver tus dudas al instante." },
+  { href: "#galeria", label: "Galería", description: "Un recorrido visual por nuestra campaña." },
   { href: "#unete", label: "Únete", description: "Tu apoyo es fundamental. ¡Súmate al cambio y participa activamente!" },
 ];
 
@@ -29,7 +29,8 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      const scrolled = window.scrollY > 10;
+      setIsScrolled(scrolled);
 
       const sections = navLinks.map(link => {
         const elem = document.querySelector(link.href);
@@ -61,7 +62,13 @@ export default function Header() {
       isScrolled ? "border-border/50 bg-background/80 backdrop-blur-xl" : "bg-transparent border-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2 md:pl-0">
+        <Link 
+          href="/" 
+          className={cn(
+            "flex items-center gap-2 md:pl-0 transition-opacity duration-300",
+            !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
+          )}
+        >
           <Image
             src="/Landpage/logoSerpaRojo.png"
             alt="Logo Horacio Serpa"
@@ -71,7 +78,10 @@ export default function Header() {
           />
         </Link>
         <TooltipProvider delayDuration={150}>
-          <nav className="hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex">
+          <nav className={cn(
+            "hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex transition-opacity duration-300",
+            !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
+            )}>
             {navLinks.map((link) => (
               <Tooltip key={link.href}>
                 <TooltipTrigger asChild>
@@ -98,7 +108,14 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn("md:hidden", isScrolled ? "text-foreground" : "text-white hover:text-white hover:bg-white/10")}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className={cn(
+                  "md:hidden transition-all duration-300", 
+                  isScrolled ? "text-foreground" : "text-white hover:text-white hover:bg-white/10"
+                )}
+              >
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Abrir menú</span>
               </Button>
@@ -118,8 +135,11 @@ export default function Header() {
               </nav>
             </SheetContent>
           </Sheet>
-          <Button asChild className={cn("hidden md:inline-flex rounded-full", !isScrolled && "bg-white/10 border border-white/20 text-white hover:bg-white/20")}>
-            <Link href="#contacto">Contacto</Link>
+          <Button asChild className={cn(
+              "hidden md:inline-flex rounded-full transition-opacity duration-300",
+              !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
+            )}>
+            <Link href="#unete">Únete</Link>
           </Button>
         </div>
       </div>
