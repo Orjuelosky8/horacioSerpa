@@ -1,3 +1,4 @@
+
 // src/lib/news.ts
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { JWT } from 'google-auth-library';
@@ -109,12 +110,6 @@ const placeholderNews: NewsItem[] = [
   },
 ];
 
-/**
- * Lee noticias desde Google Sheets.
- * ✅ O devuelve las del Sheet
- * ✅ O devuelve las de `placeholderNews`
- * ❌ Sin textos "de ejemplo".
- */
 export async function getNewsFromSheet(): Promise<NewsItem[]> {
   const newsSheetId = process.env.GOOGLE_SHEET_ID_NEWS;
   if (!newsSheetId) {
@@ -143,40 +138,43 @@ export async function getNewsFromSheet(): Promise<NewsItem[]> {
       );
       return placeholderNews;
     }
+    
+    await sheet.loadHeaderRow();
+    const headers = sheet.headerValues;
+    const titleHeader = headers.find(h => h.toLowerCase().includes('título') || h.toLowerCase().includes('titulo'));
+    const linkHeader = headers.find(h => h.toLowerCase().includes('link') || h.toLowerCase().includes('enlace'));
+    const contentHeader = headers.find(h => h.toLowerCase().includes('contenido'));
+    const dateHeader = headers.find(h => h.toLowerCase().includes('fecha'));
+    const categoryHeader = headers.find(h => h.toLowerCase().includes('categoría') || h.toLowerCase().includes('categoria'));
+    const aiHintHeader = headers.find(h => h.toLowerCase().includes('ai hint'));
 
-    const sheetNews: NewsItem[] = [];
 
-    rows.forEach((row: any, idx: number) => {
-      const title = row.get('Título') || row.get('Titulo');
-      const link = row.get('Link');
+    const sheetNews: NewsItem[] = rows.map((row: any, idx: number) => {
+      const title = titleHeader ? row.get(titleHeader) : '';
+      const link = linkHeader ? row.get(linkHeader) : '';
+      
+      if (!title || !link) return null;
 
-      // Si no hay título o link, se omite la fila (nada "de ejemplo")
-      if (!title || !link) return;
-
-      const content = row.get('Contenido') || '';
+      const content = contentHeader ? row.get(contentHeader) || '' : '';
       const words = content.split(/\s+/).filter(Boolean);
-      const excerpt =
-        words.length > 0
-          ? words.slice(0, 25).join(' ') + (words.length > 25 ? '...' : '')
-          : '';
-
+      const excerpt = words.length > 0 ? words.slice(0, 25).join(' ') + (words.length > 25 ? '...' : '') : '';
       const wordCount = words.length;
       const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-
-      sheetNews.push({
+      
+      return {
         id: idx,
         title,
-        excerpt, // puede quedar vacío si no hay contenido, pero no se inventa nada
-        date: row.get('Fecha_Publicacion') || new Date().toLocaleDateString('es-CO'),
-        category: row.get('Categoría') || 'Opinión',
+        excerpt,
+        date: dateHeader ? row.get(dateHeader) : new Date().toLocaleDateString('es-CO'),
+        category: categoryHeader ? row.get(categoryHeader) : 'Opinión',
         imageUrl: '/News/ImagenHoracioVanguardia.jpg',
         link,
         readingTime,
-        aiHint: row.get('AI Hint') || 'article',
-      });
-    });
+        aiHint: aiHintHeader ? row.get(aiHintHeader) : 'article',
+      };
+    }).filter((item): item is NewsItem => item !== null);
 
-    // Si ninguna fila fue válida, caemos al arreglo fijo
+
     if (sheetNews.length === 0) {
       console.warn(
         "ADVERTENCIA: No se encontraron filas válidas en la hoja de noticias. Se usarán las noticias de 'placeholderNews'."
@@ -206,44 +204,36 @@ export type ReferrersDebugInfo = {
 
 export async function getRegisteredReferrers(): Promise<{
   referrers: string[];
-  debug: ReferrersDebugInfo;
+  debug?: ReferrersDebugInfo;
 }> {
-  const formSheetId = process.env.GOOGLE_SHEET_ID;
-  if (!formSheetId) {
-    throw new Error(
-      'La variable de entorno principal GOOGLE_SHEET_ID para el formulario no está definida.'
-    );
-  }
+  try {
+    const formSheetId = process.env.GOOGLE_SHEET_ID;
+    if (!formSheetId) {
+      console.warn("ADVERTENCIA: La variable de entorno GOOGLE_SHEET_ID para el formulario no está definida. No se cargarán referentes.");
+      return { referrers: [] };
+    }
 
-  const doc = getSheetsAuth(formSheetId);
-  await doc.loadInfo();
+    const doc = getSheetsAuth(formSheetId);
+    await doc.loadInfo();
 
-  const sheet = doc.sheetsByIndex[0];
-  if (!sheet) {
-    throw new Error(
-      'No se encontró ninguna hoja en el documento de Google Sheets para el formulario.'
-    );
-  }
+    const sheet = doc.sheetsByIndex[0];
+    if (!sheet) {
+      console.warn("ADVERTENCIA: No se encontró la primera hoja en el documento de Google Sheets para el formulario. No se cargarán referentes.");
+      return { referrers: [] };
+    }
 
-  await sheet.loadHeaderRow();
-  const headers = sheet.headerValues || [];
+    await sheet.loadHeaderRow();
+    const headers = sheet.headerValues || [];
+    const targetHeader = headers.find(h => h && h.toString().toLowerCase().includes('nombres y apellidos completos'));
 
-  const rows = await sheet.getRows();
+    if (!targetHeader) {
+        console.warn("ADVERTENCIA: No se encontró la columna 'Nombres y apellidos completos' en la hoja de cálculo. No se cargarán referentes.");
+        return { referrers: [] };
+    }
+    
+    const rows = await sheet.getRows();
 
-  const targetIndex = headers.findIndex(
-    (h) =>
-      h &&
-      h.toString().toLowerCase().trim().startsWith('nombre completo')
-  );
-
-  const firstRowsSample = rows.slice(0, 5).map((row: any) => row._rawData);
-
-  let referrers: string[] = [];
-
-  if (targetIndex !== -1) {
-    const namesRaw = rows.map(
-      (row: any) => row._rawData?.[targetIndex] as string | undefined
-    );
+    const namesRaw = rows.map((row: any) => row.get(targetHeader) as string | undefined);
 
     const namesClean = namesRaw
       .map((n) => (n || '').toString().trim())
@@ -252,17 +242,9 @@ export async function getRegisteredReferrers(): Promise<{
     const unique = Array.from(new Set(namesClean));
     unique.sort((a, b) => a.localeCompare(b, 'es'));
 
-    referrers = unique;
+    return { referrers: unique };
+  } catch (error) {
+    console.error("ERROR al obtener la lista de referentes desde Google Sheets. Se devolverá una lista vacía.", error);
+    return { referrers: [] };
   }
-
-  const debug: ReferrersDebugInfo = {
-    sheetTitle: sheet.title,
-    rowCount: sheet.rowCount,
-    dataRowCount: rows.length,
-    headers: headers.map((h) => h?.toString() ?? ''),
-    targetIndex,
-    firstRowsSample,
-  };
-
-  return { referrers, debug };
 }

@@ -103,10 +103,11 @@ function ReferrerCombobox({ referrersList, defaultValue }: { referrersList: stri
             role="combobox"
             aria-expanded={open}
             className="w-full justify-between"
+            disabled={referrersList.length === 0}
           >
             {value
               ? referrersList.find((referrer) => referrer.toLowerCase() === value.toLowerCase())
-              : referrersList.length > 0 ? "Selecciona la persona que te contó..." : "Cargando..."}
+              : referrersList.length > 0 ? "Selecciona la persona que te contó..." : "No hay referentes disponibles"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -121,7 +122,8 @@ function ReferrerCombobox({ referrersList, defaultValue }: { referrersList: stri
                     key={referrer}
                     value={referrer}
                     onSelect={(currentValue) => {
-                      setValue(currentValue.toLowerCase() === value.toLowerCase() ? "" : currentValue);
+                      const selected = referrersList.find(r => r.toLowerCase() === currentValue.toLowerCase()) || "";
+                      setValue(selected.toLowerCase() === value.toLowerCase() ? "" : selected);
                       setOpen(false);
                     }}
                   >
@@ -338,35 +340,9 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                     <SubmitButton />
                 </div>
               </form>
-              {process.env.NEXT_PUBLIC_DEBUG === 'true' && referrersDebug?.headers && (
-  <div className="mt-6 rounded-lg border border-dashed border-blue-500/60 bg-blue-500/5 p-4 text-xs text-blue-900 space-y-2">
-    <p className="font-semibold">DEBUG Comparación de Headers</p>
-
-    <p>Buscando: <strong>"Referenciado por"</strong></p>
-
-    <pre className="whitespace-pre-wrap break-words">
-      {JSON.stringify(
-        referrersDebug.headers.map((h) => ({
-          original: h,
-          normalized: h?.toString().trim().toLowerCase(),
-          equals:
-            h?.toString().trim().toLowerCase() === "referenciado por"
-        })),
-        null,
-        2
-      )}
-    </pre>
-  </div>
-)}
-
-
             </CardContent>
         </Card>
       </div>
     </section>
   );
 }
-
-    
-
-    
