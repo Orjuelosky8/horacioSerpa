@@ -32,7 +32,7 @@ export default function ManifestoView() {
         <div className="relative -mt-24 sm:-mt-32 md:-mt-40 lg:-mt-48 xl:-mt-56 z-10 flex flex-col items-center">
             <div className="mb-4">
                 <Image
-                    src="/Landpage/tarjeton.png"
+                    src="/PapelonHoracioRecortado.png"
                     alt="Tarjetón electoral, marque L 9"
                     width={300}
                     height={150}
