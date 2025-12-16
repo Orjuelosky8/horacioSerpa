@@ -11,17 +11,15 @@ export default function ManifestoView() {
     <section className="relative w-full -mt-20" id="manifesto-section">
       
       {/* --- Desktop View (>768px) --- */}
-      <div className="hidden md:block relative w-full">
-        <div className="relative w-full aspect-[16/7] xl:aspect-[16/6]">
-          <Image
-            src="/FondoHoracioSerpa.jpeg"
-            alt="Campaña Horacio Serpa"
-            fill
-            className="object-cover w-full h-full"
-            priority
-            quality={90}
-          />
-        </div>
+      <div className="hidden md:block relative w-full h-[85svh]">
+        <Image
+          src="/FondoHoracioSerpa.jpeg"
+          alt="Campaña Horacio Serpa"
+          fill
+          className="object-cover w-full h-full"
+          priority
+          quality={90}
+        />
         <div className="absolute inset-0 flex flex-col items-center justify-end pb-12">
            <Button
               asChild

@@ -78,7 +78,10 @@ export default function Header() {
           />
         </Link>
         <TooltipProvider delayDuration={150}>
-          <nav className="hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex">
+          <nav className={cn(
+            "hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex transition-opacity duration-300",
+            !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
+            )}>
             {navLinks.map((link) => (
               <Tooltip key={link.href}>
                 <TooltipTrigger asChild>
@@ -134,8 +137,7 @@ export default function Header() {
           </Sheet>
           <Button asChild className={cn(
               "hidden md:inline-flex rounded-full transition-opacity duration-300",
-              !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100",
-              !isScrolled && "bg-white/10 border border-white/20 text-white hover:bg-white/20"
+              !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
             )}>
             <Link href="#unete">Únete</Link>
           </Button>
