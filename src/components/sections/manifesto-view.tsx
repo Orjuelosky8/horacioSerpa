@@ -12,35 +12,40 @@ export default function ManifestoView() {
       
       {/* --- Desktop View (>768px) --- */}
       <div className="hidden md:block relative w-full">
-        <Image
-          src="/FondoHoracioSerpa.jpeg"
-          alt="Campaña Horacio Serpa"
-          width={1920}
-          height={1080}
-          className="w-full h-auto object-cover"
-          priority
-          quality={90}
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-end pb-20">
-           <div className="mb-4">
-              <Image
-                src="/Landpage/tarjeton.png"
-                alt="Tarjetón electoral, marque L 9"
-                width={300} 
-                height={150} 
-                className="h-auto"
-              />
+        {/* Imagen principal que ocupa todo el ancho */}
+        <div className="relative w-full">
+            <Image
+              src="/FondoHoracioSerpa.jpeg"
+              alt="Campaña Horacio Serpa"
+              width={1920}
+              height={1080}
+              className="w-full h-auto object-cover"
+              priority
+              quality={90}
+            />
+            <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2">
+                <SocialSidebar />
             </div>
-           <Button
-              asChild
-              size="lg"
-              className="px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/40"
-            >
-              <Link href="#unete">Únete a la Campaña</Link>
-            </Button>
         </div>
-        <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2">
-            <SocialSidebar />
+
+        {/* Contenedor separado para el tarjetón y el botón, posicionado debajo de la imagen */}
+        <div className="relative -mt-24 sm:-mt-32 md:-mt-40 lg:-mt-48 xl:-mt-56 z-10 flex flex-col items-center">
+            <div className="mb-4">
+                <Image
+                    src="/Landpage/tarjeton.png"
+                    alt="Tarjetón electoral, marque L 9"
+                    width={300}
+                    height={150}
+                    className="h-auto w-48 sm:w-56 md:w-64 lg:w-72 transition-all"
+                />
+            </div>
+            <Button
+                asChild
+                size="lg"
+                className="px-10 py-6 text-lg font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/40"
+            >
+                <Link href="#unete">Únete a la Campaña</Link>
+            </Button>
         </div>
       </div>
 
