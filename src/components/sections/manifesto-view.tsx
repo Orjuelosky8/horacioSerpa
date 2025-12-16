@@ -30,7 +30,7 @@ export default function ManifestoView() {
         <div className="flex flex-col items-center -mt-40 lg:-mt-48">
             <div className="mb-4">
                 <Image
-                    src="/Landpage/PapelonHoracio.png"
+                    src="/PapelonHoracio.png"
                     alt="Tarjetón electoral, marque L 9"
                     width={300}
                     height={150}
