@@ -11,12 +11,13 @@ export default function ManifestoView() {
     <section className="relative w-full -mt-20" id="manifesto-section">
       
       {/* --- Desktop View (>768px) --- */}
-      <div className="hidden md:block relative w-full h-[85svh]">
+      <div className="hidden md:block relative w-full">
         <Image
           src="/FondoHoracioSerpa.jpeg"
           alt="Campaña Horacio Serpa"
-          fill
-          className="object-cover w-full h-full"
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-cover"
           priority
           quality={90}
         />
