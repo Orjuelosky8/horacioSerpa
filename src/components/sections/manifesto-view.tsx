@@ -12,27 +12,25 @@ export default function ManifestoView() {
       
       {/* --- Desktop View (>768px) --- */}
       <div className="hidden md:block relative w-full">
-        {/* Imagen principal que ocupa todo el ancho */}
-        <div className="relative w-full">
-            <Image
-              src="/FondoHoracioSerpa.jpeg"
-              alt="Campaña Horacio Serpa"
-              width={1920}
-              height={1080}
-              className="w-full h-auto object-cover"
-              priority
-              quality={90}
-            />
-            <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2">
-                <SocialSidebar />
-            </div>
+        <Image
+          src="/FondoHoracioSerpa.jpeg"
+          alt="Campaña Horacio Serpa al Senado"
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-cover"
+          priority
+          quality={90}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+        <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2">
+            <SocialSidebar />
         </div>
-
-        {/* Contenedor separado para el tarjetón y el botón, posicionado debajo de la imagen */}
-        <div className="relative -mt-24 sm:-mt-32 md:-mt-40 lg:-mt-48 xl:-mt-56 z-10 flex flex-col items-center">
+      </div>
+      <div className="hidden md:block relative z-10">
+        <div className="flex flex-col items-center -mt-40 lg:-mt-48">
             <div className="mb-4">
                 <Image
-                    src="/PapelonHoracioRecortado.png"
+                    src="/Landpage/tarjeton.png"
                     alt="Tarjetón electoral, marque L 9"
                     width={300}
                     height={150}
@@ -48,6 +46,7 @@ export default function ManifestoView() {
             </Button>
         </div>
       </div>
+
 
       {/* --- Mobile View (<768px) --- */}
       <div className="md:hidden relative w-full h-[90svh]">
@@ -72,13 +71,19 @@ export default function ManifestoView() {
               <SocialSidebar />
               {/* Top Content: Title and Text */}
               <div className="flex-shrink-0 z-10 pt-20">
-                   <h1 className="font-headline text-5xl font-bold tracking-tight">
+                   <h1 className="font-headline text-4xl font-bold tracking-tight">
                       Por una Colombia <br />
                       <span className="text-primary">justa y unida</span>
                   </h1>
-                  <p className="mt-4 max-w-sm mx-auto text-base text-white/80">
-                      Unidos por la experiencia, la integridad y un compromiso inquebrantable.
-                  </p>
+                   <div className="mt-4 mx-auto w-48">
+                     <Image
+                        src="/PapelonHoracioRecortado.png"
+                        alt="Tarjetón electoral"
+                        width={300}
+                        height={150}
+                        className="h-auto w-full"
+                    />
+                   </div>
               </div>
 
               {/* Middle Content: Image */}
