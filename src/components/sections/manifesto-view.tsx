@@ -10,7 +10,7 @@ export default function ManifestoView() {
   return (
     <section className="relative w-full -mt-20" id="manifesto-section">
       
-      {/* --- Desktop View (>768px) --- */}
+      {/* --- Desktop View (>768px)) --- */}
       <div className="hidden md:block relative w-full">
         <Image
           src="/FondoHoracioSerpa.jpeg"
