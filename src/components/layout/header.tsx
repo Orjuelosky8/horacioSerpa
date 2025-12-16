@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -15,8 +16,8 @@ import {
 } from "@/components/ui/tooltip";
 
 const navLinks = [
-  { href: "#biografia", label: "Quién Soy", description: "Aquí conocerás más sobre mi historia, mis raíces y mi trayectoria." },
   { href: "#propuestas", label: "Propuestas", description: "Descubre las ideas y proyectos para construir un futuro mejor." },
+  { href: "#biografia", label: "Quién Soy", description: "Aquí conocerás más sobre mi historia, mis raíces y mi trayectoria." },
   { href: "#noticias", label: "Noticias", description: "Mantente al día con las últimas novedades y actividades de la campaña." },
   { href: "#galeria", label: "Galeria", description: "Conversa con mi asistente virtual para resolver tus dudas al instante." },
   { href: "#unete", label: "Únete", description: "Tu apoyo es fundamental. ¡Súmate al cambio y participa activamente!" },
