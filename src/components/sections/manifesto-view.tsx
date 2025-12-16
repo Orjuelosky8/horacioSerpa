@@ -21,7 +21,16 @@ export default function ManifestoView() {
           priority
           quality={90}
         />
-        <div className="absolute inset-0 flex flex-col items-center justify-end pb-12">
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-20">
+           <div className="mb-4">
+              <Image
+                src="/Landpage/tarjeton.png"
+                alt="Tarjetón electoral, marque L 9"
+                width={300} 
+                height={150} 
+                className="h-auto"
+              />
+            </div>
            <Button
               asChild
               size="lg"
