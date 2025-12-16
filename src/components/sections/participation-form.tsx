@@ -103,10 +103,11 @@ function ReferrerCombobox({ referrersList, defaultValue }: { referrersList: stri
             role="combobox"
             aria-expanded={open}
             className="w-full justify-between"
+            disabled={referrersList.length === 0}
           >
             {value
               ? referrersList.find((referrer) => referrer.toLowerCase() === value.toLowerCase())
-              : referrersList.length > 0 ? "Selecciona la persona que te contó..." : "Cargando..."}
+              : referrersList.length > 0 ? "Selecciona la persona que te contó..." : "No hay referentes disponibles"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -121,7 +122,8 @@ function ReferrerCombobox({ referrersList, defaultValue }: { referrersList: stri
                     key={referrer}
                     value={referrer}
                     onSelect={(currentValue) => {
-                      setValue(currentValue.toLowerCase() === value.toLowerCase() ? "" : currentValue);
+                      const selected = referrersList.find(r => r.toLowerCase() === currentValue.toLowerCase()) || "";
+                      setValue(selected.toLowerCase() === value.toLowerCase() ? "" : selected);
                       setOpen(false);
                     }}
                   >
@@ -344,7 +346,3 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
     </section>
   );
 }
-
-    
-
-    

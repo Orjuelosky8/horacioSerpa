@@ -1,3 +1,4 @@
+
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import ManifestoView from "@/components/sections/manifesto-view";
@@ -65,8 +66,8 @@ export default function Home() {
     <>
       <Header />
       <ManifestoView />
-      <InteractiveTimeline />
       <ThematicDomes />
+      <InteractiveTimeline />
       <Suspense fallback={<NewsLoadingSkeleton />}>
         <NewsSection />
       </Suspense>

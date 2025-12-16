@@ -141,7 +141,7 @@ export async function submitForm(
       'Departamento': department,
       'Municipio - Ciudad': city,
       'Autoriza el tratamiento de sus datos': 'Sí',
-      '¿Quién te contó de mi? Escribe su Nombre completo. ': referrer,
+      'Referenciado por': referrer,
       'Déjanos tu Propuesta': proposal || '',
     });
     
