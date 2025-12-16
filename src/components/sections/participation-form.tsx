@@ -338,6 +338,28 @@ export default function ParticipationForm({ referrersList, referrersDebug }: Par
                     <SubmitButton />
                 </div>
               </form>
+              {process.env.NEXT_PUBLIC_DEBUG === 'true' && referrersDebug?.headers && (
+  <div className="mt-6 rounded-lg border border-dashed border-blue-500/60 bg-blue-500/5 p-4 text-xs text-blue-900 space-y-2">
+    <p className="font-semibold">DEBUG Comparación de Headers</p>
+
+    <p>Buscando: <strong>"Referenciado por"</strong></p>
+
+    <pre className="whitespace-pre-wrap break-words">
+      {JSON.stringify(
+        referrersDebug.headers.map((h) => ({
+          original: h,
+          normalized: h?.toString().trim().toLowerCase(),
+          equals:
+            h?.toString().trim().toLowerCase() === "referenciado por"
+        })),
+        null,
+        2
+      )}
+    </pre>
+  </div>
+)}
+
+
             </CardContent>
         </Card>
       </div>

@@ -65,8 +65,8 @@ export default function Home() {
     <>
       <Header />
       <ManifestoView />
-      <InteractiveTimeline />
       <ThematicDomes />
+      <InteractiveTimeline />
       <Suspense fallback={<NewsLoadingSkeleton />}>
         <NewsSection />
       </Suspense>
