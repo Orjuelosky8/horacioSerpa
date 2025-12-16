@@ -58,7 +58,7 @@ const timelineEvents = [
     title: "Senado de la República",
     description:
       "Con más de 93.000 votos, llega al Senado. Promueve leyes como Matrícula Cero, Ley de Turismo y Registro de Obras Inconclusas, beneficiando a miles de colombianos y apoyando el desarrollo en tiempos de crisis.",
-    imageUrl: "/Timeline/hs4.jpg",
+    imageUrl: "/Timeline/hs4.jpeg",
     aiHint: "politics congress lawmaking",
     reelUrl: "https://www.instagram.com/reel/C2Xq4g_uO9v/",
   },
