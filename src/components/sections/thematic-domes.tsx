@@ -1,16 +1,19 @@
 
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Camera, Banknote, Plane, Utensils, Shield, Handshake, Waves, UserX, Building2, Briefcase, ArrowRight, FileText } from "lucide-react";
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import { Camera, Banknote, Plane, Utensils, Shield, Handshake, Waves, UserX, Building2, Briefcase, ArrowRight, FileText, X } from "lucide-react";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 const proposals = [
   {
     id: 'seguridad',
     icon: Camera,
     title: "Sin Seguridad no hay Libertad",
-    description: "Cámaras privadas integradas a la Policía para reacción inmediata, con acceso en tiempo real para Juntas de Acción Comunal.",
+    description: "Cámaras privadas integradas a la Policía y a empresas de seguridad, para reacción inmediata.",
     details: [
         "Integración de cámaras privadas a redes de seguridad.",
         "Acceso en tiempo real para Juntas de Acción Comunal.",
@@ -22,7 +25,7 @@ const proposals = [
     id: 'icetex',
     icon: Banknote,
     title: "ICETEX Justo y Humano",
-    description: "Cuotas proporcionales al ingreso: solo pagas cuando trabajas. Sin empleo, no hay pago, para dar verdadera movilidad social.",
+    description: "Cuotas proporcionales al ingreso: solo pagas cuando trabajas. Sin empleo, no hay pago.",
     details: [
         "Cuotas de pago ajustadas a tu ingreso.",
         "Suspensión de pagos durante el desempleo.",
@@ -34,7 +37,7 @@ const proposals = [
     id: 'valorizaciones',
     icon: Building2,
     title: "No más Valorizaciones Anticipadas",
-    description: "Obra terminada, obra pagada. Basta de exigir recursos para proyectos que nunca se ejecutan. Transparencia y control ciudadano.",
+    description: "Obra terminada, obra pagada. Basta de exigir recursos para proyectos que nunca se ejecutan.",
     details: [
         "El cobro se realizará solo al finalizar la obra.",
         "Veedurías ciudadanas para supervisar proyectos.",
@@ -46,7 +49,7 @@ const proposals = [
     id: 'alimentos',
     icon: Utensils,
     title: "La Comida no se Bota",
-    description: "Eliminaremos regulaciones que obligan a desperdiciar alimentos aptos. La comida debe llegar a quienes la necesitan.",
+    description: "Eliminaremos regulaciones que obligan a desperdiciar alimentos aptos para llegar a quienes la necesitan.",
     details: [
         "Reforma de normativas que causan desperdicio.",
         "Creación de puentes con bancos de alimentos.",
@@ -58,7 +61,7 @@ const proposals = [
     id: 'pension',
     icon: Handshake,
     title: "Pensión Compartida para Parejas",
-    description: "Permitiremos ceder semanas entre la pareja para que uno de los dos alcance la pensión, protegiendo el patrimonio familiar.",
+    description: "Permitiremos ceder semanas entre la pareja para que uno de los dos alcance la pensión.",
     details: [
         "Posibilidad de transferir semanas de cotización.",
         "Asegurar que un miembro de la pareja logre la pensión.",
@@ -70,7 +73,7 @@ const proposals = [
     id: 'rio-magdalena',
     icon: Waves,
     title: "Río Magdalena: Despertar al Gigante",
-    description: "Con infraestructura moderna, convertiremos el río en un eje turístico y de transporte, impulsando la productividad regional.",
+    description: "Con infraestructura moderna, convertiremos el río en un eje turístico y de transporte, impulsando la productividad.",
     details: [
         "Inversión en navegabilidad y puertos fluviales.",
         "Fomento del turismo ecológico y cultural.",
@@ -106,7 +109,7 @@ const proposals = [
     id: 'turismo-empleo',
     icon: Plane,
     title: "Productividad, Turismo y Empleo",
-    description: "IVA cero en vuelos nacionales y estímulos a hotelería y restaurantes para generar empleo inmediato y dinamizar la economía.",
+    description: "IVA cero en vuelos nacionales y estímulos a hotelería y restaurantes para generar empleo inmediato.",
     details: [
         "Eliminación del IVA en tiquetes aéreos nacionales.",
         "Incentivos fiscales para el sector hotelero y gastronómico.",
@@ -118,7 +121,34 @@ const proposals = [
 
 type Proposal = typeof proposals[0];
 
-function FlipCard({ proposal }: { proposal: Proposal }) {
+function PdfModal({ isOpen, onOpenChange, pdfUrl, title }: { isOpen: boolean, onOpenChange: (open: boolean) => void, pdfUrl: string | null, title: string | null }) {
+  if (!pdfUrl || !title) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-4xl w-[95vw] h-[90vh] flex flex-col p-4">
+        <DialogHeader className="flex-shrink-0">
+          <DialogTitle className="truncate pr-8">{title}</DialogTitle>
+           <DialogClose asChild>
+              <Button variant="ghost" size="icon" className="absolute top-3 right-3">
+                <X className="h-5 w-5" />
+                <span className="sr-only">Cerrar</span>
+              </Button>
+            </DialogClose>
+        </DialogHeader>
+        <div className="flex-grow rounded-lg overflow-hidden border">
+          <iframe
+            src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+            className="w-full h-full"
+            title={`PDF: ${title}`}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function FlipCard({ proposal, onCardClick }: { proposal: Proposal, onCardClick: (url: string, title: string) => void }) {
     return (
       <div className="group w-full h-80 [perspective:1000px]">
         <div className="relative h-full w-full rounded-xl shadow-lg transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
@@ -148,13 +178,11 @@ function FlipCard({ proposal }: { proposal: Proposal }) {
                         ))}
                     </ul>
                 </div>
-                <div className="mt-4 text-center">
-                    <Button variant="outline" asChild>
-                      <a href={proposal.pdfUrl} target="_blank" rel="noopener noreferrer">
+                <CardFooter className="mt-4 text-center p-0">
+                    <Button variant="outline" className="w-full" onClick={() => onCardClick(proposal.pdfUrl, proposal.title)}>
                         Conoce más <ArrowRight className="ml-2 h-4 w-4" />
-                      </a>
                     </Button>
-                </div>
+                </CardFooter>
             </Card>
           </div>
         </div>
@@ -163,6 +191,16 @@ function FlipCard({ proposal }: { proposal: Proposal }) {
 }
 
 export default function ThematicDomes() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPdfUrl, setSelectedPdfUrl] = useState<string | null>(null);
+  const [selectedPdfTitle, setSelectedPdfTitle] = useState<string | null>(null);
+
+  const handleOpenModal = (pdfUrl: string, title: string) => {
+    setSelectedPdfUrl(pdfUrl);
+    setSelectedPdfTitle(title);
+    setIsModalOpen(true);
+  };
+
   return (
     <section id="propuestas" className="w-full py-20 md:py-32">
       <div className="container mx-auto px-6">
@@ -178,10 +216,16 @@ export default function ThematicDomes() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {proposals.map((proposal) => (
-            <FlipCard key={proposal.id} proposal={proposal} />
+            <FlipCard key={proposal.id} proposal={proposal} onCardClick={handleOpenModal} />
           ))}
         </div>
       </div>
+       <PdfModal 
+        isOpen={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        pdfUrl={selectedPdfUrl}
+        title={selectedPdfTitle}
+       />
     </section>
   );
 }
