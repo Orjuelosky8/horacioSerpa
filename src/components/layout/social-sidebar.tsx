@@ -28,14 +28,14 @@ export default function SocialSidebar() {
       )}
       id="social-sidebar"
     >
-      <span className="text-sm font-semibold text-white/80 [writing-mode:vertical-lr] tracking-widest uppercase hidden md:inline">Síguenos</span>
-      <div className="h-16 w-px bg-white/30 hidden md:inline" />
+      <span className="text-sm font-semibold text-primary/80 [writing-mode:vertical-lr] tracking-widest uppercase hidden md:inline">Síguenos</span>
+      <div className="h-16 w-px bg-primary/30 hidden md:inline" />
       {socialLinks.map((social) => (
         <Button
           key={social.name}
           variant="ghost"
           size="icon"
-          className="text-white/80 hover:text-white hover:bg-white/10 rounded-full"
+          className="text-primary/80 hover:text-primary hover:bg-primary/10 rounded-full"
           asChild
         >
           <a href={social.url} target="_blank" rel="noopener noreferrer" aria-label={social.name}>
