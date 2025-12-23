@@ -2,97 +2,132 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scale, BookHeart, Stethoscope, Briefcase, ShieldCheck, Leaf, ArrowRight, X, FileText } from "lucide-react";
+import { Camera, Banknote, Plane, Utensils, Shield, Handshake, Waves, UserX, Building2, Briefcase, ArrowRight, FileText } from "lucide-react";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
-import { useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 const proposals = [
   {
-    id: 'justicia',
-    icon: Scale,
-    title: "Justicia",
-    description: "Fortalecimiento del sistema judicial para una justicia más rápida, transparente y accesible para todos.",
+    id: 'seguridad',
+    icon: Camera,
+    title: "Sin Seguridad no hay Libertad",
+    description: "Cámaras privadas integradas a la Policía para reacción inmediata, con acceso en tiempo real para Juntas de Acción Comunal.",
     details: [
-        "Modernización de la infraestructura judicial.",
-        "Implementación de expedientes digitales.",
-        "Fortalecimiento de la defensoría pública.",
-        "Programas de acceso a la justicia en zonas rurales."
+        "Integración de cámaras privadas a la red de la Policía.",
+        "Acceso en tiempo real para Juntas de Acción Comunal.",
+        "Reducción de tiempos de respuesta ante delitos.",
+        "Fortalecimiento de la seguridad barrial con tecnología."
     ],
-    pdfUrl: "/propuestas/Justicia.pdf",
+    pdfUrl: "/propuestas.pdf",
   },
   {
-    id: 'educacion',
-    icon: BookHeart,
-    title: "Educación",
-    description: "Inversión en educación de calidad desde la primera infancia hasta la universidad, con enfoque en tecnología.",
+    id: 'icetex',
+    icon: Banknote,
+    title: "ICETEX Justo y Humano",
+    description: "Cuotas proporcionales al ingreso: solo pagas cuando trabajas. Sin empleo, no hay pago, para dar verdadera movilidad social.",
     details: [
-        "Cobertura universal en educación preescolar.",
-        "Bilingüismo y formación en habilidades digitales.",
-        "Becas y créditos condonables para educación superior.",
-        "Infraestructura y conectividad para colegios públicos."
+        "Cuotas de pago ajustadas al salario del egresado.",
+        "Suspensión de pagos durante períodos de desempleo.",
+        "Eliminación de la capitalización de intereses.",
+        "Fomento de la educación superior sin riesgo de quiebra."
     ],
-    pdfUrl: "/propuestas/Educacion.pdf",
+    pdfUrl: "/propuestas.pdf",
   },
   {
-    id: 'salud',
-    icon: Stethoscope,
-    title: "Salud",
-    description: "Un sistema de salud preventivo y eficiente que garantice cobertura universal y atención digna en todo el territorio.",
+    id: 'valorizaciones',
+    icon: Building2,
+    title: "No más Valorizaciones Anticipadas",
+    description: "Obra terminada, obra pagada. Basta de exigir recursos para proyectos que nunca se ejecutan. Transparencia y control ciudadano.",
     details: [
-        "Enfoque en la medicina preventiva y la salud mental.",
-        "Equipos de salud en casa para zonas apartadas.",
-        "Reducción de los tiempos de espera para especialistas.",
-        "Transparencia en el manejo de los recursos de la salud."
+        "El cobro de valorización se realizará solo al finalizar y entregar la obra.",
+        "Creación de veedurías ciudadanas para supervisar proyectos.",
+        "Publicación transparente de cronogramas y presupuestos.",
+        "Prevenir la financiación de 'elefantes blancos' con dinero público."
     ],
-    pdfUrl: "/propuestas/Salud.pdf",
+    pdfUrl: "/propuestas.pdf",
   },
   {
-    id: 'empleo',
-    icon: Briefcase,
-    title: "Empleo",
-    description: "Creación de empleos de calidad a través del apoyo a emprendedores, la industria nacional y la inversión.",
+    id: 'alimentos',
+    icon: Utensils,
+    title: "La Comida no se Bota",
+    description: "Eliminaremos regulaciones que obligan a desperdiciar alimentos aptos. La comida debe llegar a quienes la necesitan.",
     details: [
-        "Incentivos tributarios para la contratación de jóvenes.",
-        "Apoyo al emprendimiento y a las PYMES.",
-        "Inversión en sectores estratégicos como el turismo y la tecnología.",
-        "Programas de formación para el trabajo."
+        "Reforma de normativas sanitarias que causan desperdicio.",
+        "Creación de un puente entre productores, comercios y bancos de alimentos.",
+        "Incentivos para la donación de alimentos.",
+        "Reducir el hambre y el impacto ambiental del desperdicio."
     ],
-    pdfUrl: "/propuestas/Empleo.pdf",
+    pdfUrl: "/propuestas.pdf",
   },
   {
-    id: 'derechos-humanos',
-    icon: ShieldCheck,
-    title: "Derechos Humanos",
-    description: "Protección y promoción de los derechos humanos como pilar fundamental de una sociedad pacífica y equitativa.",
+    id: 'pension',
+    icon: Handshake,
+    title: "Pensión Compartida para Parejas",
+    description: "Permitiremos ceder semanas entre la pareja para que uno de los dos alcance la pensión, protegiendo el patrimonio familiar.",
     details: [
-        "Fortalecimiento de la Defensoría del Pueblo.",
-        "Lucha contra la discriminación y la violencia de género.",
-        "Protección a líderes sociales y defensores de DDHH.",
-        "Políticas de inclusión para minorías."
+        "Posibilidad de transferir semanas de cotización entre cónyuges o compañeros permanentes.",
+        "Asegurar que al menos un miembro de la pareja logre la pensión.",
+        "Protección económica para la vejez del núcleo familiar.",
+        "Reconocimiento del trabajo en equipo dentro de las familias."
     ],
-    pdfUrl: "/propuestas/DerechosHumanos.pdf",
+    pdfUrl: "/propuestas.pdf",
   },
   {
-    id: 'medio-ambiente',
-    icon: Leaf,
-    title: "Medio Ambiente",
-    description: "Políticas para la protección de nuestra biodiversidad, el fomento de energías limpias y el desarrollo sostenible.",
+    id: 'rio-magdalena',
+    icon: Waves,
+    title: "Río Magdalena: Despertar al Gigante",
+    description: "Con infraestructura moderna, convertiremos el río en un eje turístico y de transporte, impulsando la productividad regional.",
     details: [
-        "Transición hacia energías limpias y renovables.",
-        "Protección de páramos, selvas y fuentes hídricas.",
-        "Lucha frontal contra la deforestación.",
-        "Incentivos a la producción y consumo sostenible."
+        "Inversión en navegabilidad y puertos fluviales modernos.",
+        "Fomento del turismo ecológico y cultural a lo largo del río.",
+        "Transporte de carga más económico y sostenible.",
+        "Generación de empleo en los municipios ribereños."
     ],
-    pdfUrl: "/propuestas/MedioAmbiente.pdf",
+    pdfUrl: "/propuestas.pdf",
+  },
+  {
+    id: 'violadores',
+    icon: UserX,
+    title: "Violadores, No Más",
+    description: "Registro permanente e inhabilidad total para agresores. Protección real y sin concesiones para nuestras niñas y mujeres.",
+    details: [
+        "Creación de un registro público y permanente de agresores sexuales.",
+        "Inhabilidad de por vida para ocupar cargos públicos o trabajar con menores.",
+        "Endurecimiento de penas sin beneficios carcelarios.",
+        "Medidas de protección y justicia expeditas para las víctimas."
+    ],
+    pdfUrl: "/propuestas.pdf",
+  },
+  {
+    id: 'limites-presidente',
+    icon: Shield,
+    title: "Límites Reales al Presidente",
+    description: "Más autonomía para las regiones y menos centralismo. Fortaleceremos las instituciones y el equilibrio democrático.",
+    details: [
+        "Reforma a la distribución de competencias y recursos Nación-Territorio.",
+        "Fortalecimiento de la autonomía regional y local.",
+        "Mecanismos de control más estrictos al poder ejecutivo.",
+        "Garantizar el equilibrio de poderes y la independencia institucional."
+    ],
+    pdfUrl: "/propuestas.pdf",
+  },
+  {
+    id: 'turismo-empleo',
+    icon: Plane,
+    title: "Productividad, Turismo y Empleo",
+    description: "IVA cero en vuelos nacionales y estímulos a hotelería y restaurantes para generar empleo inmediato y dinamizar la economía.",
+    details: [
+        "Eliminación del IVA en tiquetes aéreos para rutas nacionales.",
+        "Incentivos fiscales para el sector hotelero y gastronómico.",
+        "Impulso al turismo como motor de empleo rápido.",
+        "Dinamización de las economías locales a través del turismo."
+    ],
+    pdfUrl: "/propuestas.pdf",
   },
 ];
 
 type Proposal = typeof proposals[0];
 
-function FlipCard({ proposal, onOpenModal }: { proposal: Proposal, onOpenModal: () => void }) {
+function FlipCard({ proposal }: { proposal: Proposal }) {
     return (
       <div className="group w-full h-80 [perspective:1000px]">
         <div className="relative h-full w-full rounded-xl shadow-lg transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
@@ -123,8 +158,10 @@ function FlipCard({ proposal, onOpenModal }: { proposal: Proposal, onOpenModal: 
                     </ul>
                 </div>
                 <div className="mt-4 text-center">
-                    <Button variant="outline" onClick={onOpenModal}>
+                    <Button variant="outline" asChild>
+                      <a href={proposal.pdfUrl} target="_blank" rel="noopener noreferrer">
                         Conoce más <ArrowRight className="ml-2 h-4 w-4" />
+                      </a>
                     </Button>
                 </div>
             </Card>
@@ -134,127 +171,26 @@ function FlipCard({ proposal, onOpenModal }: { proposal: Proposal, onOpenModal: 
     );
 }
 
-function PdfViewerModal({ 
-    isOpen, 
-    onOpenChange, 
-    proposals, 
-    selectedProposal, 
-    setSelectedProposal 
-}: { 
-    isOpen: boolean, 
-    onOpenChange: (isOpen: boolean) => void,
-    proposals: Proposal[],
-    selectedProposal: Proposal | null,
-    setSelectedProposal: (proposal: Proposal) => void,
-}) {
-    const isMobile = useIsMobile();
-    if (!selectedProposal) return null;
-
-    const handleSelectChange = (proposalId: string) => {
-        const newProposal = proposals.find(p => p.id === proposalId);
-        if (newProposal) {
-            setSelectedProposal(newProposal);
-        }
-    };
-
-    return (
-        <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-5xl w-[90%] h-[90vh] flex flex-col p-0">
-            <DialogHeader className="p-4 border-b flex-row justify-between items-center flex-shrink-0">
-              <DialogTitle className="font-headline flex-grow">
-                <Select value={selectedProposal.id} onValueChange={handleSelectChange}>
-                  <SelectTrigger className="w-full md:w-[300px] text-lg">
-                    <SelectValue placeholder="Selecciona una propuesta" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {proposals.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
-                        {p.title}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </DialogTitle>
-              
-              <DialogClose asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="hover:bg-yellow-400 hover:border-yellow-500 hover:text-black border border-transparent rounded-full p-2"
-                >
-                  <X className="h-5 w-5" />
-                  <span className="sr-only">Cerrar</span>
-                </Button>
-              </DialogClose>
-            </DialogHeader>
-
-                <div className="flex-grow p-4 pt-0">
-                    {isMobile ? (
-                         <div className="flex flex-col items-center justify-center h-full text-center">
-                            <FileText className="h-16 w-16 text-muted-foreground mb-4" />
-                            <h3 className="text-xl font-semibold mb-2">Visualización móvil</h3>
-                            <p className="text-muted-foreground mb-6 max-w-sm">
-                                Para una mejor experiencia, te recomendamos abrir el documento en el visor de PDF de tu dispositivo.
-                            </p>
-                            <Button asChild size="lg">
-                                <a href={selectedProposal.pdfUrl} target="_blank" rel="noopener noreferrer">
-                                    Ver Propuesta en PDF
-                                </a>
-                            </Button>
-                        </div>
-                    ) : (
-                        <iframe 
-                            src={selectedProposal.pdfUrl}
-                            className="w-full h-full border-0 rounded-b-lg"
-                            title={`Propuesta ${selectedProposal.title}`}
-                        />
-                    )}
-                </div>
-            </DialogContent>
-        </Dialog>
-    );
-}
-
-
 export default function ThematicDomes() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
-
-  const handleOpenModal = (proposal: Proposal) => {
-    setSelectedProposal(proposal);
-    setIsModalOpen(true);
-  };
-  
-  const handleSetSelected = (proposal: Proposal) => {
-    setSelectedProposal(proposal);
-  };
-
   return (
     <section id="propuestas" className="w-full py-20 md:py-32">
       <div className="container mx-auto px-6">
         <div className="mb-12 text-center">
           <div className="inline-block bg-background/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl">
             <h2 className="font-headline text-4xl font-bold tracking-tight md:text-5xl">
-              Nuestras Propuestas
+              9 Propuestas para Hacer País
             </h2>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-              Pilares para construir la Colombia que soñamos: un país con justicia, oportunidades y bienestar para todos.
+              Soluciones concretas para los problemas reales de Colombia. Ideas para construir un futuro con seguridad, justicia y oportunidades.
             </p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {proposals.map((proposal) => (
-            <FlipCard key={proposal.id} proposal={proposal} onOpenModal={() => handleOpenModal(proposal)} />
+            <FlipCard key={proposal.id} proposal={proposal} />
           ))}
         </div>
       </div>
-       <PdfViewerModal
-          isOpen={isModalOpen}
-          onOpenChange={setIsModalOpen}
-          proposals={proposals}
-          selectedProposal={selectedProposal}
-          setSelectedProposal={handleSetSelected}
-        />
     </section>
   );
 }
