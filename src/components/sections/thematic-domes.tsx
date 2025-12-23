@@ -12,10 +12,9 @@ const proposals = [
     title: "Sin Seguridad no hay Libertad",
     description: "Cámaras privadas integradas a la Policía para reacción inmediata, con acceso en tiempo real para Juntas de Acción Comunal.",
     details: [
-        "Integración de cámaras privadas a la red de la Policía.",
+        "Integración de cámaras privadas a redes de seguridad.",
         "Acceso en tiempo real para Juntas de Acción Comunal.",
-        "Reducción de tiempos de respuesta ante delitos.",
-        "Fortalecimiento de la seguridad barrial con tecnología."
+        "Reducción de tiempos de respuesta ante delitos."
     ],
     pdfUrl: "/propuestas.pdf",
   },
@@ -25,10 +24,9 @@ const proposals = [
     title: "ICETEX Justo y Humano",
     description: "Cuotas proporcionales al ingreso: solo pagas cuando trabajas. Sin empleo, no hay pago, para dar verdadera movilidad social.",
     details: [
-        "Cuotas de pago ajustadas al salario del egresado.",
-        "Suspensión de pagos durante períodos de desempleo.",
-        "Eliminación de la capitalización de intereses.",
-        "Fomento de la educación superior sin riesgo de quiebra."
+        "Cuotas de pago ajustadas a tu ingreso.",
+        "Suspensión de pagos durante el desempleo.",
+        "Fomento de la educación sin riesgo de quiebra."
     ],
     pdfUrl: "/propuestas.pdf",
   },
@@ -38,10 +36,9 @@ const proposals = [
     title: "No más Valorizaciones Anticipadas",
     description: "Obra terminada, obra pagada. Basta de exigir recursos para proyectos que nunca se ejecutan. Transparencia y control ciudadano.",
     details: [
-        "El cobro de valorización se realizará solo al finalizar y entregar la obra.",
-        "Creación de veedurías ciudadanas para supervisar proyectos.",
-        "Publicación transparente de cronogramas y presupuestos.",
-        "Prevenir la financiación de 'elefantes blancos' con dinero público."
+        "El cobro se realizará solo al finalizar la obra.",
+        "Veedurías ciudadanas para supervisar proyectos.",
+        "Prevenir la financiación de 'elefantes blancos'."
     ],
     pdfUrl: "/propuestas.pdf",
   },
@@ -51,10 +48,9 @@ const proposals = [
     title: "La Comida no se Bota",
     description: "Eliminaremos regulaciones que obligan a desperdiciar alimentos aptos. La comida debe llegar a quienes la necesitan.",
     details: [
-        "Reforma de normativas sanitarias que causan desperdicio.",
-        "Creación de un puente entre productores, comercios y bancos de alimentos.",
-        "Incentivos para la donación de alimentos.",
-        "Reducir el hambre y el impacto ambiental del desperdicio."
+        "Reforma de normativas que causan desperdicio.",
+        "Creación de puentes con bancos de alimentos.",
+        "Incentivos para la donación de alimentos."
     ],
     pdfUrl: "/propuestas.pdf",
   },
@@ -64,10 +60,9 @@ const proposals = [
     title: "Pensión Compartida para Parejas",
     description: "Permitiremos ceder semanas entre la pareja para que uno de los dos alcance la pensión, protegiendo el patrimonio familiar.",
     details: [
-        "Posibilidad de transferir semanas de cotización entre cónyuges o compañeros permanentes.",
-        "Asegurar que al menos un miembro de la pareja logre la pensión.",
-        "Protección económica para la vejez del núcleo familiar.",
-        "Reconocimiento del trabajo en equipo dentro de las familias."
+        "Posibilidad de transferir semanas de cotización.",
+        "Asegurar que un miembro de la pareja logre la pensión.",
+        "Protección económica para la vejez del núcleo familiar."
     ],
     pdfUrl: "/propuestas.pdf",
   },
@@ -77,10 +72,9 @@ const proposals = [
     title: "Río Magdalena: Despertar al Gigante",
     description: "Con infraestructura moderna, convertiremos el río en un eje turístico y de transporte, impulsando la productividad regional.",
     details: [
-        "Inversión en navegabilidad y puertos fluviales modernos.",
-        "Fomento del turismo ecológico y cultural a lo largo del río.",
-        "Transporte de carga más económico y sostenible.",
-        "Generación de empleo en los municipios ribereños."
+        "Inversión en navegabilidad y puertos fluviales.",
+        "Fomento del turismo ecológico y cultural.",
+        "Transporte de carga más económico y sostenible."
     ],
     pdfUrl: "/propuestas.pdf",
   },
@@ -90,10 +84,9 @@ const proposals = [
     title: "Violadores, No Más",
     description: "Registro permanente e inhabilidad total para agresores. Protección real y sin concesiones para nuestras niñas y mujeres.",
     details: [
-        "Creación de un registro público y permanente de agresores sexuales.",
-        "Inhabilidad de por vida para ocupar cargos públicos o trabajar con menores.",
-        "Endurecimiento de penas sin beneficios carcelarios.",
-        "Medidas de protección y justicia expeditas para las víctimas."
+        "Registro público y permanente de agresores sexuales.",
+        "Inhabilidad de por vida para trabajar con menores.",
+        "Endurecimiento de penas sin beneficios carcelarios."
     ],
     pdfUrl: "/propuestas.pdf",
   },
@@ -103,10 +96,9 @@ const proposals = [
     title: "Límites Reales al Presidente",
     description: "Más autonomía para las regiones y menos centralismo. Fortaleceremos las instituciones y el equilibrio democrático.",
     details: [
-        "Reforma a la distribución de competencias y recursos Nación-Territorio.",
+        "Reforma a la distribución de recursos Nación-Territorio.",
         "Fortalecimiento de la autonomía regional y local.",
-        "Mecanismos de control más estrictos al poder ejecutivo.",
-        "Garantizar el equilibrio de poderes y la independencia institucional."
+        "Mecanismos de control más estrictos al poder ejecutivo."
     ],
     pdfUrl: "/propuestas.pdf",
   },
@@ -116,10 +108,9 @@ const proposals = [
     title: "Productividad, Turismo y Empleo",
     description: "IVA cero en vuelos nacionales y estímulos a hotelería y restaurantes para generar empleo inmediato y dinamizar la economía.",
     details: [
-        "Eliminación del IVA en tiquetes aéreos para rutas nacionales.",
+        "Eliminación del IVA en tiquetes aéreos nacionales.",
         "Incentivos fiscales para el sector hotelero y gastronómico.",
-        "Impulso al turismo como motor de empleo rápido.",
-        "Dinamización de las economías locales a través del turismo."
+        "Impulso al turismo como motor de empleo rápido."
     ],
     pdfUrl: "/propuestas.pdf",
   },
