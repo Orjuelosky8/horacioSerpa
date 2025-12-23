@@ -9,7 +9,6 @@ import LiveCubesphere from "@/components/sections/live-cubesphere";
 import TestimonialReel from "@/components/sections/testimonial-reel";
 import AiChatVideo from "@/components/sections/ai-chat-video";
 import Gallery from "@/components/sections/gallery";
-import EventsCalendar from "@/components/sections/events-calendar";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
@@ -71,7 +70,6 @@ export default function Home() {
       <Suspense fallback={<NewsLoadingSkeleton />}>
         <NewsSection />
       </Suspense>
-      <EventsCalendar />
       <Gallery />
       {/* <LiveCubesphere /> // REDES SOCCIALES */}
       <TestimonialReel />
