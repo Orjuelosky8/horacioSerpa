@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -52,15 +53,14 @@ export default function ManifestoView() {
       <div className="md:hidden relative w-full h-[90svh]">
         {/* Background Video */}
         <div className="absolute inset-0 z-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src="/videos/background.mp4" type="video/mp4" />
-          </video>
+          <Image
+            src="/Landpage/fotoCongreso.jpg"
+            alt="Fondo de campaña"
+            layout="fill"
+            objectFit="cover"
+            className="w-full h-full"
+            priority
+          />
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="absolute inset-0 bg-background/30 backdrop-blur-sm"></div>
         </div>
@@ -71,7 +71,7 @@ export default function ManifestoView() {
               <SocialSidebar />
               {/* Top Content: Title and Text */}
               <div className="flex-shrink-0 z-10 pt-20">
-                   <h1 className="font-headline text-4xl font-bold tracking-tight">
+                   <h1 className="font-headline text-3xl font-bold tracking-tight">
                       Por una Colombia <br />
                       <span className="text-primary">justa y unida</span>
                   </h1>
