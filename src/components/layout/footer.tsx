@@ -18,7 +18,7 @@ export default function Footer() {
         <div className="flex flex-col items-center text-center">
           <Image
             src="/Landpage/logoSerpaBlanco.png"
-            alt="Logo Horacio Serpa"
+            alt="Logo Horacio Jose Serpa Campaña 2026"
             width={160}
             height={45}
             className="h-auto"
