@@ -4,11 +4,11 @@
 
 @layer base {
   :root {
-    --background: 0 0% 93%; /* ededed */
+    --background: 0 0% 100%; /* #ffffff */
     --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 93%;
+    --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 93%;
+    --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 356 86% 45%; /* d91118 */
     --primary-foreground: 0 0% 100%;
@@ -68,37 +68,40 @@
     @apply bg-background text-foreground;
   }
 
+  /*
   body::before {
     content: '';
     position: fixed;
-    inset: 0;              /* top:0; right:0; bottom:0; left:0; */
+    inset: 0;
     z-index: -1;
 
     background-image: url("/FondoAnimadoWebSerpa.jpg");
-    background-color: #ededed;
-    background-repeat: repeat;  /* Se repite en ambas direcciones */
-    background-size: auto;        /* O ajusta: auto 400px; si quieres más repeticiones visibles */
-    background-position: 0 0;     /* Fijamos X en 0 y empezamos en la parte superior */
+    background-color: hsl(var(--background));
+    background-repeat: repeat;
+    background-size: auto;
+    background-position: 0 0;
 
     animation: scroll-bg 40s linear infinite;
   }
 
   @keyframes scroll-bg {
     0% {
-      background-position: 0 0;        /* X = 0, Y = 0 */
+      background-position: 0 0;
     }
     100% {
-      background-position: 0 400px;    /* X = 0, Y se desplaza hacia abajo */
-      /* Si quieres que suba en lugar de bajar, usa 0 -400px */
+      background-position: 0 400px;
     }
   }
+  */
 }
 
 
 @media (prefers-reduced-motion) {
+  /*
   body::before {
     animation: none;
   }
+  */
 }
 
 /* Selecciona el botón de cierre por su clase y la posición absoluta */
