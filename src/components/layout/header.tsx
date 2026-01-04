@@ -14,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { RankingModal } from "@/components/gamification/ranking-modal";
 
 const navLinks = [
   { href: "#propuestas", label: "Propuestas", description: "Descubre las ideas y proyectos para construir un futuro mejor." },
@@ -36,7 +37,7 @@ export default function Header() {
         const elem = document.querySelector(link.href);
         return elem ? elem : null;
       }).filter(Boolean);
-      
+
       let currentSection = "";
 
       sections.forEach(section => {
@@ -49,7 +50,7 @@ export default function Header() {
       });
       setActiveLink(currentSection);
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     handleScroll();
 
@@ -62,8 +63,8 @@ export default function Header() {
       isScrolled ? "border-border/50 bg-background/80 backdrop-blur-xl" : "bg-transparent border-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className={cn(
             "flex items-center gap-2 md:pl-0 transition-opacity duration-300",
             !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
@@ -81,7 +82,7 @@ export default function Header() {
           <nav className={cn(
             "hidden items-center justify-center rounded-full border bg-secondary/50 px-4 py-2 shadow-sm md:flex transition-opacity duration-300",
             !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
-            )}>
+          )}>
             {navLinks.map((link) => (
               <Tooltip key={link.href}>
                 <TooltipTrigger asChild>
@@ -108,11 +109,11 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Sheet>
             <SheetTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className={cn(
-                  "md:hidden transition-all duration-300", 
+                  "md:hidden transition-all duration-300",
                   isScrolled ? "text-foreground" : "text-white hover:text-white hover:bg-white/10"
                 )}
               >
@@ -136,11 +137,18 @@ export default function Header() {
             </SheetContent>
           </Sheet>
           <Button asChild className={cn(
-              "hidden md:inline-flex rounded-full transition-opacity duration-300",
-              !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
-            )}>
+            "hidden md:inline-flex rounded-full transition-opacity duration-300",
+            !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
+          )}>
             <Link href="#unete">Únete</Link>
           </Button>
+
+          <div className={cn(
+            "hidden md:block transition-opacity duration-300",
+            !isScrolled ? "md:opacity-0 md:pointer-events-none" : "opacity-100"
+          )}>
+            <RankingModal />
+          </div>
         </div>
       </div>
     </header>

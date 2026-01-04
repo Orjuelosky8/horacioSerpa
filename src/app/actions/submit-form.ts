@@ -143,7 +143,33 @@ export async function submitForm(
       'Autoriza el tratamiento de sus datos': 'Sí',
       'Referenciado por': referrer,
       'Déjanos tu Propuesta': proposal || '',
+      'Puntos': '10', // Puntos iniciales por registrarse
     });
+    
+    // Logic to update referrer points
+    if (referrer) {
+      try {
+        const rows = await sheet.getRows();
+        // Buscar al referente por nombre (ignorando mayúsculas/minúsculas)
+        const referrerRow = rows.find(row => {
+          const name = row.get('Nombres y apellidos completos');
+          return name && name.toString().toLowerCase().trim() === referrer.toLowerCase().trim();
+        });
+
+        if (referrerRow) {
+          const currentPoints = parseInt(referrerRow.get('Puntos') || '0', 10);
+          const newPoints = isNaN(currentPoints) ? 50 : currentPoints + 50;
+          referrerRow.set('Puntos', newPoints.toString());
+          await referrerRow.save();
+          console.log(`DEBUG: Puntos actualizados para ${referrer}: ${newPoints}`);
+        } else {
+          console.log(`DEBUG: Referente ${referrer} no encontrado para sumar puntos.`);
+        }
+      } catch (err) {
+        console.error('ERROR al visualizar/actualizar puntos del referente:', err);
+        // No fallamos el registro completo si falla la actualización de puntos del referente
+      }
+    }
     
     console.log('DEBUG: ¡Fila añadida con éxito!');
 
